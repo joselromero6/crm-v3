@@ -38,6 +38,9 @@ function crm_v3_comunicados_fuentes() {
         'infonavit' => array(
             'nombre'  => 'Infonavit',
             'funcion' => 'crm_v3_comunicados_leer_infonavit',
+            // Infonavit entrega siempre su lista completa del año:
+            // lo que ya no venga en ella se quita de la tarjeta.
+            'completa' => true,
         ),
 
         'noticias' => array(
@@ -136,6 +139,9 @@ function crm_v3_comunicados_palabras_evento() {
             'presenta avances', 'mananera', 'ha contratado', 'entregado',
             'entrega en', 'entrega escrituras', 'entrega primeras',
             'entrega de', 'trabajos de limpieza', 'reitera',
+            'incendio', 'conato', 'falla en', 'accidente', 'muere',
+            'fallece', 'detienen', 'robo', 'asalto', 'balacera',
+            'inundacion', 'explosion', 'desalojo', 'fraude',
         )
     );
 }
@@ -389,8 +395,50 @@ function crm_v3_comunicados_normalizar($item, $fuente) {
         'url'       => $url,
         'fuente'    => $fuente,
         'extracto'  => $extracto,
+        'cuerpo'    => isset($item['cuerpo']) ? (string) $item['cuerpo'] : '',
         'detectado' => time(),
     );
+}
+
+
+/**
+ * Palabras importantes de un título (para comparar dos títulos).
+ */
+function crm_v3_comunicados_palabras_de($titulo) {
+
+    $palabras = array();
+
+    foreach (explode(' ', crm_v3_comunicados_texto_plano($titulo)) as $palabra) {
+
+        // Se ignoran las palabras cortas (el, de, para, que…).
+        if (strlen($palabra) >= 4) {
+            $palabras[$palabra] = true;
+        }
+    }
+
+    return $palabras;
+}
+
+
+/**
+ * ¿Dos títulos hablan de lo mismo?
+ *
+ * Varios medios publican la misma noticia con el título casi igual.
+ * Se consideran repetidos cuando comparten la gran mayoría de sus
+ * palabras importantes.
+ */
+function crm_v3_comunicados_son_parecidos($titulo_a, $titulo_b) {
+
+    $a = crm_v3_comunicados_palabras_de($titulo_a);
+    $b = crm_v3_comunicados_palabras_de($titulo_b);
+
+    if (count($a) < 3 || count($b) < 3) {
+        return false;
+    }
+
+    $comunes = count(array_intersect_key($a, $b));
+
+    return ($comunes / min(count($a), count($b))) >= 0.7;
 }
 
 
@@ -488,6 +536,48 @@ function crm_v3_comunicados_texto_infonavit($html) {
 
 
 /**
+ * Texto completo de un boletín, en párrafos separados por línea
+ * en blanco. Se quitan las fotos y los controles del carrusel.
+ */
+function crm_v3_comunicados_cuerpo_infonavit($crudo) {
+
+    $html = stripcslashes((string) $crudo);
+
+    // Todo lo anterior al último control del carrusel son fotos.
+    $corte = strripos($html, 'carousel-control-next');
+
+    if ($corte !== false) {
+
+        $fin = stripos($html, '</a>', $corte);
+
+        $html = $fin !== false
+            ? substr($html, $fin + 4)
+            : substr($html, $corte);
+    }
+
+    $texto = crm_v3_comunicados_texto_infonavit($html);
+
+    $parrafos = array();
+
+    foreach (explode('|', $texto) as $parrafo) {
+
+        $parrafo = trim($parrafo, " *\t");
+
+        if ($parrafo !== '') {
+            $parrafos[] = $parrafo;
+        }
+    }
+
+    $cuerpo = implode("\n\n", $parrafos);
+
+    // Un boletín muy largo se recorta para no cargar la base de datos.
+    return function_exists('mb_substr')
+        ? mb_substr($cuerpo, 0, 8000)
+        : substr($cuerpo, 0, 8000);
+}
+
+
+/**
  * Reconocer los boletines dentro de la respuesta de Infonavit.
  *
  * Cada boletín llega como una serie de textos seguidos:
@@ -572,10 +662,16 @@ function crm_v3_comunicados_boletines_infonavit($strings) {
             $fecha = $lista[count($lista) - 1]['fecha'];
         }
 
+        // Dos lugares antes del resumen va el texto completo.
+        $cuerpo = $i >= 2
+            ? crm_v3_comunicados_cuerpo_infonavit($strings[$i - 2])
+            : '';
+
         $lista[] = array(
             'titulo'   => $titulo,
             'fecha'    => $fecha,
             'extracto' => implode(' ', $extracto),
+            'cuerpo'   => $cuerpo,
             'url'      => crm_v3_comunicados_url_sala_prensa(),
         );
     }
@@ -836,7 +932,8 @@ function crm_v3_comunicados_actualizar() {
     }
 
     // En la primera revisión todo es "nuevo"; no tiene caso resaltarlo.
-    $primera_vez = empty($guardados);
+    $primera_vez  = empty($guardados);
+    $ids_antes    = array_fill_keys(array_keys($guardados), true);
 
     $estado = array(
         'revisado' => time(),
@@ -879,7 +976,18 @@ function crm_v3_comunicados_actualizar() {
             $vistos[$comunicado['id']] = true;
             $encontrados++;
 
+            // Ya estaba: se actualizan sus datos, pero conserva
+            // el día en que se detectó.
             if (isset($guardados[$comunicado['id']])) {
+
+                $comunicado['detectado'] = $guardados[$comunicado['id']]['detectado'];
+
+                if (!empty($guardados[$comunicado['id']]['inicial'])) {
+                    $comunicado['inicial'] = true;
+                }
+
+                $guardados[$comunicado['id']] = $comunicado;
+
                 continue;
             }
 
@@ -888,7 +996,17 @@ function crm_v3_comunicados_actualizar() {
             }
 
             $guardados[$comunicado['id']] = $comunicado;
-            $estado['nuevos']++;
+        }
+
+        // Fuente con lista completa: lo que ya no trae, se quita.
+        if (!empty($fuente['completa'])) {
+
+            foreach ($guardados as $id => $guardado) {
+
+                if ($guardado['fuente'] === $clave && !isset($vistos[$id])) {
+                    unset($guardados[$id]);
+                }
+            }
         }
 
         $estado['fuentes'][$clave] = array(
@@ -910,8 +1028,30 @@ function crm_v3_comunicados_actualizar() {
             ? $por_fuente[$clave] + 1
             : 1;
 
-        if ($por_fuente[$clave] <= 40) {
-            $lista[] = $comunicado;
+        if ($por_fuente[$clave] > 40) {
+            continue;
+        }
+
+        // Si ya hay uno más reciente que dice lo mismo, este se omite.
+        $repetido = false;
+
+        foreach ($lista as $aceptado) {
+
+            if (crm_v3_comunicados_son_parecidos($aceptado['titulo'], $comunicado['titulo'])) {
+                $repetido = true;
+                break;
+            }
+        }
+
+        if ($repetido) {
+            $por_fuente[$clave]--;
+            continue;
+        }
+
+        $lista[] = $comunicado;
+
+        if (!isset($ids_antes[$comunicado['id']])) {
+            $estado['nuevos']++;
         }
     }
 
@@ -1041,11 +1181,19 @@ function crm_v3_comunicados_render($limite = 8) {
                             <?php echo esc_html($fuente); ?>
                         </span>
 
-                        <?php if (!empty($comunicado['url'])) : ?>
+                        <?php
+                        // Los boletines de Infonavit no tienen página propia:
+                        // se abren dentro del CRM con su texto completo.
+                        $enlace = !empty($comunicado['cuerpo'])
+                            ? admin_url('admin.php?page=crm-comunicado&id=' . $comunicado['id'])
+                            : $comunicado['url'];
+                        ?>
+
+                        <?php if (!empty($enlace)) : ?>
 
                             <a
                                 class="crm-bo-comunicado-titulo"
-                                href="<?php echo esc_url($comunicado['url']); ?>"
+                                href="<?php echo esc_url($enlace); ?>"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 title="<?php echo esc_attr($comunicado['titulo']); ?>"
@@ -1230,3 +1378,137 @@ add_action(
     'admin_post_crm_v3_comunicados_diagnostico',
     'crm_v3_comunicados_diagnostico'
 );
+
+
+
+/**
+ * ============================================================
+ * PÁGINA DE UN COMUNICADO
+ * ============================================================
+ *
+ * Muestra el texto completo de un boletín de Infonavit.
+ */
+
+function crm_v3_comunicado_registrar_pagina() {
+
+    add_submenu_page(
+        '',
+        'Comunicado',
+        'Comunicado',
+        'manage_options',
+        'crm-comunicado',
+        'crm_v3_comunicado_page'
+    );
+}
+
+add_action('admin_menu', 'crm_v3_comunicado_registrar_pagina', 20);
+
+
+function crm_v3_comunicado_titulo_pagina() {
+
+    global $title;
+
+    $title = 'Comunicado';
+}
+
+add_action('load-admin_page_crm-comunicado', 'crm_v3_comunicado_titulo_pagina');
+
+
+function crm_v3_comunicado_page() {
+
+    if (!current_user_can('manage_options')) {
+        wp_die('No tienes permisos para acceder a esta sección.');
+    }
+
+    $id = isset($_GET['id'])
+        ? sanitize_key($_GET['id'])
+        : '';
+
+    $comunicado = null;
+
+    foreach (crm_v3_comunicados_lista() as $item) {
+
+        if ($item['id'] === $id) {
+            $comunicado = $item;
+            break;
+        }
+    }
+
+    $fuentes = crm_v3_comunicados_fuentes();
+
+    ?>
+
+    <div class="wrap crm-comunicado-wrap">
+
+        <?php if (!$comunicado) : ?>
+
+            <h1>Comunicado</h1>
+
+            <p>Este comunicado ya no está en la lista.</p>
+
+        <?php else : ?>
+
+            <p class="crm-comunicado-meta">
+                <?php echo esc_html(
+                    isset($fuentes[$comunicado['fuente']])
+                        ? $fuentes[$comunicado['fuente']]['nombre']
+                        : $comunicado['fuente']
+                ); ?>
+                <?php if (!empty($comunicado['fecha'])) : ?>
+                    · <?php echo esc_html(crm_v3_format_date($comunicado['fecha'])); ?>
+                <?php endif; ?>
+            </p>
+
+            <h1><?php echo esc_html($comunicado['titulo']); ?></h1>
+
+            <?php if (!empty($comunicado['extracto'])) : ?>
+                <p class="crm-comunicado-extracto">
+                    <?php echo esc_html($comunicado['extracto']); ?>
+                </p>
+            <?php endif; ?>
+
+            <div class="crm-comunicado-cuerpo">
+                <?php
+                $cuerpo = !empty($comunicado['cuerpo']) ? $comunicado['cuerpo'] : '';
+
+                foreach (preg_split('/\n\s*\n/', $cuerpo) as $parrafo) {
+
+                    if (trim($parrafo) !== '') {
+                        echo '<p>' . make_clickable(esc_html(trim($parrafo))) . '</p>';
+                    }
+                }
+                ?>
+            </div>
+
+            <?php if (!empty($comunicado['url'])) : ?>
+                <p>
+                    <a
+                        class="button"
+                        href="<?php echo esc_url($comunicado['url']); ?>"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >Ver en la página de origen</a>
+                </p>
+            <?php endif; ?>
+
+        <?php endif; ?>
+
+        <p>
+            <a href="<?php echo esc_url(admin_url('admin.php?page=crm-v3-cibr#crm-comunicados')); ?>">
+                ← Regresar al Backoffice
+            </a>
+        </p>
+
+    </div>
+
+    <style>
+        .crm-comunicado-wrap { max-width: 820px; }
+        .crm-comunicado-wrap h1 { font-size: 22px; line-height: 1.3; margin: 4px 0 14px; }
+        .crm-comunicado-meta { margin: 14px 0 0; color: #7b8794; font-size: 12px; }
+        .crm-comunicado-extracto { padding: 10px 14px; border-left: 3px solid #6f9baa; background: #fff; color: #263238; font-size: 14px; line-height: 1.6; }
+        .crm-comunicado-cuerpo { margin: 16px 0; padding: 6px 20px; background: #fff; border: 1px solid #e3e8ee; border-radius: 10px; }
+        .crm-comunicado-cuerpo p { font-size: 14px; line-height: 1.7; color: #263238; }
+    </style>
+
+    <?php
+}
