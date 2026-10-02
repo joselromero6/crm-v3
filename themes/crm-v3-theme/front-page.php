@@ -74,15 +74,13 @@ if ($destacadas->have_posts()) :
 
     <div class="property-card">
 
-       <?php if (has_post_thumbnail()) : ?>
         <a href="<?php the_permalink(); ?>">
-        <?php the_post_thumbnail('medium_large'); ?>
+            <img
+                src="<?php echo esc_url(crm_v3_theme_imagen_propiedad_url()); ?>"
+                alt="<?php the_title_attribute(); ?>"
+                loading="lazy"
+            >
         </a>
-        <?php else : ?>
-        <a href="<?php the_permalink(); ?>">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/default-property.jpg" alt="<?php the_title(); ?>">
-        </a>
-        <?php endif; ?>
 
         <div class="property-content">
 
