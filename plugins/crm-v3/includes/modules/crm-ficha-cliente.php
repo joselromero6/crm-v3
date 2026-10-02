@@ -628,6 +628,15 @@ function crm_v3_ficha_cliente_page() {
     }
 
 
+    /*
+     * Propiedad que se está viendo (pestaña seleccionada).
+     * Se conserva al guardar comentarios para regresar a la misma.
+     */
+    $propiedad_url_id = isset($_GET['propiedad_id'])
+        ? absint($_GET['propiedad_id'])
+        : 0;
+
+
     /* ========================================================
      * CAMPOS ACF
      * ======================================================== */
@@ -917,12 +926,12 @@ function crm_v3_ficha_cliente_page() {
                                     value="<?php echo esc_attr($cliente_id); ?>"
                                 >
 
-                                <?php if (!empty($propiedad_id)): ?>
+                                <?php if (!empty($propiedad_url_id)): ?>
 
                                     <input
                                         type="hidden"
                                         name="propiedad_id"
-                                        value="<?php echo esc_attr($propiedad_id); ?>"
+                                        value="<?php echo esc_attr($propiedad_url_id); ?>"
                                     >
 
                                 <?php endif; ?>
@@ -1068,12 +1077,12 @@ function crm_v3_ficha_cliente_page() {
                                                     ); ?>"
                                                 >
 
-                                                <?php if (!empty($propiedad_id)): ?>
+                                                <?php if (!empty($propiedad_url_id)): ?>
 
                                                     <input
                                                         type="hidden"
                                                         name="propiedad_id"
-                                                        value="<?php echo esc_attr($propiedad_id); ?>"
+                                                        value="<?php echo esc_attr($propiedad_url_id); ?>"
                                                     >
 
                                                 <?php endif; ?>
@@ -1651,8 +1660,9 @@ crm_v3_operacion_ficha(
 
 </div>
 
+</section>
 
-
+    </div>
 
 <?php
 }
@@ -1677,7 +1687,7 @@ function crm_v3_guardar_comentario_cliente() {
         return;
     }
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('manage_options')) {
         return;
     }
 
@@ -1742,7 +1752,7 @@ function crm_v3_eliminar_comentario_cliente() {
         return;
     }
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('manage_options')) {
         return;
     }
 

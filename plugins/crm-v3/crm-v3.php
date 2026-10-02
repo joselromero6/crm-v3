@@ -162,6 +162,11 @@ add_action(
 
 function crm_v3_enqueue_propiedades_assets($hook) {
 
+    // Los códigos de seguridad solo se entregan a administradores.
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
     if (
         !isset($_GET['page']) ||
         $_GET['page'] !== 'crm-propiedades'
@@ -205,6 +210,11 @@ add_action(
 );
 
 function crm_v3_enqueue_operaciones_styles($hook) {
+
+    // Los códigos de seguridad solo se entregan a administradores.
+    if (!current_user_can('manage_options')) {
+        return;
+    }
 
     if (
         !isset($_GET['page']) ||
@@ -281,6 +291,11 @@ add_action(
  */
 
 function crm_v3_enqueue_backoffice_styles($hook) {
+
+    // Los códigos de seguridad solo se entregan a administradores.
+    if (!current_user_can('manage_options')) {
+        return;
+    }
 
     if (
         !isset($_GET['page']) ||
@@ -434,6 +449,11 @@ add_action(
  * Cargar estilos de CRM Leads.
  */
 function crm_v3_enqueue_leads_styles($hook) {
+
+    // Los códigos de seguridad solo se entregan a administradores.
+    if (!current_user_can('manage_options')) {
+        return;
+    }
 
     if (
         !isset($_GET['page']) ||

@@ -41,7 +41,7 @@ function crm_v3_guardar_lead() {
         return;
     }
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('manage_options')) {
         return;
     }
 
@@ -252,7 +252,7 @@ add_action(
 
 function crm_v3_agregar_nota_lead() {
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('manage_options')) {
         wp_send_json_error(
             [
                 'message' => 'No tienes permisos.'
@@ -376,7 +376,7 @@ add_action(
 
 function crm_v3_editar_nota_lead() {
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('manage_options')) {
         wp_send_json_error(
             [
                 'message' => 'No tienes permisos.'
@@ -615,7 +615,7 @@ function crm_v3_leads_acf_choice_label($field_name, $value, $post_id) {
 
 function crm_v3_leads_page() {
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('manage_options')) {
 
         wp_die(
             'No tienes permisos para acceder a esta sección.'
@@ -2010,7 +2010,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                             </span>
 
-                                    <!-- Notas -->
+                                        </div>
+
+                                    </td>
 
                                     <!-- Notas -->
 
@@ -2051,10 +2053,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                             </button>
 
                                         <?php endif; ?>
-
-                                    </td>
-
-                                        </div>
 
                                     </td>
 
@@ -2166,6 +2164,8 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 
 
+</div>
+
     <?php
 }
 
@@ -2180,7 +2180,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function crm_v3_obtener_notas_lead() {
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('manage_options')) {
         wp_send_json_error(
             [
                 'message' => 'No tienes permisos.'
@@ -2275,7 +2275,7 @@ add_action(
 
 function crm_v3_borrar_nota_lead() {
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('manage_options')) {
 
         wp_send_json_error(
             [
