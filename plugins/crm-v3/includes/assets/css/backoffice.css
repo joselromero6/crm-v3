@@ -1,0 +1,678 @@
+/* =========================================================
+   CRM CIBR — BACKOFFICE
+   UI PRO
+========================================================= */
+
+.crm-v3-backoffice {
+    margin: 20px 20px 40px 0;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.crm-bo-header {
+    background: #fff;
+    border: 1px solid #e3e8ee;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    overflow: hidden;
+}
+
+.crm-bo-header-content {
+    min-height: 92px;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.crm-bo-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.crm-bo-brand-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #eef4f7;
+    color: #2f6574;
+}
+
+.crm-bo-brand-icon .dashicons {
+    font-size: 25px;
+    width: 25px;
+    height: 25px;
+}
+
+.crm-bo-brand-text h1 {
+    margin: 0;
+    color: #1f2933;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.crm-bo-brand-text p {
+    margin: 5px 0 0;
+    color: #7b8794;
+    font-size: 13px;
+}
+
+.crm-bo-header-meta {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.crm-bo-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #52606d;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.crm-bo-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #35a36f;
+    box-shadow: 0 0 0 3px rgba(53,163,111,.10);
+}
+
+.crm-bo-date {
+    color: #7b8794;
+    font-size: 12px;
+}
+
+/* =========================================================
+   CONTENIDO
+========================================================= */
+
+.crm-bo-content {
+    margin-top: 14px;
+}
+
+/* =========================================================
+   PANELES
+========================================================= */
+
+.crm-bo-panel {
+    margin-top: 12px;
+    background: #fff;
+    border: 1px solid #e3e8ee;
+    border-radius: 10px;
+    box-shadow: 0 2px 7px rgba(0,0,0,.035);
+    overflow: hidden;
+}
+
+.crm-bo-panel:first-child {
+    margin-top: 0;
+}
+
+.crm-bo-panel-header {
+    padding: 10px 16px 4px;
+}
+
+.crm-bo-panel-header h2 {
+    margin: 0;
+    color: #263238;
+    font-size: 14px;        /* Titulos area de trabajo interna y externa */
+    font-weight: 600;
+}
+
+.crm-bo-panel-header p {
+    margin: 3px 0 0;
+    color: #7b8794;
+    font-size: 11px;
+}
+
+/* =========================================================
+   BOTONES / ENLACES
+========================================================= */
+
+.crm-bo-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 7px 16px 11px;
+}
+
+.crm-bo-link {
+    min-height: 32px;
+    padding: 0 11px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    border: 1px solid #dce3e8;
+    border-radius: 6px;
+
+    background: #f8fafb;
+    color: #43515c;
+
+    text-decoration: none !important;
+    font-size: 11px;
+    font-weight: 500;
+
+    box-sizing: border-box;
+
+    transition:
+        background-color .15s ease,
+        border-color .15s ease,
+        color .15s ease,
+        transform .15s ease;
+}
+
+.crm-bo-link:hover {
+    background: #eef4f7;
+    border-color: #c8d6dd;
+    color: #245b6b;
+    transform: translateY(-1px);
+}
+
+.crm-bo-link .dashicons {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 782px) {
+
+    .crm-v3-backoffice {
+        margin-right: 10px;
+    }
+
+    .crm-bo-header-content {
+        padding: 18px 20px;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .crm-bo-header-meta {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+}
+
+
+
+
+/* =========================================================
+   ÁREA DE TRABAJO INTERNO — 70 / 30
+========================================================= */
+
+.crm-bo-workspace-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 7fr)
+        minmax(0, 3fr);
+    gap: 0;
+    width: 100%;
+}
+
+
+/* =========================================================
+   ÁREA PRINCIPAL — 70%
+========================================================= */
+
+.crm-bo-workspace-main {
+    min-width: 0;
+    padding-right: 12px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   ÁREA SECUNDARIA — 30%
+========================================================= */
+
+.crm-bo-workspace-side {
+    min-width: 0;
+    min-height: 48px;
+    padding-left: 12px;
+    border-left: 1px solid #edf0f2;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   BOTONES DEL ÁREA PRINCIPAL
+========================================================= */
+
+.crm-bo-workspace-main .crm-bo-links {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 782px) {
+
+    .crm-bo-workspace-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .crm-bo-workspace-main {
+        padding-right: 0;
+    }
+
+    .crm-bo-workspace-side {
+        min-height: 40px;
+
+        padding-left: 0;
+        padding-top: 10px;
+
+        border-left: 0;
+        border-top: 1px solid #edf0f2;
+    }
+
+}
+
+
+
+/* =========================================================
+   ANÁLISIS — 50 / 50
+========================================================= */
+
+.crm-bo-analysis-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.crm-bo-analysis-panel {
+    min-width: 0;
+    background: #fff;
+    border: 1px solid #e3e8ee;
+    border-radius: 10px;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, .035);
+    overflow: hidden;
+}
+
+.crm-bo-analysis-header {
+    padding: 11px 14px;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.crm-bo-analysis-header h2 {
+    margin: 0;
+    color: #263238;
+    font-size: 14px;    /* Titulo analisis de clientes y propiedades */  
+    font-weight: 600;
+}
+
+.crm-bo-analysis-content {
+    min-height: 180px;
+    padding: 14px;
+}
+
+@media (max-width: 782px) {
+
+    .crm-bo-analysis-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+
+/* =========================================================
+   ANÁLISIS CLIENTES — HEADER Y CONTADORES
+========================================================= */
+
+.crm-bo-analysis-header-clientes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.crm-bo-analysis-header-clientes h2 {
+    margin: 0;
+    flex: 0 0 auto;
+}
+
+.crm-bo-analysis-header-clientes
+.crm-bo-client-analysis-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    flex: 0 0 auto;
+}
+
+.crm-bo-client-counter {
+    height: 28px;
+    padding: 0 9px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    border: 1px solid #dce3e8;
+    border-radius: 6px;
+
+    background: #f8fafb;
+    color: #43515c;
+
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 500;
+
+    white-space: nowrap;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.crm-bo-client-counter strong {
+    font-weight: 700;
+}
+
+.crm-bo-client-counter:hover,
+.crm-bo-client-counter.is-active {
+    background: #eef4f7;
+    border-color: #c8d6dd;
+    color: #245b6b;
+}
+
+/* =========================================================
+   ANÁLISIS CLIENTES — RESUMEN POR ETAPAS
+========================================================= */
+
+.crm-bo-client-summary {
+    padding: 0 0 10px;
+}
+
+.crm-bo-client-summary-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.crm-bo-client-summary-header strong {
+    color: #263238;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.crm-bo-client-summary-header span {
+    padding: 3px 7px;
+    border-radius: 4px;
+    background: #eef4f7;
+    color: #52606d;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.crm-bo-client-summary-data {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px 12px;
+}
+
+.crm-bo-client-summary-data > div {
+    min-width: 0;
+}
+
+.crm-bo-client-summary-data small {
+    display: block;
+    margin-bottom: 2px;
+    color: #8a96a3;
+    font-size: 10px;
+}
+
+.crm-bo-client-summary-data strong {
+    display: block;
+    color: #43515c;
+    font-size: 10px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SEPARADORES DE ETAPAS
+========================================================= */
+
+.crm-bo-client-section {
+    margin-top: 11px;
+    padding-top: 10px;
+    border-top: 1px dashed #d8e0e5;
+}
+
+.crm-bo-client-section-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 7px;
+
+    color: #263238;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.crm-bo-client-section-title::before {
+    content: "";
+    width: 3px;
+    height: 14px;
+    border-radius: 2px;
+    background: #6f9aa7;
+}
+
+
+/* =========================================================
+   PROPIEDADES
+========================================================= */
+
+.crm-bo-client-property {
+    display: grid;
+    grid-template-columns: 1.5fr .9fr .9fr .8fr .9fr .8fr;
+    gap: 8px;
+
+    padding: 8px 10px;
+
+    border: 1px solid #e5eaee;
+    border-radius: 6px;
+    background: #fafbfc;
+
+    font-size: 10px;
+}
+
+.crm-bo-client-property strong {
+    color: #37474f;
+    font-weight: 600;
+}
+
+.crm-bo-client-property span {
+    color: #667580;
+}
+
+
+/* =========================================================
+   OPERACIONES
+========================================================= */
+
+.crm-bo-client-operation {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr .8fr 1fr 1fr .8fr;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid #e5eaee;
+    border-radius: 6px;
+    background: #fafbfc;
+    font-size: 10px;
+}
+
+.crm-bo-client-operation strong {
+    color: #37474f;
+    font-weight: 600;
+}
+
+.crm-bo-client-operation span {
+    color: #667580;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .crm-bo-client-summary-data {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .crm-bo-client-property,
+    .crm-bo-client-operation {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================================
+   CLIENTE — IDENTIFICACIÓN
+========================================================= */
+
+.crm-bo-client-summary-header {
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+
+
+
+/* =========================================================
+   PRÓXIMOS MÓDULOS — 30 / 70
+========================================================= */
+
+.crm-bo-next-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 4fr)      /* Controla el largo de la Card */
+        minmax(0, 6fr);     /* Controla el largo de la Card */
+    gap: 12px;
+    margin-top: 12px;
+}
+
+
+.crm-bo-next-panel {
+    min-width: 0;
+    background: #fff;
+    border: 1px solid #e3e8ee;
+    border-radius: 10px;
+    box-shadow:
+    0 2px 7px rgba(0, 0, 0, .035);
+    overflow: hidden;
+}
+
+
+.crm-bo-next-header {
+    padding: 11px 14px;
+    border-bottom: 1px solid #edf0f2;
+}
+
+
+.crm-bo-next-header h2 {
+    margin: 0;
+    color: #263238;
+    font-size: 14px;    /* Titulos comunicados y CIE */
+    font-weight: 600;
+}
+
+
+.crm-bo-next-content {
+    min-height: 180px;
+    padding: 14px;
+}
+
+
+.crm-bo-next-placeholder {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.crm-bo-next-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    background: #f1f5f7;
+    color: #6f9baa;
+}
+
+
+.crm-bo-next-icon .dashicons {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+}
+
+
+.crm-bo-next-placeholder h3 {
+    margin: 0 0 5px;
+    color: #263238;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.crm-bo-next-placeholder p {
+    max-width: 320px;
+    margin: 0;
+    color: #7b8794;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 782px) {
+    .crm-bo-next-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+

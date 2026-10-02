@@ -1,0 +1,408 @@
+/* =========================================================
+   CRM V3 — DASHBOARD
+   Widget nativo WordPress + diseño CRM premium
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR DEL WIDGET
+   ========================================================= */
+
+#crm_v3_dashboard_widget {
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe5e8;
+
+    border-radius: 6px;
+
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, .05);
+}
+
+
+/* =========================================================
+   HEADER NATIVO WORDPRESS
+   ---------------------------------------------------------
+   NO modificamos su estructura.
+   WordPress conserva:
+   - arrastrar
+   - minimizar
+   - ordenar
+   - controles nativos
+   ========================================================= */
+
+#crm_v3_dashboard_widget .postbox-header {
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #dfe5e8;
+}
+
+
+#crm_v3_dashboard_widget .postbox-header h2 {
+
+    margin: 0;
+
+    padding: 10px 12px;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    font-weight: 600;
+
+    color: #263238;
+}
+
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+#crm_v3_dashboard_widget .inside {
+
+    margin: 0;
+
+    padding: 0;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   CABECERA CRM
+   ========================================================= */
+
+.crm-dashboard-widget {
+
+    width: 100%;
+
+    margin: 0;
+
+    padding: 18px;
+
+    box-sizing: border-box;
+}
+
+
+.crm-dashboard-header {
+
+    margin: 0 0 15px;
+
+    padding: 0;
+}
+
+
+/* Identificador */
+
+.crm-dashboard-eyebrow {
+
+    margin: 0 0 5px;
+
+    padding: 0;
+
+    font-size: 9px;
+
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    letter-spacing: .14em;
+
+    text-transform: uppercase;
+
+    color: #6b7479;
+}
+
+
+/* Título */
+
+.crm-dashboard-header h2 {
+
+    margin: 0;
+
+    padding: 0;
+
+    border: 0;
+
+    font-size: 17px;
+
+    line-height: 1.25;
+
+    font-weight: 600;
+
+    letter-spacing: 0;
+
+    color: #263238;
+}
+
+
+/* Descripción */
+
+.crm-dashboard-header p {
+
+    margin: 5px 0 0;
+
+    padding: 0;
+
+    font-size: 10px;
+
+    line-height: 1.4;
+
+    color: #6b7479;
+}
+
+
+/* =========================================================
+   CONTADORES 1 uan linea 3
+   ========================================================= */
+
+.crm-dashboard-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 7px;
+
+    width: 100%;
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TARJETA DE INDICADOR
+   ========================================================= */
+
+.crm-dashboard-stat {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    min-width: 0;
+
+    min-height: 68px;
+
+    padding: 10px 10px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe5e8;
+
+    border-radius: 6px;
+
+    box-sizing: border-box;
+
+    text-decoration: none;
+
+    overflow: hidden;
+
+    transition:
+        background-color .15s ease,
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
+
+
+/* Línea superior */
+
+.crm-dashboard-stat::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 3px;
+
+    background: #2785c7;
+}
+
+
+.crm-dashboard-stat:nth-child(2)::before {
+
+    background: #f59e0b;
+}
+
+
+.crm-dashboard-stat:nth-child(3)::before {
+
+    background: #8b5cf6;
+}
+
+
+.crm-dashboard-stat:nth-child(4)::before {
+
+    background: #16a34a;
+}
+
+
+/* Hover */
+
+.crm-dashboard-stat:hover {
+
+    background: #f9fbfc;
+
+    border-color: #cbd5da;
+
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, .06);
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   ICONO
+   ========================================================= */
+
+.crm-dashboard-stat-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 30px;
+
+    width: 30px;
+
+    height: 30px;
+
+    margin-right: 8px;
+
+    background: #f1f5f7;
+
+    border-radius: 7px;
+
+    color: #607d86;
+}
+
+
+.crm-dashboard-stat-icon .dashicons {
+
+    width: 16px;
+
+    height: 16px;
+
+    font-size: 16px;
+
+    line-height: 16px;
+}
+
+
+/* =========================================================
+   INFORMACIÓN
+   ========================================================= */
+
+.crm-dashboard-stat-content {
+
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.crm-dashboard-stat-label {
+
+    display: block;
+
+    margin: 0 0 4px;
+
+    padding: 0;
+
+    font-size: 9px;
+
+    line-height: 1.2;
+
+    font-weight: 600;
+
+    color: #626b70;
+
+    white-space: nowrap;
+}
+
+
+.crm-dashboard-stat-number {
+
+    display: block;
+
+    margin: 0;
+
+    padding: 0;
+
+    font-size: 22px;
+
+    line-height: 1;
+
+    font-weight: 700;
+
+    letter-spacing: -.02em;
+
+    color: #0875b5;
+}
+
+
+/* =========================================================
+   FLECHA
+   ========================================================= */
+
+.crm-dashboard-stat-arrow {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    margin-left: 5px;
+
+    font-size: 14px;
+
+    line-height: 1;
+
+    color: #aeb8bd;
+}
+
+
+.crm-dashboard-stat:hover
+.crm-dashboard-stat-arrow {
+
+    color: #2785c7;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 500px) {
+
+    .crm-dashboard-widget {
+
+        padding: 15px;
+    }
+
+    .crm-dashboard-stats {
+
+        grid-template-columns: 1fr;
+    }
+}

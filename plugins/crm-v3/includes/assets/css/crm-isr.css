@@ -1,0 +1,229 @@
+/* =========================================================
+   CRM V3 — ISR
+   ========================================================= */
+
+.crm-v3-isr {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #d9dde1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.crm-v3-isr-title {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e1e4e7;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    color: #263238;
+}
+
+.crm-v3-isr-note {
+    padding: 7px 12px;
+    border-bottom: 1px solid #e1e4e7;
+    font-size: 11px;
+    color: #737b82;
+}
+
+.crm-v3-isr-section {
+    border-bottom: 1px solid #e1e4e7;
+}
+
+.crm-v3-isr-section-title {
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    box-sizing: border-box;
+    background: #f5f6f7;
+    border-bottom: 1px solid #e1e4e7;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    color: #737b82;
+}
+
+.crm-v3-isr-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+    padding: 6px;
+    box-sizing: border-box;
+}
+
+.crm-v3-isr-item {
+    min-width: 0;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    border: 1px solid #d9dde1;
+    background: #fafbfc;
+}
+
+.crm-v3-isr-item span {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 11px;
+    line-height: 1.2;
+    color: #737b82;
+}
+
+.crm-v3-isr-item strong {
+    display: block;
+    font-size: 11px;
+    line-height: 1.2;
+    color: #263238;
+}
+
+.crm-v3-isr-form {
+    padding: 0;
+}
+
+.crm-v3-isr-row {
+    display: grid;
+    grid-template-columns: 155px minmax(0, 1fr);
+    align-items: center;
+    min-height: 35px;
+    border-bottom: 1px solid #e1e4e7;
+}
+
+.crm-v3-isr-row label {
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #737b82;
+    line-height: 1.2;
+}
+
+.crm-v3-isr-row input,
+.crm-v3-isr-row select {
+    width: 100%;
+    max-width: 210px;
+    min-height: 30px;
+    margin: 3px 8px;
+    padding: 3px 7px;
+    border: 1px solid #cfd6dc;
+    border-radius: 3px;
+    background: #fff;
+    color: #263238;
+    font-size: 11px;
+    box-sizing: border-box;
+}
+
+.crm-v3-isr-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 7px 8px;
+}
+
+/* =========================================================
+ * ISR EXENTO
+ * ========================================================= */
+
+.crm-v3-isr-exento {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+    color: #737b82;
+}
+
+.crm-v3-isr-exento span {
+    white-space: nowrap;
+}
+
+.crm-v3-isr-exento select {
+    width: 70px;
+    min-height: 30px;
+    margin: 0;
+    padding: 3px 7px;
+    border: 1px solid #cfd6dc;
+    border-radius: 3px;
+    background: #fff;
+    color: #263238;
+    font-size: 11px;
+    box-sizing: border-box;
+}
+
+
+
+.crm-v3-isr-save {
+    min-height: 30px;
+    padding: 0 12px;
+    border: 1px solid #1d4f7a;
+    border-radius: 3px;
+    background: #1d4f7a;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.crm-v3-isr-save:hover {
+    background: #16456d;
+}
+
+.crm-v3-isr-total {
+    background: #eef3f7;
+    border-color: #b9c9d6;
+}
+
+.crm-v3-isr-status {
+    background: #f8fafb;
+    border-color: #d5dce1;
+}
+
+.crm-v3-isr-status strong {
+    color: #1d4f7a;
+}
+
+.crm-v3-isr-total strong {
+    font-size: 13px;
+    color: #1d4f7a;
+}
+
+.crm-v3-isr-warning {
+    padding: 7px 10px;
+    font-size: 11px;
+    line-height: 1.35;
+    color: #737b82;
+    background: #fafafa;
+}
+
+@media (max-width: 700px) {
+
+    .crm-v3-isr-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .crm-v3-isr-row {
+        grid-template-columns: 1fr;
+        padding: 3px 0;
+    }
+
+    .crm-v3-isr-row input,
+    .crm-v3-isr-row select {
+        max-width: calc(100% - 16px);
+    }
+
+
+    
+    .crm-v3-isr-actions {
+    flex-wrap: wrap;
+}
+
+.crm-v3-isr-exento {
+    width: 100%;
+    justify-content: flex-end;
+}
+}

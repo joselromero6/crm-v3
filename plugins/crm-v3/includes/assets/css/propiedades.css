@@ -1,0 +1,616 @@
+/* =========================================================
+   HEADER CRM PROPIEDADES
+   ========================================================= */
+
+.crm-v3-module-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 68px;
+    margin: 0 0 10px 0;
+    padding: 26px 16px;         /* Controla alto del header */
+    background: #ffffff;
+    border: 1px solid #dfe5e8;
+    border-left: 3px solid #4f8f94;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+    box-sizing: border-box;
+}
+
+
+.crm-v3-module-header-info span {
+    min-width: 0;
+    color: #263238;
+    font-size: 16px; /* Titulo header */
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.crm-v3-module-header-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.crm-v3-module-header-info p {
+    margin: 4px 0 0 0;
+    padding: 0;
+    color: #6b7479;
+    font-size: 14px;        /* subtitulo header */
+    line-height: 1.2;
+    font-weight: 400;
+}
+
+.crm-v3-new-property {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 15px;
+    background: #2785c7;
+    border: 0;
+    border-radius: 4px;
+    color: #ffffff !important;
+    font-size: 14px;    /* size boton registros header */
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+
+.crm-v3-new-property:hover {
+    background: #176fa9;
+    color: #ffffff !important;
+}
+
+/* =========================================================
+   TABLA CRM PROPIEDADES
+   ========================================================= */
+
+.crm-v3-propiedades-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: #ffffff;
+    border: 1px solid #dfe5e8;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+    box-sizing: border-box;
+}
+
+
+.crm-v3-propiedades-table {
+    width: 100%;
+    min-width: 1100px;
+    margin: 0 !important;
+    border: 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    table-layout: auto;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.crm-v3-propiedades-table thead th {
+    height: 34px;
+    padding: 0 9px !important;
+    background: #f4f6f8 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #dfe5e8 !important;
+    color: #59636e;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* =========================================================
+   AJUSTE FORZADO — ENCABEZADO TABLA PROPIEDADES
+   ========================================================= */
+
+.crm-v3-propiedades .crm-v3-propiedades-table thead th {
+    font-size: 12px !important;     /* Titulo de la tabla */
+    font-weight: 400 !important;
+    letter-spacing: .04em !important;
+}
+
+
+
+/* =========================================================
+   FILAS
+   ========================================================= */
+
+.crm-v3-propiedades-table tbody tr {
+    background: #ffffff !important;
+    transition: background .12s ease;
+}
+
+.crm-v3-propiedades-table tbody tr:hover {
+    background: #f8fafb !important;
+}
+
+.crm-v3-propiedades-table tbody td {
+    height: 37px;
+    padding: 0 9px !important;
+    border: 0 !important;
+    border-bottom: 1px solid #edf0f2 !important;
+    color: #344054;
+    font-size: 11px;        /* size filas tabla */
+    line-height: 1.2;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.crm-v3-propiedades-table tbody tr:last-child td {
+    border-bottom: 0 !important;
+}
+
+
+/* =========================================================
+   CLIENTE / PROPIETARIO
+   ========================================================= */
+
+.crm-v3-propiedades-table .crm-propiedad-cliente a {
+    color: #1769aa;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+
+.crm-v3-propiedades-table .crm-propiedad-cliente a:hover {
+    color: #0f4f82;
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   COLUMNAS NUMÉRICAS
+   ========================================================= */
+
+.crm-v3-propiedades-table td:nth-child(5),
+.crm-v3-propiedades-table td:nth-child(6) {
+    color: #475467;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================================
+   VALORES MONETARIOS
+   ========================================================= */
+
+.crm-v3-propiedades-table .crm-monto {
+    color: #26343a;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================================
+   ESTATUS
+   ========================================================= */
+
+.crm-v3-propiedades-table .crm-propiedad-estatus {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 11px;        /* size estatus filas tabla */ 
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   ESTATUS — PROPIEDAD
+   ========================================================= */
+
+.crm-v3-propiedades-table .crm-estatus-en-proceso {
+    background: #fff4cc;
+    color: #8a6500;
+}
+
+.crm-v3-propiedades-table .crm-estatus-para-relacionar {
+    background: #e8f1ff;
+    color: #1769aa;
+}
+
+.crm-v3-propiedades-table .crm-estatus-perdida {
+    background: #fde8e8;
+    color: #b42318;
+}
+
+.crm-v3-propiedades-table .crm-estatus-cerrada {
+    background: #e8f7ee;
+    color: #18794e;
+}
+
+.crm-v3-propiedades-table .crm-estatus-disponible {
+    background: #e8f7ee;
+    color: #18794e;
+}
+
+
+/* =========================================================
+   ESTATUS OP — OPERACIÓN
+   ========================================================= */
+
+.crm-v3-propiedades-table .crm-estatus-op-en-proceso {
+    background: #fff4cc;
+    color: #8a6500;
+}
+
+.crm-v3-propiedades-table .crm-estatus-op-para-relacionar {
+    background: #e8f1ff;
+    color: #1769aa;
+}
+
+.crm-v3-propiedades-table .crm-estatus-op-perdida {
+    background: #fde8e8;
+    color: #b42318;
+}
+
+.crm-v3-propiedades-table .crm-estatus-op-cerrada {
+    background: #e8f7ee;
+    color: #18794e;
+}
+
+
+/* =========================================================
+   SIN ESTATUS
+   ========================================================= */
+
+.crm-v3-propiedades-table .crm-estatus-sin-estatus {
+    color: #98a2b3;
+    background: transparent;
+}
+
+/* =========================================================
+   ANCHO DE COLUMNAS DE ESTATUS
+   ========================================================= */
+
+.crm-v3-propiedades-table th:nth-child(10),
+.crm-v3-propiedades-table td:nth-child(10) {
+    min-width: 95px;
+    width: 95px;
+}
+
+.crm-v3-propiedades-table th:nth-child(11),
+.crm-v3-propiedades-table td:nth-child(11) {
+    min-width: 95px;
+    width: 95px;
+}
+
+.crm-v3-propiedades-table .crm-propiedad-estatus {
+    white-space: nowrap;
+}
+
+
+
+
+/* =========================================================
+   SCROLLBAR HORIZONTAL
+   ========================================================= */
+
+.crm-v3-propiedades-table-wrapper::-webkit-scrollbar {
+    height: 7px;
+}
+
+
+.crm-v3-propiedades-table-wrapper::-webkit-scrollbar-track {
+    background: #f1f3f5;
+}
+
+
+.crm-v3-propiedades-table-wrapper::-webkit-scrollbar-thumb {
+    background: #c7d0d6;
+    border-radius: 10px;
+}
+
+
+.crm-v3-propiedades-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #aeb9c0;
+}
+
+
+
+/* ============================================================
+   CONTADORES CRM PROPIEDADES
+   ============================================================ */
+
+.crm-v3-propiedades-counters {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    margin: 0 0 10px;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   TARJETA DEL CONTADOR
+   ============================================================ */
+
+.crm-prop-counter {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 64px;
+    height: 64px;
+    padding: 8px 10px;
+    margin: 0;
+    background: #fff;
+    border: 1px solid #dfe5ea;
+    border-radius: 8px;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none !important;
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: inherit;
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+        transform .15s ease,
+        box-shadow .15s ease,
+        border-color .15s ease;
+}
+
+
+/* ============================================================
+   LÍNEA SUPERIOR
+   ============================================================ */
+
+.crm-prop-counter::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 8px 8px 0 0;
+    background: #2878bd;
+}
+
+
+/* ============================================================
+   COLORES DE CONTADORES
+   ============================================================ */
+
+/* TODOS */
+.crm-prop-counter:nth-child(1)::before {
+    background: #2878bd;
+}
+
+/* EXCLUSIVA */
+.crm-prop-counter:nth-child(2)::before {
+    background: #0084bd;
+}
+
+/* EN PROCESO */
+.crm-prop-counter:nth-child(3)::before {
+    background: #ff9800;
+}
+
+/* RELACIONADA */
+.crm-prop-counter:nth-child(4)::before {
+    background: #ff9800;
+}
+
+/* SIN RELACIÓN */
+.crm-prop-counter:nth-child(5)::before {
+    background: #16a34a;
+}
+
+/* CERRADA */
+.crm-prop-counter:nth-child(6)::before {
+    background: #ef233c;
+}
+
+/* PERDIDA */
+.crm-prop-counter:nth-child(7)::before {
+    background: #7c4dff;
+}
+
+
+/* ============================================================
+   ETIQUETA
+   ============================================================ */
+
+.crm-prop-counter span {
+    display: block;
+    margin: 0 0 4px;
+    color: #667085;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .07em;
+    line-height: 1.1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   NÚMERO
+   ============================================================ */
+
+.crm-prop-counter strong {
+    display: block;
+    margin: 0;
+    color: #26343a;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* ============================================================
+   HOVER
+   ============================================================ */
+
+.crm-prop-counter:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        0 3px 9px rgba(15, 23, 42, .09);
+    text-decoration: none !important;
+}
+
+
+/* ============================================================
+   CONTADOR ACTIVO
+   ============================================================ */
+
+.crm-prop-counter.is-active {
+    border-color: #2878bd;
+    box-shadow:
+        0 0 0 1px #2878bd,
+        0 3px 8px rgba(40, 120, 189, .12);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+    .crm-v3-propiedades-counters {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 700px) {
+    .crm-v3-propiedades-counters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* ============================================================
+   FILTROS CRM PROPIEDADES
+   ============================================================ */
+
+.crm-v3-propiedades-filters {
+    width: 100%;
+    margin: 0 0 10px;
+    box-sizing: border-box;
+}
+
+.crm-v3-propiedades-filters form {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.crm-v3-propiedades-filters select {
+    width: 100%;
+    min-width: 0;
+    height: 32px;
+    margin: 0;
+    padding: 0 9px;
+    background: #fff;
+    border: 1px solid #d5dde3;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #344054;
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 32px;
+    cursor: pointer;
+}
+
+/* Estado al seleccionar */
+
+.crm-v3-propiedades-filters select:focus {
+    border-color: #2878bd;
+    outline: none;
+    box-shadow: 0 0 0 1px rgba(40, 120, 189, .12);
+}
+
+
+
+/* ============================================================
+   ANCHO DE COLUMNAS — CRM PROPIEDADES
+   ============================================================ */
+
+.crm-v3-propiedades-table {
+    table-layout: fixed;
+}
+
+/* Propiedad */
+.crm-v3-propiedades-table th:nth-child(1),
+.crm-v3-propiedades-table td:nth-child(1) {
+    width: 18%;
+}
+
+/* Cliente propietario */
+.crm-v3-propiedades-table th:nth-child(2),
+.crm-v3-propiedades-table td:nth-child(2) {
+    width: 17%;
+}
+
+/* Colonia */
+.crm-v3-propiedades-table th:nth-child(3),
+.crm-v3-propiedades-table td:nth-child(3) {
+    width: 10%;
+}
+
+/* Ciudad */
+.crm-v3-propiedades-table th:nth-child(4),
+.crm-v3-propiedades-table td:nth-child(4) {
+    width: 7%;
+}
+
+/* Tipo de propiedad */
+.crm-v3-propiedades-table th:nth-child(5),
+.crm-v3-propiedades-table td:nth-child(5) {
+    width: 14%;
+}
+
+/* M² terreno */
+.crm-v3-propiedades-table th:nth-child(6),
+.crm-v3-propiedades-table td:nth-child(6) {
+    width: 7%;
+}
+
+/* M² construcción */
+.crm-v3-propiedades-table th:nth-child(7),
+.crm-v3-propiedades-table td:nth-child(7) {
+    width: 8%;
+}
+
+/* Valor catastral */
+.crm-v3-propiedades-table th:nth-child(8),
+.crm-v3-propiedades-table td:nth-child(8) {
+    width: 9%;
+}
+
+/* Precio venta */
+.crm-v3-propiedades-table th:nth-child(9),
+.crm-v3-propiedades-table td:nth-child(9) {
+    width: 9%;
+}
+
+/* Estatus */
+.crm-v3-propiedades-table th:nth-child(10),
+.crm-v3-propiedades-table td:nth-child(10) {
+    width: 9%;
+}

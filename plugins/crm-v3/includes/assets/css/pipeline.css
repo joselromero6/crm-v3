@@ -1,0 +1,315 @@
+/**
+ * ============================================================
+ * CRM CIBR — PIPELINE
+ * ============================================================
+ */
+
+/* ============================================================
+ * PIPELINE
+ * ============================================================ */
+
+.crm-v3-pipeline {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 18px 14px;
+}
+
+
+/* ============================================================
+ * ETAPAS
+ * ============================================================ */
+
+.crm-v3-pipeline-step {
+    min-width: 0;
+    min-height: 52px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    border: 1px solid #cfd6dc;
+    border-radius: 5px;
+    background: #f5f6f7;
+    color: #737b82;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+
+/* ============================================================
+ * ETAPA COMPLETA
+ * ============================================================ */
+
+.crm-v3-pipeline-step.is-complete {
+    background: #4a73bd;
+    border-color: #315c9f;
+    color: #ffffff;
+}
+
+
+/* ============================================================
+ * ETAPA ACTUAL
+ * ============================================================ */
+
+.crm-v3-pipeline-step.is-current {
+    background: #ffffff;
+    border: 2px solid #4a73bd;
+    color: #1d4f7a;
+}
+
+
+/* ============================================================
+ * ETAPA PENDIENTE
+ * ============================================================ */
+
+.crm-v3-pipeline-step.is-pending {
+    background: #f1f3f5;
+    border-color: #d9dde1;
+    color: #9aa1a8;
+}
+
+
+/* ============================================================
+ * EDITOR DE OPERACIÓN
+ * ============================================================ */
+
+.crm-v3-operacion-editor {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin-top: 12px;
+    background: #ffffff;
+    border: 1px solid #d9dde1;
+    border-radius: 4px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+ * LAYOUT DEL EDITOR
+ * ============================================================ */
+
+.crm-v3-operacion-editor-layout {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background: transparent;
+    border: 0;
+}
+
+/* ============================================================
+ * COLUMNA IZQUIERDA — OPERACIÓN + FINANCIERO
+ * ============================================================ */
+
+.crm-v3-operacion-editor-left {
+    grid-column: 1;
+    grid-row: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+ * COLUMNA DERECHA — ISR
+ * ============================================================ */
+
+.crm-v3-operacion-isr {
+    grid-column: 2;
+    grid-row: 1;
+
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    align-self: start;
+}
+
+
+
+
+
+
+
+
+
+/* ============================================================
+ * PANEL — DATOS DE OPERACIÓN
+ * ============================================================ */
+
+.crm-v3-operacion-editor-panel {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #d9dde1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+
+/* ============================================================
+ * TÍTULO DEL EDITOR
+ * ============================================================ */
+
+.crm-v3-operacion-editor-title {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e1e4e7;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    color: #263238;
+}
+
+
+/* ============================================================
+ * FORMULARIO
+ * ============================================================ */
+
+.crm-v3-operacion-editor-form {
+    padding: 0;
+}
+
+
+/* ============================================================
+ * FILAS DEL FORMULARIO
+ * ============================================================ */
+
+.crm-v3-operacion-editor-row {
+    display: grid;
+    grid-template-columns:
+        145px
+        minmax(0, 1fr);
+    align-items: center;
+    min-height: 38px;
+    border-bottom: 1px solid #e1e4e7;
+}
+
+
+/* ============================================================
+ * ETIQUETAS
+ * ============================================================ */
+
+.crm-v3-operacion-editor-row label {
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    color: #737b82;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+ * CAMPOS
+ * ============================================================ */
+
+.crm-v3-operacion-editor-row select,
+.crm-v3-operacion-editor-row input {
+    width: 300px;
+    max-width: calc(100% - 16px);
+    margin: 4px 8px;
+    min-height: 44px;
+    padding: 4px 8px;
+    border: 1px solid #cfd6dc;
+    border-radius: 3px;
+    background: #ffffff;
+    color: #263238;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+ * BOTÓN GUARDAR
+ * ============================================================ */
+
+.crm-v3-operacion-editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 7px 10px;
+}
+
+
+.crm-v3-operacion-editor-save {
+    min-height: 32px;
+    padding: 0 14px;
+    border: 1px solid #1d4f7a;
+    border-radius: 3px;
+    background: #1d4f7a;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+.crm-v3-operacion-editor-save:hover {
+    background: #16456d;
+}
+
+
+/* ============================================================
+ * RESPONSIVE — TABLET
+ * ============================================================ */
+
+@media (max-width: 1100px) {
+
+    .crm-v3-operacion-editor-layout {
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1fr);
+    }
+
+}
+
+
+/* ============================================================
+ * RESPONSIVE — MÓVIL
+ * ============================================================ */
+
+@media (max-width: 700px) {
+
+    .crm-v3-pipeline {
+        grid-template-columns:
+            repeat(8, minmax(100px, 1fr));
+        overflow-x: auto;
+        padding: 15px 10px;
+    }
+
+
+    .crm-v3-operacion-editor-layout {
+        grid-template-columns: 1fr;
+    }
+
+
+    .crm-v3-operacion-editor-row {
+        grid-template-columns: 1fr;
+    }
+
+
+    .crm-v3-operacion-editor-row label {
+        padding-bottom: 4px;
+    }
+
+}

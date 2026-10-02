@@ -1,0 +1,900 @@
+/* ============================================================
+   CRM V3 - NUEVOS REGISTROS
+   ============================================================ */
+
+.crm-v3-formulario {
+    width: 100%;
+    margin: 0;
+    padding: 8px 10px 0;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   HEADER PRINCIPAL
+   ============================================================ */
+
+.crm-v3-formulario .crm-v3-module-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 58px;
+    margin: 0 0 10px;
+    padding: 32px 16px;
+    background: #ffffff;
+    border: 1px solid #dfe5e8;
+    border-left: 3px solid #4f8f94;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+    box-sizing: border-box;
+}
+
+.crm-v3-formulario .crm-v3-module-header > span {
+    color: #263238;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.crm-v3-form-card {
+    width: 100%;
+    margin: 0 0 10px;
+    background: #ffffff;
+    border: 1px solid #dfe5e8;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   HEADER DE CARD
+   ============================================================ */
+
+.crm-v3-form-card-header {
+    display: flex;
+    align-items: center;
+    min-height: 46px;
+    padding: 8px 12px;
+    background: #ffffff;
+    border-bottom: 1px solid #e8ecef;
+    box-sizing: border-box;
+}
+
+.crm-v3-form-card-header h2 {
+    margin: 0 0 2px;
+    color: #263238;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.crm-v3-form-card-header p {
+    margin: 0;
+    color: #7a858f;
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+
+/* ============================================================
+   CUERPO
+   ============================================================ */
+
+.crm-v3-form-card-body {
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   FORMULARIO ACF
+   ============================================================ */
+
+.crm-v3-form-card-body .acf-form {
+    margin: 0;
+}
+
+.crm-v3-form-card-body .acf-fields {
+    display: grid !important;
+    grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+    column-gap: 10px;
+    row-gap: 8px;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+.crm-v3-form-card-body .acf-field {
+    width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   CLIENTES
+   ============================================================ */
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-fields {
+    grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="fecha_de_registro"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="origen_lead"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="domicilio"] {
+    grid-column: span 2;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="telefono"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="e-mail"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="tipo_cliente"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="relacion_comercial"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="origen_recursos"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="tipo_credito"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="presupuesto"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="adeudo_hipoteca"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="fecha_de_contacto"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="prioridad"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="estatus"] {
+    grid-column: span 1;
+}
+
+.crm-v3-formulario
+.crm-v3-form-card:first-of-type
+.acf-field[data-name="notas"] {
+    grid-column: span 3;
+}
+
+
+/* ============================================================
+   PROPIEDADES
+   ============================================================ */
+
+.crm-v3-property-card .acf-fields {
+    grid-template-columns:
+        repeat(12, minmax(0, 1fr));
+
+    grid-template-areas:
+
+    "titulo titulo fecha cliente cliente direccion direccion direccion colonia colonia ciudad ciudad"
+
+    "operacion operacion estado_inmueble estado_inmueble estado_comercial estado_comercial documentacion documentacion tipo_propiedad tipo_propiedad recamaras recamaras"
+
+    "banos banos cochera cochera terreno terreno construccion construccion mostrar_web mostrar_web adeudo_agua adeudo_agua"
+
+    "adeudo_predial adeudo_predial rehabilitacion rehabilitacion cartera cartera valor_catastral valor_catastral precio precio estatus estatus"
+
+    "comision comision imagenes imagenes imagenes imagenes imagenes imagenes imagenes imagenes imagenes imagenes";
+}
+
+.crm-v3-property-card .acf-field[data-name="_post_title"] {
+    grid-area: titulo;
+}
+
+.crm-v3-property-card .acf-field[data-name="fecha_captacion"] {
+    grid-area: fecha;
+}
+
+.crm-v3-property-card .acf-field[data-name="cliente_propietario"] {
+    grid-area: cliente;
+}
+
+.crm-v3-property-card .acf-field[data-name="direccion"] {
+    grid-area: direccion;
+}
+
+.crm-v3-property-card .acf-field[data-name="colonia_fraccionamiento"] {
+    grid-area: colonia;
+}
+
+.crm-v3-property-card .acf-field[data-name="ciudad"] {
+    grid-area: ciudad;
+}
+
+.crm-v3-property-card .acf-field[data-name="tipo_de_operacion"] {
+    grid-area: operacion;
+}
+
+.crm-v3-property-card .acf-field[data-name="estado_del_inmueble"] {
+    grid-area: estado_inmueble;
+}
+
+.crm-v3-property-card .acf-field[data-name="estado_comercial"] {
+    grid-area: estado_comercial;
+}
+
+.crm-v3-property-card .acf-field[data-name="documentacion"] {
+    grid-area: documentacion;
+}
+
+.crm-v3-property-card .acf-field[data-name="tipo_de_propiedad"] {
+    grid-area: tipo_propiedad;
+}
+
+.crm-v3-property-card .acf-field[data-name="recamaras"] {
+    grid-area: recamaras;
+}
+
+.crm-v3-property-card .acf-field[data-name="banos"] {
+    grid-area: banos;
+}
+
+.crm-v3-property-card .acf-field[data-name="cochera"] {
+    grid-area: cochera;
+}
+
+.crm-v3-property-card .acf-field[data-name="m2_terreno"] {
+    grid-area: terreno;
+}
+
+.crm-v3-property-card .acf-field[data-name="m2_construccion"] {
+    grid-area: construccion;
+}
+
+.crm-v3-property-card .acf-field[data-name="mostrar_web"] {
+    grid-area: mostrar_web;
+}
+
+.crm-v3-property-card .acf-field[data-name="adeudo_agua"] {
+    grid-area: adeudo_agua;
+}
+
+.crm-v3-property-card .acf-field[data-name="adeudo_pedial"] {
+    grid-area: adeudo_predial;
+}
+
+.crm-v3-property-card .acf-field[data-name="costo_rehabilitacion"] {
+    grid-area: rehabilitacion;
+}
+
+.crm-v3-property-card .acf-field[data-name="tipo_de_cartera"] {
+    grid-area: cartera;
+}
+
+.crm-v3-property-card .acf-field[data-name="valor_catastral"] {
+    grid-area: valor_catastral;
+}
+
+.crm-v3-property-card .acf-field[data-name="precio_de_venta"] {
+    grid-area: precio;
+}
+
+.crm-v3-property-card .acf-field[data-name="estatus"] {
+    grid-area: estatus;
+}
+
+.crm-v3-property-card .acf-field[data-name="comision"] {
+    grid-area: comision;
+}
+
+.crm-v3-property-card .acf-field[data-name="imagenes"] {
+    grid-area: imagenes;
+}
+
+
+/* ============================================================
+   ETIQUETAS
+   ============================================================ */
+
+.crm-v3-form-card-body .acf-label {
+    margin: 0 0 4px;
+}
+
+.crm-v3-form-card-body .acf-label label {
+    color: #59636e;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: .04em;
+    line-height: 1.1;
+}
+
+
+/* ============================================================
+   CONTROLES DEL FORMULARIO
+   ============================================================ */
+
+.crm-v3-form-card-body .acf-input input:not([type="checkbox"]),
+.crm-v3-form-card-body .acf-input select,
+.crm-v3-form-card-body .acf-input .select2-container {
+
+    width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    font-family: inherit !important;
+    font-size: 9px !important;
+
+    color: #344054 !important;
+}
+
+
+/* ============================================================
+   INPUTS Y SELECTS NATIVOS
+   ============================================================ */
+
+.crm-v3-form-card-body .acf-input input:not([type="checkbox"]),
+.crm-v3-form-card-body .acf-input select {
+
+    width: 100% !important;
+
+    height: 30px !important;
+    min-height: 30px !important;
+
+    margin: 0 !important;
+    padding: 5px 8px !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #d5dde3 !important;
+    border-radius: 4px !important;
+
+    color: #344054 !important;
+
+    font-family: inherit !important;
+    font-size: 9px !important;
+
+    line-height: 18px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   SELECT NATIVO
+   ============================================================ */
+
+.crm-v3-form-card-body .acf-input select {
+
+    cursor: pointer;
+
+    appearance: auto;
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
+}
+
+
+/* ============================================================
+   SELECT2 — CONTENEDOR
+   ============================================================ */
+
+.crm-v3-form-card-body .acf-input .select2-container {
+
+    width: 100% !important;
+
+    height: 30px !important;
+
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   SELECT2 — CAMPO
+   ============================================================ */
+
+.crm-v3-form-card-body
+.acf-input
+.select2-container
+.select2-selection--single {
+
+    width: 100% !important;
+
+    height: 30px !important;
+    min-height: 30px !important;
+
+    padding: 0 28px 0 8px !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #d5dde3 !important;
+    border-radius: 4px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   SELECT2 — TEXTO
+   ============================================================ */
+
+.crm-v3-form-card-body
+.acf-input
+.select2-container
+.select2-selection__rendered {
+
+    height: 28px !important;
+
+    padding: 0 !important;
+
+    color: #344054 !important;
+
+    font-family: inherit !important;
+    font-size: 9px !important;
+
+    line-height: 28px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   SELECT2 — FLECHA
+   ============================================================ */
+
+.crm-v3-form-card-body
+.acf-input
+.select2-container
+.select2-selection__arrow {
+
+    width: 24px !important;
+    height: 28px !important;
+
+    top: 0 !important;
+    right: 0 !important;
+}
+
+
+/* ============================================================
+   SELECT2 — FOCUS
+   ============================================================ */
+
+.crm-v3-form-card-body
+.acf-input
+.select2-container--focus
+.select2-selection--single,
+
+.crm-v3-form-card-body
+.acf-input
+.select2-container--open
+.select2-selection--single {
+
+    border-color: #2878bd !important;
+
+    outline: none !important;
+
+    box-shadow:
+        0 0 0 1px rgba(40, 120, 189, .12) !important;
+}
+
+
+/* ============================================================
+   TEXTAREA
+   ============================================================ */
+
+.crm-v3-form-card-body .acf-input textarea {
+    width: 100% !important;
+
+    height: 54px !important;
+    min-height: 54px !important;
+
+    margin: 0 !important;
+    padding: 5px 8px !important;
+
+    background: #ffffff;
+
+    border: 1px solid #d5dde3;
+    border-radius: 4px;
+
+    color: #344054;
+
+    font-family: inherit;
+    font-size: 11px;
+
+    box-sizing: border-box;
+
+    resize: vertical;
+}
+
+
+/* ============================================================
+   MOSTRAR EN WEB
+   ============================================================ */
+
+.crm-v3-property-card
+.acf-field[data-name="mostrar_web"] .acf-input {
+    display: flex;
+    align-items: center;
+
+    min-height: 30px;
+}
+
+.crm-v3-property-card
+.acf-field[data-name="mostrar_web"]
+input[type="checkbox"] {
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin: 0 6px 0 0 !important;
+}
+
+
+/* ============================================================
+   IMÁGENES
+   ============================================================ */
+
+.crm-v3-property-card
+.acf-field[data-name="imagenes"] .acf-input {
+    min-height: 30px;
+}
+
+
+/* ============================================================
+   FOCUS
+   ============================================================ */
+
+.crm-v3-form-card-body .acf-input input:focus,
+.crm-v3-form-card-body .acf-input select:focus,
+.crm-v3-form-card-body .acf-input textarea:focus {
+    border-color: #2878bd;
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 1px rgba(40, 120, 189, .12);
+}
+
+
+/* ============================================================
+   ACCIONES
+   ============================================================ */
+
+.crm-v3-form-card-body .acf-form-submit {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 12px;
+    padding-top: 10px;
+
+    border-top: 1px solid #edf0f2;
+}
+
+.crm-v3-form-submit {
+    min-height: 32px;
+
+    padding: 0 15px;
+
+    background: #2785c7;
+
+    border: 0;
+    border-radius: 4px;
+
+    color: #ffffff !important;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition: background .15s ease;
+}
+
+.crm-v3-form-submit:hover {
+    background: #176fa9;
+}
+
+/* ============================================================
+   OPERACIONES
+   ============================================================ */
+
+.crm-v3-operation-card {
+    margin-top: 10px;
+}
+
+.crm-v3-operation-card .acf-fields {
+    grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+
+    column-gap: 10px;
+    row-gap: 8px;
+}
+
+
+/* Distribución */
+
+.crm-v3-operation-card
+.acf-field[data-name="fecha_de_operacion"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="comprador"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="propiedad"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="expediente_completo"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="valuador"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="tipo_de_avaluo"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="institucion_financiera"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="notaria"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="valor_mercado"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="precio_de_cierre"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="fecha_cierre"] {
+    grid-column: span 1;
+}
+
+.crm-v3-operation-card
+.acf-field[data-name="estatus_de_operecion"] {
+    grid-column: span 1;
+}
+
+
+
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+    .crm-v3-form-card-body .acf-fields {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .crm-v3-property-card .acf-fields {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        grid-template-areas: none;
+    }
+
+    .crm-v3-property-card .acf-field {
+        grid-column: auto !important;
+        grid-area: auto !important;
+    }
+}
+
+
+@media (max-width: 782px) {
+
+    .crm-v3-form-card-body .acf-fields {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .crm-v3-property-card .acf-fields {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .crm-v3-form-card-body .acf-fields,
+    .crm-v3-property-card .acf-fields {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+
+
+/* ============================================================
+   VALIDACIÓN FLOTANTE
+   ============================================================ */
+
+.crm-v3-validation-notice {
+    position: fixed;
+
+    top: 72px;
+    right: 24px;
+
+    z-index: 999999;
+
+    width: 360px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e6e9;
+    border-left: 4px solid #d94b4b;
+    border-radius: 6px;
+
+    box-shadow:
+        0 8px 28px rgba(0, 0, 0, .16);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(-8px);
+
+    transition:
+        opacity .18s ease,
+        transform .18s ease,
+        visibility .18s ease;
+
+    box-sizing: border-box;
+}
+
+.crm-v3-validation-notice.is-visible {
+    opacity: 1;
+    visibility: visible;
+
+    transform: translateY(0);
+}
+
+
+/* Header */
+
+.crm-v3-validation-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 38px;
+
+    padding: 0 10px;
+
+    background: #fafafa;
+
+    border-bottom: 1px solid #edf0f2;
+}
+
+.crm-v3-validation-header strong {
+    color: #b63838;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* Cerrar */
+
+.crm-v3-validation-close {
+    width: 24px;
+    height: 24px;
+
+    padding: 0;
+
+    background: transparent;
+
+    border: 0;
+
+    color: #7d858c;
+
+    font-size: 18px;
+    line-height: 24px;
+
+    cursor: pointer;
+}
+
+.crm-v3-validation-close:hover {
+    color: #b63838;
+}
+
+
+/* Mensaje */
+
+.crm-v3-validation-message {
+    padding: 10px 12px;
+
+    color: #59636e;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.crm-v3-validation-message div + div {
+    margin-top: 5px;
+}

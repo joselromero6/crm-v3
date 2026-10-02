@@ -1,0 +1,790 @@
+/* =========================================================
+   CRM CIBR — CLIENTES
+   UI PRO
+   ========================================================= */
+
+.crm-v3-clientes {
+    width: calc(100% - 20px);
+    margin: 10px 20px 0 0;
+
+    color: #263238;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.crm-v3-module-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 68px;
+    margin: 0 0 10px 0;
+    padding: 26px 16px; /*Controla alto del header */
+    background: #ffffff;
+    border: 1px solid #dfe5e8;
+    border-left: 3px solid #4f8f94;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+    box-sizing: border-box;
+}
+
+.crm-v3-module-header span {
+    min-width: 0;
+    color: #263238;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.crm-v3-module-header-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.crm-v3-module-header-info p {
+    margin: 4px 0 0 0;
+    padding: 0;
+    color: #6b7479;
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 400;
+}
+
+.crm-v3-new-client {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 15px;
+    background: #2785c7;
+    border: 0;
+    border-radius: 4px;
+    color: #ffffff !important;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none !important;
+    white-space: nowrap;
+}
+
+
+.crm-v3-new-client:hover {
+    background: #176fa9;
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CONTADORES CRM CLIENTES
+   ========================================================= */
+
+.crm-v3-clientes-counters {
+    display: grid;
+
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+
+    gap: 8px;
+
+    width: 100%;
+
+    margin: 10px 0 0 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CONTADOR
+   ========================================================= */
+
+.crm-counter {
+    position: relative;
+
+    min-width: 0;
+    min-height: 60px;
+    height: 60px;
+
+    padding: 10px 12px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe5e8;
+    border-radius: 8px;
+
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+
+    text-align: center;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
+
+
+/* =========================================================
+   LÍNEA SUPERIOR
+   ========================================================= */
+
+.crm-counter::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 3px;
+
+    background: #2785c7;
+
+    border-radius: 8px 8px 0 0;
+}
+
+
+/* =========================================================
+   COLORES DE CONTADORES
+   ========================================================= */
+
+.crm-counter:nth-child(1)::before {
+    background: #2785c7;
+}
+
+.crm-counter:nth-child(2)::before {
+    background: #319fe5;
+}
+
+.crm-counter:nth-child(3)::before {
+    background: #f59e0b;
+}
+
+.crm-counter:nth-child(4)::before {
+    background: #16a34a;
+}
+
+.crm-counter:nth-child(5)::before {
+    background: #8b5cf6;
+}
+
+.crm-counter:nth-child(6)::before {
+    background: #ef4444;
+}
+
+.crm-counter:nth-child(7)::before {
+    background: #ef4444;
+}
+
+
+/* =========================================================
+   ETIQUETA
+   ========================================================= */
+
+.crm-counter span {
+    display: block;
+
+    margin: 6px 0 0 0;
+
+    color: #626b70;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    line-height: 1;
+
+    letter-spacing: 0;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   NÚMERO
+   ========================================================= */
+
+.crm-counter strong {
+    display: block;
+
+    margin: 3px 0 0 0;
+
+    color: #0875b5;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.crm-counter:hover {
+    border-color: #c8d2d7;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .07);
+}
+
+
+/* =========================================================
+   CONTADOR ACTIVO
+   ========================================================= */
+
+.crm-counter.active {
+    border-color: #2785c7;
+
+    box-shadow:
+        0 0 0 1px #2785c7,
+        0 2px 5px rgba(39, 133, 199, .10);
+}
+
+
+.crm-counter.active::before {
+    background: #2785c7;
+}
+
+
+.crm-counter.active span {
+    color: #0875b5;
+}
+
+
+/* =========================================================
+   FILTROS
+   ========================================================= */
+
+.crm-v3-clientes-filters {
+    display: grid;
+
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+
+    gap: 8px;
+
+    width: 100%;
+
+    margin: 10px 0 10px 0;
+    padding: 0;
+
+    background: transparent;
+
+    border: 0;
+    border-radius: 0;
+
+    box-shadow: none;
+
+    box-sizing: border-box;
+}
+
+
+.crm-filter {
+    min-width: 0;
+}
+
+
+.crm-filter label {
+    display: block;
+
+    margin: 0 0 5px 0;
+
+    color: #626b70;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    line-height: 1.2;
+
+    letter-spacing: 0;
+
+    white-space: nowrap;
+}
+
+
+.crm-filter select {
+    width: 100%;
+    height: 34px;
+
+    min-width: 0;
+
+    padding: 0 30px 0 10px;
+
+    background: #ffffff;
+
+    border: 1px solid #d7dee5;
+    border-radius: 5px;
+
+    color: #475467;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    line-height: 34px;
+
+    box-shadow: none;
+
+    box-sizing: border-box;
+
+    cursor: pointer;
+
+    appearance: auto;
+
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
+
+
+.crm-filter select:hover {
+    border-color: #b9c5cf;
+}
+
+
+.crm-filter select:focus {
+    border-color: #2785c7;
+
+    box-shadow:
+        0 0 0 1px rgba(39, 133, 199, .12);
+
+    outline: none;
+}
+
+/* =========================================================
+   TABLA — CONTENEDOR
+   ========================================================= */
+
+.crm-v3-clientes-table-wrapper {
+    width: 100%;
+
+    margin-top: 0;
+
+    overflow-x: auto;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe5e8;
+    border-radius: 6px;
+
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+
+    box-sizing: border-box;
+
+    scrollbar-width: thin;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.crm-v3-clientes-table {
+    width: 100%;
+    min-width: 1150px;
+
+    margin: 0 !important;
+
+    border: 0 !important;
+
+    border-collapse: separate !important;
+    border-spacing: 0;
+
+    table-layout: fixed;
+}
+
+/* =========================================================
+   ANCHOS DE COLUMNAS — CRM CLIENTES
+   ========================================================= */
+
+/* Cliente */
+.crm-v3-clientes-table th:nth-child(1),
+.crm-v3-clientes-table td:nth-child(1) {
+    width: 16% !important;
+}
+
+/* Origen Lead */
+.crm-v3-clientes-table th:nth-child(2),
+.crm-v3-clientes-table td:nth-child(2) {
+    width: 10% !important;
+}
+
+/* Tipo de Cliente */
+.crm-v3-clientes-table th:nth-child(3),
+.crm-v3-clientes-table td:nth-child(3) {
+    width: 10% !important;
+}
+
+/* Relación Comercial */
+.crm-v3-clientes-table th:nth-child(4),
+.crm-v3-clientes-table td:nth-child(4) {
+    width: 11% !important;
+}
+
+/* Recursos */
+.crm-v3-clientes-table th:nth-child(5),
+.crm-v3-clientes-table td:nth-child(5) {
+    width: 11% !important;
+}
+
+/* Tipo de Crédito */
+.crm-v3-clientes-table th:nth-child(6),
+.crm-v3-clientes-table td:nth-child(6) {
+    width: 10% !important;
+}
+
+/* Presupuesto */
+.crm-v3-clientes-table th:nth-child(7),
+.crm-v3-clientes-table td:nth-child(7) {
+    width: 8% !important;
+}
+
+/* Hipoteca */
+.crm-v3-clientes-table th:nth-child(8),
+.crm-v3-clientes-table td:nth-child(8) {
+    width: 8% !important;
+}
+
+/* Estatus */
+.crm-v3-clientes-table th:nth-child(9),
+.crm-v3-clientes-table td:nth-child(9) {
+    width: 9% !important;
+}
+
+/* Estatus Operación */
+.crm-v3-clientes-table th:nth-child(10),
+.crm-v3-clientes-table td:nth-child(10) {
+    width: 7% !important;
+}
+
+/* =========================================================
+   ENCABEZADO DE TABLA
+   ========================================================= */
+
+.crm-v3-clientes-table thead th {
+    height: 34px;       /* Controla alto de la cabezera */
+    padding: 0 9px !important;
+    background: #f4f6f8 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #dfe5e8 !important;
+    color: #59636e;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* =========================================================
+   AJUSTE FORZADO — ENCABEZADO TABLA CLIENTES
+   ========================================================= */
+
+.crm-v3-clientes .crm-v3-clientes-table thead th {
+    font-size: 12px !important;     /* Titulos de la tabla */
+    font-weight: 400 !important;
+    letter-spacing: .04em !important;
+}
+
+.crm-v3-clientes-table thead th:first-child {
+    border-radius: 6px 0 0 0;
+}
+
+.crm-v3-clientes-table thead th:last-child {
+    border-radius: 0 6px 0 0;
+}
+
+
+/* =========================================================
+   FILAS
+   ========================================================= */
+
+.crm-v3-clientes-table tbody tr {
+    background: #ffffff !important;
+    transition: background .12s ease;
+}
+
+
+.crm-v3-clientes-table tbody tr:hover {
+    background: #f8fafb !important;
+}
+
+
+.crm-v3-clientes-table tbody td {
+    height: 37px;
+    padding: 0 9px !important;
+    border: 0 !important;
+    border-bottom: 1px solid #edf0f2 !important;
+    color: #344054;
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+
+.crm-v3-clientes-table tbody tr:last-child td {
+    border-bottom: 0 !important;
+}
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   CLIENTE
+   ========================================================= */
+
+.crm-cliente-nombre {
+    min-width: 180px;
+    font-weight: 700;
+}
+
+
+.crm-cliente-nombre a {
+    color: #1769aa;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition: color .15s ease;
+}
+
+
+.crm-cliente-nombre a:hover {
+    color: #0f4f82;
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   INFORMACIÓN
+   ========================================================= */
+
+.crm-v3-clientes-table td:nth-child(2),
+.crm-v3-clientes-table td:nth-child(3),
+.crm-v3-clientes-table td:nth-child(4),
+.crm-v3-clientes-table td:nth-child(5),
+.crm-v3-clientes-table td:nth-child(6) {
+    color: #475467;
+}
+
+
+/* =========================================================
+   MONTOS
+   ========================================================= */
+
+.crm-monto {
+    min-width: 125px;
+
+    color: #26343a !important;
+
+    font-weight: 700;
+
+    font-variant-numeric: tabular-nums;
+
+    text-align: right;
+}
+
+
+
+
+
+/* =========================================================
+   ESTATUS — BADGES CRM
+   MISMA PALETA QUE CRM PROPIEDADES
+   ========================================================= */
+
+.crm-estatus {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 22px;
+
+    padding: 3px 9px;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    box-sizing: border-box;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    letter-spacing: .05px;
+
+    white-space: nowrap;
+}
+
+/* =========================================================
+   ESTATUS CRM CLIENTES
+   ========================================================= */
+
+.crm-estatus-en_proceso,
+.crm-estatus-op-en_proceso {
+    background: #fff7e6;
+    color: #a66a00;
+    border-color: #f5dfb0;
+}
+
+
+.crm-estatus-para_relacionar {
+    background: #edf6ff;
+    color: #1769aa;
+    border-color: #d7eaff;
+}
+
+
+.crm-estatus-perdido,
+.crm-estatus-op-perdida {
+    background: #fff0f0;
+    color: #b32d2e;
+    border-color: #f7d7d7;
+}
+
+
+.crm-estatus-op-cerrada {
+    background: #eef2f7;
+    color: #4b5d73;
+    border-color: #d9e0e8;
+}
+
+
+
+/* =========================================================
+   SEGUIMIENTO
+   ========================================================= */
+
+.crm-estatus-seguimiento {
+    background: #edf6ff;
+    color: #1769aa;
+    border-color: #d7eaff;
+}
+
+
+/* =========================================================
+   PARA RELACIONAR
+   ========================================================= */
+
+.crm-estatus-para_relacionar {
+    background: #edf6ff;
+    color: #1769aa;
+    border-color: #d7eaff;
+}
+
+
+/* =========================================================
+   EN PROCESO
+   ========================================================= */
+
+.crm-estatus-en_proceso,
+.crm-estatus-op-en_proceso {
+    background: #fff7e6;
+    color: #a66a00;
+    border-color: #f5dfb0;
+}
+
+
+/* =========================================================
+   PERDIDO / PERDIDA
+   ========================================================= */
+
+.crm-estatus-perdido,
+.crm-estatus-perdida,
+.crm-estatus-op-perdido,
+.crm-estatus-op-perdida {
+    background: #fff0f0;
+    color: #b32d2e;
+    border-color: #f7d7d7;
+}
+
+
+/* =========================================================
+   CERRADO / CERRADA
+   ========================================================= */
+
+.crm-estatus-cerrado,
+.crm-estatus-cerrada,
+.crm-estatus-op-cerrado,
+.crm-estatus-op-cerrada {
+    background: #eef7f1;
+    color: #287a45;
+    border-color: #d5eadc;
+}
+
+
+/* =========================================================
+   CITA PROGRAMADA
+   ========================================================= */
+
+.crm-estatus-cita_programada {
+    background: #fff7e6;
+    color: #a66a00;
+    border-color: #f5dfb0;
+}
+
+
+/* =========================================================
+   VISITADO
+   ========================================================= */
+
+.crm-estatus-visitado {
+    background: #eef7f1;
+    color: #287a45;
+    border-color: #d5eadc;
+}
+
+
+/* =========================================================
+   EN NEGOCIACIÓN
+   ========================================================= */
+
+.crm-estatus-en_negociacion {
+    background: #f3efff;
+    color: #6842a5;
+    border-color: #dfd4f5;
+}
+
+
+/* =========================================================
+   ESTATUS OP — SEGUIMIENTO / COTIZACIÓN
+   ========================================================= */
+
+.crm-estatus-op-seguimiento,
+.crm-estatus-op-cotizacion,
+.crm-estatus-op-cotizacion_enviada {
+    background: #edf6ff;
+    color: #1769aa;
+    border-color: #d7eaff;
+}

@@ -1,0 +1,472 @@
+/* =========================================================
+   CRM CIBR — ANÁLISIS COMPARATIVO DE MERCADO
+========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+========================================================= */
+
+.crm-v3-analisis-mercado {
+    width: 100%;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.crm-v3-mercado-header {
+    margin-bottom: 10px;
+}
+
+.crm-v3-mercado-title {
+    margin: 0;
+
+    color: #263238;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.crm-v3-mercado-description {
+    margin-top: 3px;
+
+    color: #7b8794;
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+.crm-v3-mercado-filtros {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        minmax(150px, .7fr);
+
+    gap: 10px;
+    align-items: end;
+}
+
+.crm-v3-mercado-filtro {
+    min-width: 0;
+}
+
+.crm-v3-mercado-filtro label {
+    display: block;
+
+    margin: 0 0 4px;
+
+    color: #52606d;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   CAMPOS
+========================================================= */
+
+.crm-v3-mercado-filtro select,
+.crm-v3-mercado-filtro input {
+    display: block;
+
+    width: 100%;
+    height: 34px;
+
+    margin: 0;
+    padding: 0 10px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dce3e8;
+    border-radius: 6px;
+
+    background-color: #ffffff;
+
+    color: #43515c;
+
+    font-family: inherit;
+    font-size: 11px;
+    line-height: 34px;
+}
+
+
+/* =========================================================
+   SELECT NATIVO
+========================================================= */
+
+.crm-v3-mercado-filtro select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    padding-right: 30px;
+
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 6px;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%237b8794' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.crm-v3-mercado-filtro select option {
+    padding: 6px 8px;
+
+    background: #ffffff;
+    color: #43515c;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   ESTADOS
+========================================================= */
+
+.crm-v3-mercado-filtro select:focus,
+.crm-v3-mercado-filtro input:focus {
+    border-color: #9db8c2;
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 2px rgba(47, 101, 116, .08);
+}
+
+.crm-v3-mercado-filtro select:disabled {
+    background-color: #f5f7f8;
+    color: #9aa5ad;
+
+    cursor: not-allowed;
+}
+
+.crm-v3-mercado-filtro input::placeholder {
+    color: #9aa5ad;
+}
+
+
+/* =========================================================
+   PRECIO A EVALUAR
+========================================================= */
+
+.crm-v3-mercado-precio input {
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   RESULTADO
+========================================================= */
+
+.crm-v3-mercado-resultado {
+    margin-top: 12px;
+}
+
+.crm-v3-mercado-placeholder {
+    padding: 9px 10px;
+
+    border-radius: 6px;
+
+    background: #f7f9fa;
+
+    color: #7b8794;
+
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 782px) {
+
+    .crm-v3-mercado-filtros {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================================
+   PROPIEDADES COMPARABLES
+========================================================= */
+
+.crm-v3-mercado-comparables {
+    margin-top: 10px;
+}
+
+.crm-v3-mercado-result-title {
+    margin-bottom: 7px;
+
+    color: #52606d;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.crm-v3-mercado-comparable {
+    margin-bottom: 7px;
+    padding: 9px 10px;
+
+    border: 1px solid #e3e8ee;
+    border-radius: 7px;
+
+    background: #fafbfc;
+}
+
+.crm-v3-mercado-comparable:last-child {
+    margin-bottom: 0;
+}
+
+.crm-v3-mercado-comparable-title {
+    margin-bottom: 8px;
+
+    color: #263238;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.crm-v3-mercado-comparable-data {
+    display: grid;
+    grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+
+    gap: 8px;
+}
+
+.crm-v3-mercado-comparable-data div {
+    min-width: 0;
+}
+
+.crm-v3-mercado-comparable-data small {
+    display: block;
+    margin-bottom: 3px;
+
+    color: #8a96a3;
+    font-size: 9px;
+    line-height: 1.2;
+}
+
+.crm-v3-mercado-comparable-data strong {
+    display: block;
+
+    color: #43515c;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .crm-v3-mercado-comparable-data {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .crm-v3-mercado-comparable-data {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================================
+   RESUMEN DEL MERCADO
+========================================================= */
+
+.crm-v3-mercado-resumen {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #d8e0e5;
+}
+
+.crm-v3-mercado-resumen-title {
+    margin-bottom: 7px;
+
+    color: #263238;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.crm-v3-mercado-resumen-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    gap: 8px;
+}
+
+.crm-v3-mercado-resumen-grid > div {
+    min-width: 0;
+    padding: 8px 9px;
+
+    border: 1px solid #e3e8ee;
+    border-radius: 6px;
+
+    background: #fafbfc;
+}
+
+.crm-v3-mercado-resumen-grid small {
+    display: block;
+    margin-bottom: 4px;
+
+    color: #8a96a3;
+    font-size: 9px;
+    line-height: 1.2;
+}
+
+.crm-v3-mercado-resumen-grid strong {
+    display: block;
+
+    color: #263238;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+
+    .crm-v3-mercado-resumen-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .crm-v3-mercado-resumen-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+
+/* =========================================================
+   EVALUACIÓN DEL PRECIO
+========================================================= */
+
+.crm-v3-mercado-evaluacion {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 10px;
+    padding: 9px 10px;
+
+    border-top: 1px dashed #d8e0e5;
+    border-radius: 6px;
+
+    background: #fafbfc;
+}
+
+.crm-v3-mercado-evaluacion-title {
+    color: #263238;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.crm-v3-mercado-evaluacion-item {
+    min-width: 0;
+    padding-left: 10px;
+    border-left: 1px solid #e3e8ee;
+}
+
+.crm-v3-mercado-evaluacion-item small {
+    display: block;
+    margin-bottom: 3px;
+
+    color: #8a96a3;
+    font-size: 9px;
+}
+
+.crm-v3-mercado-evaluacion-item strong {
+    display: block;
+
+    color: #263238;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+
+    .crm-v3-mercado-evaluacion {
+        grid-template-columns: 1fr;
+    }
+
+    .crm-v3-mercado-evaluacion-item {
+        padding-left: 0;
+        padding-top: 7px;
+        border-left: 0;
+        border-top: 1px solid #e3e8ee;
+    }
+
+}
+
+
+
+/* =========================================================
+   CLASIFICACIÓN DEL PRECIO
+========================================================= */
+
+.crm-v3-mercado-evaluacion-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 28px;
+    padding: 0 10px;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.crm-v3-mercado-evaluacion-status.is-good {
+    background: #edf8f1;
+    border: 1px solid #c9e7d3;
+    color: #277a48;
+}
+
+.crm-v3-mercado-evaluacion-status.is-market {
+    background: #fff8e8;
+    border: 1px solid #ead9a5;
+    color: #8a6a16;
+}
+
+.crm-v3-mercado-evaluacion-status.is-high {
+    background: #fff0f0;
+    border: 1px solid #efcccc;
+    color: #b33a3a;
+}

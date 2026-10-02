@@ -1,0 +1,389 @@
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.crm-operaciones-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 68px;
+    margin: 0;
+    padding: 26px 16px;     /* Controla alto del header */
+    background: #ffffff;
+    border: 1px solid #dfe5e8;
+    border-left: 3px solid #4f8f94;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+    box-sizing: border-box;
+}
+
+.crm-operaciones-header-info {
+    min-width: 0;
+}
+
+.crm-operaciones-header-info h1 {
+    margin: 0 0 5px;
+    padding: 0;
+    border: 0;
+    font-size: 16px;    /* Titulo header */
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #263238;
+}
+
+.crm-operaciones-header-info p {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #6b7479;
+}
+
+.crm-operaciones-header-actions {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.crm-operaciones-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 15px;
+    background: #2785c7;
+    border-radius: 4px;
+    color: #ffffff !important;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.crm-operaciones-btn:hover {
+    background: #176fa9;
+    color: #ffffff !important;
+}
+
+.crm-operaciones-wrap {
+    width: auto;
+    margin: 10px 10px 0 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.crm-operaciones-header {
+    margin-top: 0;
+}
+
+/* =========================================================
+   CONTADORES
+   ========================================================= */
+
+.crm-operaciones-stats {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    margin: 10px 0 0 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.crm-operaciones-stat {
+    position: relative;
+    min-height: 60px;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1px solid #dfe5e8;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.crm-operaciones-stat::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #2785c7;
+}
+
+.crm-operaciones-stat.stat-proceso::before {
+    background: #f59e0b;
+}
+
+.crm-operaciones-stat.stat-expediente::before {
+    background: #8b5cf6;
+}
+
+.crm-operaciones-stat.stat-cerradas::before {
+    background: #16a34a;
+}
+
+.crm-operaciones-stat.stat-perdidas::before {
+    background: #ef4444;
+}
+
+.crm-operaciones-stat .stat-value {
+    display: block;
+    margin-top: 3px;
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 700;
+    color: #0875b5;
+}
+
+.crm-operaciones-stat .stat-label {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1;
+    color: #626b70;
+}
+
+.crm-operaciones-header,
+.crm-operaciones-stats {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   ALINEACIÓN GENERAL
+   ========================================================= */
+
+.crm-operaciones-wrap {
+    width: calc(100% - 20px);
+    margin: 10px 20px 0 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.crm-operaciones-header,
+.crm-operaciones-stats {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+
+.crm-operaciones-stats {
+    width: 100%;
+}
+
+
+/* =========================================================
+   FILTROS AVANZADOS
+   ========================================================= */
+
+/* =========================================================
+   FILTROS
+   ========================================================= */
+
+.crm-operaciones-filters {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
+    width: calc(100% - 16px);
+    margin-top: 10px;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.crm-operaciones-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.crm-operaciones-filter label {
+    display: block;
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 600;
+    color: #596368;
+}
+
+.crm-operaciones-filter select,
+.crm-operaciones-filter input {
+    width: 100%;
+    height: 34px;
+    margin: 0;
+    padding: 0 9px;
+    border: 1px solid #dfe5e8;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #374047;
+    font-size: 11px;
+    line-height: 34px;
+    box-sizing: border-box;
+}
+
+.crm-operaciones-filter select:focus,
+.crm-operaciones-filter input:focus {
+    border-color: #4f8f94;
+    box-shadow: 0 0 0 1px #4f8f94;
+    outline: none;
+}
+
+/* =========================================================
+   TABLA DE OPERACIONES
+   ========================================================= */
+
+.crm-operaciones-table-wrap {
+    width: calc(100% - 16px);
+    margin-top: 12px;
+    overflow-x: auto;
+    background: #ffffff;
+    border: 1px solid #dfe5e8;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+}
+
+.crm-operaciones-table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: collapse;
+    table-layout: auto;
+    font-size: 11px;
+}
+
+.crm-operaciones-table thead th {
+    height: 32px;
+    padding: 0 9px;
+    background: #f7f9fa;
+    border-bottom: 1px solid #dfe5e8;
+    color: #4d585e;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: left;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.crm-operaciones-table tbody td {
+    height: 36px;
+    padding: 0 9px;
+    border-bottom: 1px solid #edf0f2;
+    color: #374047;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.crm-operaciones-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.crm-operaciones-table tbody tr:hover {
+    background: #f8fbfc;
+}
+
+.crm-operaciones-table tbody td:first-child,
+.crm-operaciones-table tbody td:nth-child(2),
+.crm-operaciones-table tbody td:nth-child(3) {
+    font-weight: 600;
+    color: #1673ad;
+}
+
+.crm-operaciones-table .crm-operaciones-money {
+    font-weight: 600;
+    color: #374047;
+    text-align: right;
+}
+
+.crm-operaciones-table tbody td[colspan] {
+    height: 50px;
+    color: #7b858a;
+    text-align: center;
+    font-weight: 400;
+}
+
+/* Scroll horizontal */
+
+.crm-operaciones-table-wrap::-webkit-scrollbar {
+    height: 8px;
+}
+
+.crm-operaciones-table-wrap::-webkit-scrollbar-track {
+    background: #f1f3f4;
+}
+
+.crm-operaciones-table-wrap::-webkit-scrollbar-thumb {
+    background: #c7ced2;
+    border-radius: 10px;
+}
+
+.crm-operaciones-table-wrap::-webkit-scrollbar-thumb:hover {
+    background: #aeb8bd;
+}
+
+
+
+/* =========================================================
+   ESTATUS DE OPERACIÓN
+   ========================================================= */
+
+.crm-operacion-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 72px;
+    height: 22px;
+    padding: 0 9px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PERDIDA — ROJO
+   ========================================================= */
+
+.crm-operacion-status-perdida {
+    background: #fdecec;
+    border: 1px solid #efb0b0;
+    color: #c62828 !important;
+}
+
+
+/* =========================================================
+   EN PROCESO — AMARILLO
+   ========================================================= */
+
+.crm-operacion-status-en_proceso {
+    background: #fff7df;
+    border: 1px solid #f3d58a;
+    color: #b77900 !important;
+}
+
+
+/* =========================================================
+   CERRADA — VERDE
+   ========================================================= */
+
+.crm-operacion-status-cerrada {
+    background: #eaf7ee;
+    border: 1px solid #a9dfbb;
+    color: #16803c !important;
+}

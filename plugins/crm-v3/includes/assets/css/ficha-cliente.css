@@ -1,0 +1,833 @@
+/* =========================================================
+   CRM CIBR — FICHA DEL CLIENTE
+   UI PRO
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.crm-v3-ficha {
+    width: calc(100% - 20px);
+    margin: 10px 20px 0 0;
+    padding: 0;
+    color: #263238;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.crm-v3-ficha-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 68px;
+    margin: 0 0 10px 0;
+    padding: 23px 16px;
+    background: #ffffff;
+    border: 1px solid #dfe5e8;
+    border-left: 3px solid #4f8f94;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+    box-sizing: border-box;
+}
+
+.crm-v3-ficha-header span {
+    min-width: 0;
+    color: #263238;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.crm-v3-ficha-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 13px;
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 4px;
+    color: #1769aa;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.crm-v3-ficha-back:hover {
+    background: #f5f9fb;
+    border-color: #b9c8d1;
+    color: #0d4f80;
+}
+
+
+/* =========================================================
+   COLUMNAS PRINCIPALES
+   ========================================================= */
+
+.crm-v3-ficha-columns {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+    gap: 10px;
+    width: 100%;
+    margin: 0 0 10px 0;
+    align-items: start;
+}
+
+.crm-v3-ficha-columns .crm-v3-ficha-section {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   SECCIONES
+   ========================================================= */
+
+.crm-v3-ficha-section,
+.crm-v3-operacion {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #dfe5e8;
+    border-radius: 6px;
+    box-sizing: border-box;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+}
+
+.crm-v3-ficha-section {
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   TITULOS DE SECCION
+   ========================================================= */
+
+.crm-v3-ficha-section-title,
+.crm-v3-operacion-comentarios-title {
+    position: relative;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    background: #f4f6f8;
+    border-bottom: 1px solid #dfe5e8;
+    color: #59636e;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    box-sizing: border-box;
+}
+
+.crm-v3-ficha-section-title::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    background: #4f8f94;
+}
+
+
+/* =========================================================
+   CONTENIDO DE SECCION
+   ========================================================= */
+
+.crm-v3-ficha-section-content {
+    padding: 14px;
+}
+
+.crm-v3-ficha-section-content p {
+    margin: 0;
+    color: #737d83;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   CLIENTE
+   ========================================================= */
+
+.crm-v3-ficha-client-name {
+    margin: 0 0 12px 0;
+    color: #234f70;
+    font-size: 20px;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -.1px;
+}
+
+
+/* =========================================================
+   SELECTOR DE PROPIEDADES
+   ========================================================= */
+
+.crm-v3-ficha-property-header {
+    margin-bottom: 18px;
+}
+
+.crm-v3-ficha-property-selector-label {
+    margin-bottom: 8px;
+    color: #667085;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+.crm-v3-ficha-property-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.crm-v3-ficha-property-tab {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 6px 11px;
+    border: 1px solid #d8dee6;
+    border-radius: 4px;
+    background: #f8fafc;
+    color: #526173;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    transition:
+        background-color .15s ease,
+        border-color .15s ease,
+        color .15s ease;
+}
+
+.crm-v3-ficha-property-tab:hover {
+    background: #eef3f7;
+    border-color: #b9c5d1;
+    color: #1f4f7a;
+}
+
+.crm-v3-ficha-property-tab.is-active {
+    background: #1f4f7a;
+    border-color: #1f4f7a;
+    color: #ffffff;
+}
+
+.crm-v3-ficha-property-name {
+    margin: 0 0 12px 0;
+    color: #234f70;
+    font-size: 16px;
+    line-height: 1.3;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   GRIDS DE INFORMACION
+   ========================================================= */
+
+.crm-v3-ficha-grid,
+.crm-v3-ficha-property-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: #dfe5e8;
+    border: 1px solid #dfe5e8;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   CAMPOS GENERALES
+   ========================================================= */
+
+.crm-ficha-field {
+    min-height: 60px;
+    padding: 10px 12px;
+    background: #ffffff;
+    box-sizing: border-box;
+    transition: background .12s ease;
+}
+
+.crm-ficha-field:hover {
+    background: #fbfcfd;
+}
+
+.crm-ficha-field span,
+.crm-v3-ficha-notas > span {
+    display: block;
+    margin: 0 0 5px 0;
+    color: #737b82;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.crm-ficha-field strong {
+    display: block;
+    color: #303b42;
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   NOTAS
+   ========================================================= */
+
+.crm-v3-ficha-notas {
+    margin-top: 14px;
+    padding: 11px 12px;
+    background: #f8fafb;
+    border: 1px solid #dfe5e8;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.crm-v3-ficha-notas > span {
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.crm-v3-ficha-notas div {
+    color: #48535a;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   PROPIEDAD VACIA
+   ========================================================= */
+
+.crm-v3-ficha-empty {
+    margin: 14px;
+    padding: 18px 16px;
+    background: #fafbfc;
+    border: 1px dashed #cfd9de;
+    border-radius: 4px;
+    color: #737d83;
+    font-size: 14px;
+    line-height: 1.55;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   OPERACION
+   ========================================================= */
+
+.crm-v3-operacion {
+    margin-bottom: 10px;
+    background: #f4f6f8;
+}
+
+.crm-v3-operacion-header {
+    min-height: 40px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4f6f8;
+    border-bottom: 1px solid #dfe5e8;
+    box-sizing: border-box;
+}
+
+.crm-v3-operacion-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.crm-v3-operacion-title span {
+    color: #263238;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .06em;
+}
+
+.crm-v3-operacion-title small {
+    color: #737b82;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   BOTONES DE OPERACION
+   ========================================================= */
+
+.crm-v3-operacion-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.crm-v3-operacion-button {
+    min-height: 28px;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 3px;
+    color: #1d4f7a;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.crm-v3-operacion-button:hover {
+    background: #f5f7f8;
+    color: #16456d;
+}
+
+
+/* =========================================================
+   LAYOUT OPERACION + COMENTARIOS
+   ========================================================= */
+
+.crm-v3-operacion-body {
+    padding: 0;
+    background: #ffffff;
+}
+
+.crm-v3-operacion-layout {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 3fr)
+        minmax(300px, 1.35fr);
+    gap: 0;
+    align-items: start;
+    background: #ffffff;
+}
+
+.crm-v3-operacion-data {
+    min-width: 0;
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   GRID DE DATOS DE OPERACION
+   ========================================================= */
+
+.crm-v3-operacion-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: #dfe5e8;
+    border: 1px solid #dfe5e8;
+    box-sizing: border-box;
+}
+
+.crm-v3-operacion-grid .crm-ficha-field {
+    min-height: 60px;
+    padding: 10px 12px;
+    background: #ffffff;
+}
+
+.crm-v3-operacion-grid .crm-ficha-field span {
+    display: block;
+    margin: 0 0 5px 0;
+    color: #737b82;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.crm-v3-operacion-grid .crm-ficha-field strong {
+    display: block;
+    color: #263238;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   COMENTARIOS DE OPERACION
+   ========================================================= */
+
+.crm-v3-operacion-comentarios {
+    min-width: 0;
+    background: #ffffff;
+    border-left: 1px solid #dfe5e8;
+    box-sizing: border-box;
+}
+
+.crm-v3-operacion-comentarios-title {
+    min-height: 40px;
+    padding: 0 12px;
+    position: static;
+}
+
+.crm-v3-operacion-comentarios-content {
+    padding: 12px;
+    color: #737b82;
+    font-size: 12px;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   FORMULARIO DE COMENTARIOS
+   ========================================================= */
+
+.crm-v3-comentario-form {
+    margin: 0;
+}
+
+.crm-v3-comentario-textarea {
+    width: 100%;
+    min-height: 85px;
+    padding: 9px;
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 3px;
+    color: #263238;
+    font-size: 13px;
+    line-height: 1.5;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.crm-v3-comentario-textarea:focus {
+    outline: none;
+    border-color: #6f8f8f;
+    box-shadow:
+        0 0 0 1px rgba(111,143,143,.12);
+}
+
+
+/* =========================================================
+   BOTONES DE COMENTARIOS
+   ========================================================= */
+
+.crm-v3-comentarios-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 9px;
+}
+
+.crm-v3-comentario-guardar,
+.crm-v3-comentarios-ver {
+    min-height: 32px;
+    padding: 0 11px;
+    border: 1px solid #1d4f7a;
+    border-radius: 3px;
+    background: #1d4f7a;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.crm-v3-comentarios-ver {
+    background: #ffffff;
+    color: #1d4f7a;
+}
+
+.crm-v3-comentario-guardar:hover {
+    background: #16456d;
+}
+
+.crm-v3-comentarios-ver:hover {
+    background: #f5f9fb;
+}
+
+
+/* =========================================================
+   MODAL DE COMENTARIOS
+   ========================================================= */
+
+.crm-v3-comentarios-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    box-sizing: border-box;
+}
+
+.crm-v3-comentarios-modal.is-open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crm-v3-comentarios-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+}
+
+.crm-v3-comentarios-modal-window {
+    position: relative;
+    z-index: 2;
+    width: min(700px, calc(100vw - 40px));
+    max-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid #d9dde1;
+    border-radius: 6px;
+    box-shadow: 0 10px 35px rgba(0,0,0,.25);
+    overflow: hidden;
+}
+
+.crm-v3-comentarios-modal-header {
+    min-height: 44px;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e1e4e7;
+    box-sizing: border-box;
+}
+
+.crm-v3-comentarios-modal-header strong {
+    color: #263238;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .05em;
+}
+
+.crm-v3-comentarios-modal-close {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #737b82;
+    font-size: 22px;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.crm-v3-comentarios-modal-close:hover {
+    color: #263238;
+}
+
+.crm-v3-comentarios-modal-body {
+    padding: 14px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HISTORIAL DE COMENTARIOS
+   ========================================================= */
+
+.crm-v3-comentarios-historial {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.crm-v3-comentario-item {
+    margin-bottom: 0;
+    padding: 10px;
+    background: #f8fafb;
+    border: 1px solid #dfe5e8;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.crm-v3-comentario-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 7px;
+}
+
+.crm-v3-comentario-meta strong {
+    color: #263238;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.crm-v3-comentario-meta span {
+    color: #737b82;
+    font-size: 12px;
+}
+
+.crm-v3-comentario-texto {
+    color: #263238;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.crm-v3-comentario-eliminar-form {
+    margin-top: 7px;
+    text-align: right;
+}
+
+.crm-v3-comentario-eliminar {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #c62828;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.crm-v3-comentario-eliminar:hover {
+    text-decoration: underline;
+}
+
+.crm-v3-comentarios-vacio {
+    padding: 18px;
+    background: #f8fafb;
+    border: 1px solid #e1e4e7;
+    color: #737b82;
+    font-size: 12px;
+    text-align: center;
+}
+
+
+/* =========================================================
+   BLOQUEAR SCROLL DEL ADMIN
+   ========================================================= */
+
+body.crm-v3-modal-open {
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .crm-v3-ficha-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .crm-v3-operacion-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .crm-v3-operacion-comentarios {
+        border-left: 0;
+        border-top: 1px solid #dfe5e8;
+    }
+
+    .crm-v3-operacion-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+
+    .crm-v3-ficha {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .crm-v3-ficha-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .crm-v3-ficha-grid,
+    .crm-v3-ficha-property-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .crm-v3-ficha-header {
+        min-height: 60px;
+        padding: 0 12px;
+    }
+
+    .crm-v3-ficha-client-name {
+        font-size: 19px;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .crm-v3-operacion-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .crm-v3-operacion-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .crm-v3-operacion-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .crm-v3-operacion-layout {
+        margin: 0;
+    }
+
+    .crm-v3-comentarios-actions {
+        flex-wrap: wrap;
+    }
+
+    .crm-v3-comentarios-modal-window {
+        width: calc(100vw - 24px);
+        max-height: calc(100vh - 40px);
+    }
+}
+
+
+/* =========================================================
+   PIPELINE — SIN OPERACION ACTIVA
+   ========================================================= */
+
+.crm-v3-pipeline-vacio {
+    width: 100%;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+    color: #737b82;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    background: #ffffff;
+    border: 1px solid #d9dde1;
+    border-radius: 3px;
+    box-sizing: border-box;
+}

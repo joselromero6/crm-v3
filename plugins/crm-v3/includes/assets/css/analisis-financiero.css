@@ -1,0 +1,368 @@
+/**
+ * ============================================================
+ * CRM CIBR — ANÁLISIS FINANCIERO
+ * ============================================================
+ */
+
+
+/* ============================================================
+ * CONTENEDOR
+ * ============================================================ */
+
+.crm-v3-operacion-financiero {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #d9dde1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+
+.crm-v3-analisis-financiero {
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+ * TÍTULO
+ * ============================================================ */
+
+.crm-v3-financiero-title {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e1e4e7;
+    background: #f5f6f7;
+    color: #263238;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+
+
+/* ============================================================
+ * SECCIONES
+ * ============================================================ */
+.crm-v3-financiero-section {
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    border: 1px solid #e1e4e7;
+    border-radius: 4px;
+}
+
+.crm-v3-financiero-section:first-of-type {
+    margin-bottom: 0;
+}
+
+.crm-v3-financiero-comparaciones {
+    margin-bottom: 8px;
+}
+
+/* ============================================================
+ * TÍTULO DE SECCIÓN
+ * ============================================================ */
+
+.crm-v3-financiero-section-title {
+    padding-bottom: 2px;
+    margin-bottom: 8px;
+    color: #737b82;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+}
+
+
+/* ============================================================
+ * GRID FINANCIERO
+ * ============================================================ */
+
+.crm-v3-financiero-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 7px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+ * ITEM FINANCIERO
+ * ============================================================ */
+
+.crm-v3-financiero-item {
+    min-width: 0;
+    padding: 7px 8px;
+    box-sizing: border-box;
+    background: #fafbfc;
+    border: 1px solid #e1e4e7;
+    border-radius: 3px;
+}
+
+
+/* ============================================================
+ * ETIQUETA
+ * ============================================================ */
+
+.crm-v3-financiero-item span {
+    display: block;
+    margin-bottom: 4px;
+    color: #737b82;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    line-height: 1.25;
+}
+
+
+/* ============================================================
+ * VALOR
+ * ============================================================ */
+
+.crm-v3-financiero-item strong {
+    display: block;
+    min-height: 15px;
+    color: #263238;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+
+/* ============================================================
+ * VALORES PRINCIPALES
+ * ============================================================ */
+
+.crm-v3-financiero-section:first-of-type
+.crm-v3-financiero-item strong {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* ============================================================
+ * COMPARACIONES
+ * ============================================================ */
+
+.crm-v3-financiero-comparaciones {
+    display: grid;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+    margin-top: 6px;
+    box-sizing: border-box;
+}
+
+
+.crm-v3-financiero-comparacion {
+    min-width: 0;
+    padding: 10px 8px;
+    background: #f8fafc;
+    border: 1px solid #dfe5e8;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+
+.crm-v3-financiero-comparacion span {
+    display: block;
+    margin-bottom: 5px;
+    color: #667085;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    line-height: 1.25;
+}
+
+
+.crm-v3-financiero-comparacion strong {
+    display: block;
+    color: #1f4f7a;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+
+/* ============================================================
+ * COMPARACIÓN 1 — CATASTRAL VS VENTA
+ * ============================================================ */
+
+.crm-v3-financiero-comparacion:nth-child(1) {
+    background: #f3f8fd;
+    border-color: #c5dcf2;
+}
+
+
+.crm-v3-financiero-comparacion:nth-child(1) strong {
+    color: #1f5f9c;
+}
+
+
+/* ============================================================
+ * COMPARACIÓN 2 — CATASTRAL VS MERCADO
+ * ============================================================ */
+
+.crm-v3-financiero-comparacion:nth-child(2) {
+    background: #f3faf6;
+    border-color: #c5e3d2;
+}
+
+
+.crm-v3-financiero-comparacion:nth-child(2) strong {
+    color: #278653;
+}
+
+
+/* ============================================================
+ * COMPARACIÓN 3 — CIERRE VS MERCADO
+ * ============================================================ */
+
+.crm-v3-financiero-comparacion:nth-child(3) {
+    background: #f8f5fc;
+    border-color: #d9cbee;
+}
+
+
+.crm-v3-financiero-comparacion:nth-child(3) strong {
+    color: #6541a8;
+}
+
+
+/* ============================================================
+ * TOTAL DE COSTOS
+ * ============================================================ */
+
+.crm-v3-financiero-total {
+    grid-column: 1 / -1;
+    background: #f1f5f7;
+    border-color: #c8d2d9;
+}
+
+
+.crm-v3-financiero-total span {
+    font-weight: 700;
+}
+
+
+.crm-v3-financiero-total strong {
+    font-size: 13px;
+    font-weight: 800;
+    color: #263238;
+}
+
+
+/* ============================================================
+ * PRESUPUESTO / HIPOTECA
+ * ============================================================ */
+
+.crm-v3-financiero-section:nth-child(4)
+.crm-v3-financiero-item strong {
+    font-weight: 700;
+}
+
+
+/* ============================================================
+ * RESULTADOS FINANCIEROS
+ * ============================================================ */
+
+.crm-v3-financiero-section:last-child {
+    background: #f8fafb;
+    border-top: 1px solid #d6dde2;
+}
+
+
+.crm-v3-financiero-section:last-child
+.crm-v3-financiero-item {
+    background: #ffffff;
+    border-color: #d5dce1;
+}
+
+
+.crm-v3-financiero-section:last-child
+.crm-v3-financiero-item strong {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1d4f7a;
+}
+
+
+/* ============================================================
+ * MARGEN SOBRE CIERRE
+ * ============================================================ */
+
+.crm-v3-financiero-section:last-child
+.crm-v3-financiero-item:last-child {
+    background: #eef4f8;
+    border-color: #b9cbd8;
+}
+
+
+.crm-v3-financiero-section:last-child
+.crm-v3-financiero-item:last-child strong {
+    font-size: 14px;
+    font-weight: 800;
+    color: #1d4f7a;
+}
+
+
+/* ============================================================
+ * RESULTADOS NEGATIVOS
+ * ============================================================ */
+
+.crm-v3-financiero-section
+.crm-v3-financiero-item.is-negative
+strong {
+    color: #d63638;
+}
+
+
+
+/* ============================================================
+ * RESPONSIVE — TABLET
+ * ============================================================ */
+
+@media (max-width: 900px) {
+
+    .crm-v3-financiero-grid-valores {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .crm-v3-financiero-comparaciones {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+
+/* ============================================================
+ * RESPONSIVE — MÓVIL
+ * ============================================================ */
+
+@media (max-width: 600px) {
+
+    .crm-v3-financiero-grid,
+    .crm-v3-financiero-grid-valores {
+        grid-template-columns: 1fr;
+    }
+
+
+    .crm-v3-financiero-comparaciones {
+        grid-template-columns: 1fr;
+    }
+
+}

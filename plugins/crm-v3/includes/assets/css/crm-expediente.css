@@ -1,0 +1,890 @@
+/* =========================================================
+   CRM V3 — EXPEDIENTE
+   ETAPA 1 — HEADER
+   ========================================================= */
+
+.crm-v3-expediente {
+    margin: 20px 20px 30px 0;
+}
+
+/* ============================================================
+   MENSAJE DE EXPEDIENTE
+   ============================================================ */
+
+.crm-expediente-message {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 0 10px 0;
+    padding: 10px 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #edf8f0;
+    border-left: 4px solid #46b96b;
+    color: #40505a;
+
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.crm-expediente-message-close {
+    border: 0;
+    background: transparent;
+    padding: 0 4px;
+
+    font-size: 18px;
+    line-height: 1;
+    color: #26343d;
+
+    cursor: pointer;
+}
+
+.crm-expediente-message-close:hover {
+    opacity: .65;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.crm-expediente-header {
+    width: 100%;
+    min-height: 72px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #d9e1e7;
+    border-left: 4px solid #1f6f8b;
+    border-radius: 6px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(30, 50, 70, 0.06);
+}
+
+
+.crm-expediente-header-info h1 {
+    margin: 0;
+    font-size: 16px;        /* sixe titulo */
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: .4px;
+    color: #243746;
+}
+
+
+.crm-expediente-header-info p {
+    margin: 5px 0 0;
+    font-size: 13px;       /* subtitulo header */
+    line-height: 1.3;
+    color: #71808a;
+}
+
+
+/* =========================================================
+   CONTROLES
+   ========================================================= */
+
+.crm-expediente-controls {
+    width: 100%;
+
+    margin-top: 14px;
+
+    display: flex;
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+}
+
+
+/* =========================================================
+   PORCENTAJES
+   ========================================================= */
+
+.crm-expediente-progress {
+    min-width: 145px;
+    height: 38px;
+
+    box-sizing: border-box;
+
+    padding: 0 14px;
+
+    background: #ffffff;
+
+    border: 1px solid #d9e1e7;
+
+    border-radius: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    font-size: 12px;
+
+    color: #53636d;
+
+    box-shadow: 0 1px 4px rgba(30, 50, 70, 0.04);
+}
+
+
+.crm-expediente-progress strong {
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #1f6f8b;
+}
+
+
+/* =========================================================
+   AVALÚO
+   ========================================================= */
+
+.crm-expediente-avaluo {
+    min-width: 165px;
+    height: 38px;
+
+    box-sizing: border-box;
+
+    padding: 0 12px;
+
+    background: #ffffff;
+
+    border: 1px solid #d9e1e7;
+
+    border-radius: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    font-size: 12px;
+
+    color: #53636d;
+
+    box-shadow: 0 1px 4px rgba(30, 50, 70, 0.04);
+}
+
+
+.crm-expediente-check {
+    width: 17px;
+    height: 17px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #b8c5cd;
+
+    border-radius: 3px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #1f6f8b;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   GUARDAR
+   ========================================================= */
+
+.crm-expediente-save {
+    height: 38px;
+
+    padding: 0 20px;
+
+    border: 0;
+
+    border-radius: 5px;
+
+    background: #1f6f8b;
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow: 0 2px 5px rgba(31, 111, 139, 0.18);
+
+    transition:
+        background .15s ease,
+        transform .15s ease;
+}
+
+.crm-expediente-save:hover {
+    background: #185c73;
+}
+
+.crm-expediente-save:active {
+    transform: translateY(1px);
+}
+
+
+
+
+
+/* =========================================================
+   ETAPA 2 — DATOS VENDEDOR / COMPRADOR
+   ========================================================= */
+
+.crm-expediente-columns {
+    width: 100%;
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    box-sizing: border-box;
+}
+
+.crm-expediente-column {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.crm-expediente-card {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #d8e1e7;
+    border-radius: 6px;
+
+    overflow: hidden;
+
+    box-shadow: 0 2px 8px rgba(30, 50, 70, .05);
+}
+
+
+/* =========================================================
+   TITULO
+   ========================================================= */
+
+.crm-expediente-card h2 {
+    margin: 0;
+
+    padding: 11px 14px;
+
+    background: #f7f9fa;
+
+    border-bottom: 1px solid #dfe6ea;
+
+    color: #30424d;
+
+    font-size: 14px;        /* tirulos card vendedor comprador */
+    font-weight: 700;
+
+    letter-spacing: .6px;
+}
+
+
+/* =========================================================
+   GRID DE DATOS
+   ========================================================= */
+
+.crm-expediente-data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CADA DATO
+   ========================================================= */
+
+.crm-expediente-data-grid > div {
+    min-height: 48px;
+    padding: 9px 12px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #edf1f3;
+    color: #2f3e47;
+}
+
+
+/* línea central */
+
+.crm-expediente-data-grid > div:nth-child(odd) {
+    border-right: 1px solid #edf1f3;
+}
+
+
+/* =========================================================
+   ETIQUETA
+   ========================================================= */
+
+.crm-expediente-data-grid strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #7a8790;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .55px;
+}
+
+
+/* =========================================================
+   VALOR
+   ========================================================= */
+
+.crm-expediente-data-grid span {
+    display: block;
+
+    min-height: 14px;
+
+    color: #263640;
+
+    font-size: 12px;
+
+    line-height: 1.3;
+}
+
+
+/* =========================================================
+   CAMPOS MANUALES
+   ========================================================= */
+
+.crm-expediente-data-grid input {
+    width: 100%;
+    height: 30px;
+
+    margin: 0;
+
+    padding: 5px 8px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #ccd7de;
+    border-radius: 4px;
+
+    color: #263640;
+
+    font-size: 12px;
+
+    outline: none;
+}
+
+.crm-expediente-data-grid input:focus {
+    border-color: #2496a8;
+
+    box-shadow: 0 0 0 2px rgba(36,150,168,.08);
+}
+
+/* =========================================================
+   SIMETRÍA — VENDEDOR / COMPRADOR
+   ========================================================= */
+
+.crm-expediente-data-grid {
+    grid-auto-rows: 68px;
+}
+
+.crm-expediente-data-grid > div {
+    height: 68px;
+    min-height: 68px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.crm-expediente-data-grid > div:has(input) {
+    height: 66px;
+    min-height: 66px;
+}
+
+
+/* CAMPOS MANUALES */
+
+.crm-expediente-data-grid > div:has(input) {
+    justify-content: center;
+}
+
+.crm-expediente-data-grid input {
+    height: 28px;
+    flex: 0 0 28px;
+}
+
+
+/* MISMA ALTURA PARA LAS DOS CARDS */
+
+.crm-expediente-columns {
+    align-items: flex-start;
+}
+
+.crm-expediente-column .crm-expediente-card {
+    min-height: 0;
+    height: auto;
+}
+
+/* =========================================================
+   ETAPA 3 — DOCUMENTOS PARA EXPEDIENTE
+   ========================================================= */
+
+.crm-expediente-documents {
+    width: 100%;
+    margin-top: 14px;
+    box-sizing: border-box;
+}
+
+
+/* FILA DE DOCUMENTO */
+
+.crm-expediente-document-row {
+    width: 100%;
+    min-height: 22px;
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    align-items: center;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #edf1f3;
+    color: #40515b;
+    font-size: 14px;
+    line-height: 1.35;
+    cursor: pointer;
+}
+
+
+/* DOS CASILLAS:
+   1 = CÓNYUGE
+   2 = PRINCIPAL */
+
+.crm-expediente-document-checks {
+    width: 48px;
+    display: grid;
+    grid-template-columns: 20px 20px;
+    gap: 4px;
+    align-items: center;
+}
+
+
+/* CHECKBOX */
+
+.crm-expediente-document-checks input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #b9c7cf;
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+}
+
+
+/* CHECK MARCADO */
+
+.crm-expediente-document-checks
+input[type="checkbox"]:checked {
+    background: #1f6f8b;
+    border-color: #1f6f8b;
+}
+
+
+.crm-expediente-document-checks
+input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    left: 3px;
+    top: -2px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* CUANDO NO APLICA CÓNYUGE */
+
+.crm-expediente-check-placeholder {
+    display: block;
+    width: 20px;
+    height: 16px;
+}
+
+
+/* TEXTO DEL DOCUMENTO */
+
+.crm-expediente-document-row > span:last-child {
+    display: block;
+    min-width: 0;
+    padding-left: 4px;
+    line-height: 1.35;
+}
+
+
+/* EFECTO HOVER */
+
+.crm-expediente-document-row:hover {
+    background: #f7fafb;
+}
+
+.crm-expediente-document-row:hover
+input[type="checkbox"] {
+    border-color: #1f6f8b;
+}
+
+.crm-expediente-documents-title {
+    width: 100%;
+    margin: 18px 0 10px;
+    padding: 10px 14px;
+    box-sizing: border-box;
+
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: #243746;
+
+    background: #f5f8fa;
+    border: 1px solid #d8e1e7;
+    border-radius: 6px;
+}
+
+/* =========================================================
+   TITULO ISR — SIN CHECKBOX.  AQUI.      ??????
+   ========================================================= */
+
+.crm-expediente-document-title {
+    grid-column: 2 / -1;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0 0 0 57px;
+    line-height: 1.35;
+    font-size: 14px;
+}
+
+/* ============================================================
+   DOCUMENTOS — CHECKBOX CÓNYUGE / PRINCIPAL
+   ============================================================ */
+
+.crm-expediente-document-checks input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    margin: 0;
+}
+
+.crm-expediente-check-placeholder {
+    display: block;
+    width: 22px;
+    height: 14px;
+}
+
+.crm-expediente-document-row > span:last-child {
+    display: block;
+    padding-left: 8px;
+    line-height: 1.25;
+}
+
+
+/* =========================================================
+   DOCUMENTOS — ALTURA SIMÉTRICA VENDEDOR / COMPRADOR
+   ========================================================= */
+
+.crm-expediente-documents {
+    min-height: 420px;
+    box-sizing: border-box;
+}
+
+
+
+
+
+
+
+/* =========================================================
+   ETAPA 4 — NOTAS
+   ========================================================= */
+
+.crm-expediente-notes {
+    width: 100%;
+    margin-top: 16px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #d8e1e7;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(30, 50, 70, .05);
+}
+
+
+/* ENCABEZADO */
+
+.crm-expediente-notes label {
+    display: block;
+    width: 100%;
+    height: 32px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 9px 12px;
+    background: #f7f9fa;
+    border-bottom: 1px solid #dfe6ea;
+    color: #53636d;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+}
+
+
+/* ÁREA DE TEXTO */
+
+.crm-expediente-notes textarea {
+    display: block;
+    width: 100%;
+    height: 125px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 11px 12px;
+    border: 0;
+    border-radius: 0;
+    background: #ffffff;
+    color: #34454f;
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+}
+
+
+/* PLACEHOLDER */
+
+.crm-expediente-notes textarea::placeholder {
+    color: #a0abb2;
+}
+
+
+/* FOCUS */
+
+.crm-expediente-notes:focus-within {
+    border-color: #2496a8;
+    box-shadow:
+        0 2px 8px rgba(30, 50, 70, .05),
+        0 0 0 2px rgba(36, 150, 168, .06);
+}
+
+/* =========================================================
+   NOTAS — ALINEACIÓN SIMÉTRICA
+   ========================================================= */
+
+.crm-expediente-columns {
+    align-items: stretch;
+}
+
+.crm-expediente-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.crm-expediente-notes {
+    margin-top: auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.crm-expediente-notes textarea {
+    width: 100%;
+    height: 125px;
+    min-height: 125px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+
+
+
+
+
+
+/* ============================================================
+   LINK EXPEDIENTE — GOOGLE DRIVE
+   ============================================================ */
+
+.crm-expediente-drive,
+.crm-expediente-drive-input {
+    height: 32px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* BOTÓN CUANDO YA EXISTE EL LINK */
+
+.crm-expediente-drive {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    background: #ffffff;
+    border: 1px solid #d8e1e7;
+    color: #40515b;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.crm-expediente-controls .crm-expediente-drive-input {
+    width: 140px !important;
+    height: 30px !important;
+
+    box-sizing: border-box !important;
+
+    margin: 0 !important;
+    padding: 0 10px !important;
+
+    background: #fff !important;
+    border: 1px solid #d8e1e7 !important;
+    border-radius: 4px !important;
+
+    color: #40515b !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+
+    line-height: 28px !important;
+    outline: none !important;
+
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+}
+
+
+/* INPUT CUANDO TODAVÍA NO EXISTE EL LINK */
+
+.crm-expediente-drive {
+    height: 30px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    background: #fff;
+    border: 1px solid #d8e1e7;
+    border-radius: 3px;
+    color: #40515b;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+
+/* HOVER DEL BOTÓN */
+
+.crm-expediente-drive:hover {
+    background: #f5f8fa;
+    border-color: #1f6f8b;
+    color: #1f6f8b;
+}
+
+
+
+
+/* =========================================================
+   ENCABEZADO DE COLUMNAS — DOCUMENTOS
+   ========================================================= */
+
+.crm-expediente-documents-header {
+    display: grid;
+    grid-template-columns: 20px 20px 1fr;
+    align-items: center;
+
+    margin-bottom: 3px;
+
+    font-size: 16px;
+    font-weight: 600;
+    color: #52606d;
+    line-height: 1;
+}
+
+.crm-expediente-documents-header span:nth-child(1) {
+    text-align: center;
+}
+
+.crm-expediente-documents-header span:nth-child(2) {
+    text-align: center;
+    transform: translateX(3px);
+}
+
+.crm-expediente-documents-header span:nth-child(3) {
+    text-align: left;
+    padding-left: 15px;
+}
+
+
+
+/* =========================================================
+   BOTÓN — VOLVER A FICHA DEL CLIENTE
+   ========================================================= */
+
+.crm-expediente-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.crm-expediente-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 28px;
+    box-sizing: border-box;
+
+    padding: 0 10px;
+
+    background: #fff;
+    border: 1px solid #cbd5df;
+    border-radius: 3px;
+
+    color: #1f5f8b;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+
+    white-space: nowrap;
+}
+
+.crm-expediente-back:hover {
+    background: #f4f8fb;
+    color: #174d72;
+    border-color: #9fb6c7;
+    text-decoration: none;
+}

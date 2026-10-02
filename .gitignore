@@ -1,0 +1,11 @@
+/*
+!/.gitignore
+!/.gitattributes
+!/plugins/
+/plugins/*
+!/plugins/crm-v3/
+!/themes/
+/themes/*
+!/themes/crm-v3-theme/
+.DS_Store
+*.zip
