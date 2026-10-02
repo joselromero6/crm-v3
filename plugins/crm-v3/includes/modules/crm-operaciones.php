@@ -753,7 +753,7 @@ function crm_v3_operaciones_render_table($operaciones) {
 
                     <td>
                         <?php echo esc_html(
-                            crm_v3_display_value($tipo_avaluo)
+                            crm_v3_etiqueta_campo('tipo_de_avaluo', $operacion_id, $tipo_avaluo)
                         ); ?>
                     </td>
 

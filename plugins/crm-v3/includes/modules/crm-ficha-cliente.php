@@ -571,7 +571,7 @@ function crm_v3_operacion_ficha($cliente_id, $propiedad_id = 0) {
 
                         <strong>
                             <?php echo esc_html(
-                                $estatus_operacion ?: '—'
+                                crm_v3_etiqueta_campo('estatus_de_operacion', $operacion_id, $estatus_operacion)
                             ); ?>
                         </strong>
 
@@ -584,7 +584,7 @@ function crm_v3_operacion_ficha($cliente_id, $propiedad_id = 0) {
 
                         <strong>
                             <?php echo esc_html(
-                                $tipo_avaluo ?: '—'
+                                crm_v3_etiqueta_campo('tipo_de_avaluo', $operacion_id, $tipo_avaluo)
                             ); ?>
                         </strong>
 
@@ -862,7 +862,7 @@ function crm_v3_ficha_cliente_page() {
 
                             <strong>
                                 <?php echo esc_html(
-                                    crm_v3_display_value($prioridad)
+                                    crm_v3_etiqueta_campo('prioridad', $cliente_id, $prioridad)
                                 ); ?>
                             </strong>
                         </div>
@@ -873,7 +873,7 @@ function crm_v3_ficha_cliente_page() {
 
                             <strong>
                                 <?php echo esc_html(
-                                    crm_v3_display_value($estatus)
+                                    crm_v3_etiqueta_campo('estatus', $cliente_id, $estatus)
                                 ); ?>
                             </strong>
                         </div>
@@ -1391,7 +1391,7 @@ if (stripos($tipo_cliente_ficha, 'vendedor') !== false) {
                 <span>Tipo de operación</span>
                 <strong>
                     <?php echo esc_html(
-                        crm_v3_display_value($prop_tipo_operacion)
+                        crm_v3_etiqueta_campo('tipo_de_operacion', $propiedad_id, $prop_tipo_operacion)
                     ); ?>
                 </strong>
             </div>
@@ -1411,7 +1411,7 @@ if (stripos($tipo_cliente_ficha, 'vendedor') !== false) {
                 <span>Estado del inmueble</span>
                 <strong>
                     <?php echo esc_html(
-                        crm_v3_display_value($prop_estado_inmueble)
+                        crm_v3_etiqueta_campo('estado_del_inmueble', $propiedad_id, $prop_estado_inmueble)
                     ); ?>
                 </strong>
             </div>
@@ -1421,7 +1421,7 @@ if (stripos($tipo_cliente_ficha, 'vendedor') !== false) {
                 <span>Estado comercial</span>
                 <strong>
                     <?php echo esc_html(
-                        crm_v3_display_value($prop_estado_comercial)
+                        crm_v3_etiqueta_campo('estado_comercial', $propiedad_id, $prop_estado_comercial)
                     ); ?>
                 </strong>
             </div>
@@ -1431,7 +1431,7 @@ if (stripos($tipo_cliente_ficha, 'vendedor') !== false) {
                 <span>Documentación</span>
                 <strong>
                     <?php echo esc_html(
-                        crm_v3_display_value($prop_documentacion)
+                        crm_v3_etiqueta_campo('documentacion', $propiedad_id, $prop_documentacion)
                     ); ?>
                 </strong>
             </div>
@@ -1541,7 +1541,7 @@ if (stripos($tipo_cliente_ficha, 'vendedor') !== false) {
                 <span>Estatus</span>
                 <strong>
                     <?php echo esc_html(
-                        crm_v3_display_value($prop_estatus)
+                        crm_v3_etiqueta_campo('estatus', $propiedad_id, $prop_estatus)
                     ); ?>
                 </strong>
             </div>

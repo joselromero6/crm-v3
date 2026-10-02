@@ -818,6 +818,18 @@ if ($filtro_origen || $filtro_institucion) {
         'field_6a8600e4158d0'
     );
 
+    /*
+     * Si ACF no encuentra el campo, se sigue con una lista vacía
+     * en lugar de lanzar avisos en los recorridos de opciones.
+     */
+    if (!is_array($campo_tipo_lead) || empty($campo_tipo_lead['choices'])) {
+        $campo_tipo_lead = array('choices' => array());
+    }
+
+    if (!is_array($campo_estatus) || empty($campo_estatus['choices'])) {
+        $campo_estatus = array('choices' => array());
+    }
+
 /* ============================================================
  * VALORES REALMENTE CAPTURADOS PARA LOS FILTROS
  * ============================================================ */
@@ -1998,7 +2010,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                     <span
                                         class="crm-lead-status crm-lead-status-<?php echo esc_attr(
-                                            sanitize_title($estatus)
+                                            sanitize_title((string) $estatus)
                                         ); ?>"
                                     >
 

@@ -26,7 +26,7 @@
             {
                 "param": "post_type",
                 "operator": "==",
-                "value": "propiedades"
+                "value": "operaciones"
             }
         ]
     ],
@@ -42,5 +42,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1788286583
+    "modified": 1790976540
 }

@@ -400,3 +400,12 @@
         grid-template-columns: 1fr;
     }
 }
+
+
+/* Botones "+ Valuador / + Banco / + Notaría / + Servicio" */
+
+.crm-catalogos-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}

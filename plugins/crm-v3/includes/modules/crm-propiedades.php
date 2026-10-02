@@ -6,11 +6,56 @@ if (!defined('ABSPATH')) {
 
 /*
 ====================================
-Registro CPT Propiedades WEB No tocar.
+Propiedades en el sitio web. No tocar.
 ====================================
+
+El tipo de contenido "propiedades" se define en ACF. Aquí solo se
+asegura lo que el sitio público necesita: que sea público y que
+tenga listado en /propiedades/. Antes se registraba por segunda
+vez desde aquí, y esa copia pisaba la configuración de ACF.
 */
 
+function crm_v3_propiedades_args_web($args, $post_type) {
+
+    if ($post_type !== 'propiedades') {
+        return $args;
+    }
+
+    $args['public']             = true;
+    $args['publicly_queryable'] = true;
+    $args['has_archive']        = true;
+    $args['show_in_rest']       = true;
+
+    $rewrite = isset($args['rewrite']) && is_array($args['rewrite'])
+        ? $args['rewrite']
+        : array();
+
+    $rewrite['slug'] = 'propiedades';
+
+    $args['rewrite'] = $rewrite;
+
+    return $args;
+}
+
+add_filter(
+    'register_post_type_args',
+    'crm_v3_propiedades_args_web',
+    10,
+    2
+);
+
+
+/*
+ * Respaldo: si ACF no registró el tipo (por ejemplo, con ACF
+ * desactivado), se registra aquí para que el sitio no pierda
+ * sus propiedades.
+ */
+
 function crm_v3_register_propiedades() {
+
+    if (post_type_exists('propiedades')) {
+        return;
+    }
 
     register_post_type('propiedades', array(
 
@@ -31,7 +76,7 @@ function crm_v3_register_propiedades() {
     ));
 }
 
-add_action('init', 'crm_v3_register_propiedades');
+add_action('init', 'crm_v3_register_propiedades', 20);
 
 
 
@@ -800,7 +845,7 @@ function crm_v3_propiedades_render_table($propiedades) {
                 <th>Propietario</th>
                 <th>Colonia</th>
                 <th>Ciudad</th>
-                <th>Propiedad</th>
+                <th>Tipo</th>
                 <th>M² terreno</th>
                 <th>M² const</th>
                 <th>V. catastral</th>
@@ -974,7 +1019,7 @@ function crm_v3_propiedades_render_table($propiedades) {
         <?php else : ?>
 
             <tr>
-                <td colspan="9" class="crm-propiedades-empty">
+                <td colspan="11" class="crm-propiedades-empty">
                     No se encontraron propiedades.
                 </td>
             </tr>

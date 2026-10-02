@@ -12,7 +12,7 @@ get_header();
         <div class="container">
             <h1>Sobre CIBR Inmobiliaria</h1>
             <p>
-                En CIRB Inmobiliaria comprendemos que el sector de la vivienda de interés social es uno de los más sensibles y vulnerables del mercado inmobiliario.
+                En CIBR Inmobiliaria comprendemos que el sector de la vivienda de interés social es uno de los más sensibles y vulnerables del mercado inmobiliario.
 
                 Con frecuencia, las familias que buscan vender, traspasar o comprar una propiedad se enfrentan a falta de claridad regulatoria, procesos poco transparentes y en muchos casos, a la alta informalidad existente tanto en asesores como en supuestas inmobiliarias.
 

@@ -351,3 +351,40 @@ function crm_v3_titulo_plano($post_id) {
     );
 }
 
+
+/**
+ * Etiqueta visible de un campo de lista de ACF.
+ *
+ * ACF guarda la clave ("en_proceso"); en pantalla se muestra la
+ * etiqueta definida en ACF ("En proceso"). Si el campo o la opción
+ * no existen, se arma una etiqueta legible a partir de la clave.
+ */
+function crm_v3_etiqueta_campo($campo, $post_id, $valor = null, $empty = '—') {
+
+    if ($valor === null) {
+        $valor = get_field($campo, $post_id);
+    }
+
+    if (is_array($valor)) {
+        $valor = isset($valor['label']) ? $valor['label'] : reset($valor);
+    }
+
+    if ($valor === null || $valor === false || $valor === '') {
+        return $empty;
+    }
+
+    $valor = (string) $valor;
+
+    $objeto = get_field_object($campo, $post_id);
+
+    if (
+        is_array($objeto) &&
+        !empty($objeto['choices']) &&
+        isset($objeto['choices'][$valor])
+    ) {
+        return $objeto['choices'][$valor];
+    }
+
+    return ucfirst(str_replace('_', ' ', $valor));
+}
+

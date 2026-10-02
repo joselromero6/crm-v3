@@ -18,7 +18,9 @@ function crm_v3_theme_assets() {
         'crm-v3-style',
         get_stylesheet_uri(),
         array(),
-        wp_get_theme()->get('Version')
+        // La fecha del archivo como versión: al cambiar el CSS,
+        // el navegador descarga el nuevo en lugar de usar su copia.
+        filemtime(get_stylesheet_directory() . '/style.css')
     );
 }
 

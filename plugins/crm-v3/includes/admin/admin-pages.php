@@ -211,7 +211,7 @@ add_submenu_page(
 //================================================//
 
 add_submenu_page(
-    null,
+    '',
     'Ficha del Cliente',
     'Ficha del Cliente',
     'manage_options',
@@ -221,7 +221,7 @@ add_submenu_page(
 
 
 add_submenu_page(
-    null,
+    '',
     'Expediente',
     'Expediente',
     'manage_options',
@@ -369,3 +369,38 @@ function crm_v3_dashboard_page() {
     <?php
 }
 
+
+
+/**
+ * Título de las páginas sin menú (Ficha del Cliente y Expediente).
+ *
+ * WordPress no les asigna título por no estar en ningún menú;
+ * sin esto la pestaña del navegador queda sin nombre.
+ */
+function crm_v3_titulo_paginas_ocultas() {
+
+    global $title;
+
+    $titulos = array(
+        'crm-ficha-cliente' => 'Ficha del Cliente',
+        'crm-expediente'    => 'Expediente',
+    );
+
+    $pagina = isset($_GET['page'])
+        ? sanitize_key($_GET['page'])
+        : '';
+
+    if (isset($titulos[$pagina])) {
+        $title = $titulos[$pagina];
+    }
+}
+
+add_action(
+    'load-admin_page_crm-ficha-cliente',
+    'crm_v3_titulo_paginas_ocultas'
+);
+
+add_action(
+    'load-admin_page_crm-expediente',
+    'crm_v3_titulo_paginas_ocultas'
+);
