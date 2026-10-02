@@ -816,3 +816,81 @@ function crm_v3_comunicados_render($limite = 8) {
 
     <?php
 }
+
+
+/**
+ * ============================================================
+ * DIAGNÓSTICO (temporal)
+ * ============================================================
+ *
+ * Descarga en un archivo de texto la respuesta completa del portal
+ * de Infonavit, para poder ajustar la lectura de títulos y enlaces.
+ *
+ * Solo administradores:
+ * wp-admin/admin-post.php?action=crm_v3_comunicados_diagnostico
+ */
+
+function crm_v3_comunicados_diagnostico() {
+
+    if (!current_user_can('manage_options')) {
+        wp_die('No tienes permisos para esta acción.');
+    }
+
+    $resultado = function_exists('crm_infonavit_gwt_leer_comunicados')
+        ? crm_infonavit_gwt_leer_comunicados()
+        : array('ok' => false, 'error' => 'Lector no disponible.');
+
+    $lineas = array(
+        'DIAGNÓSTICO COMUNICADOS INFONAVIT',
+        'Fecha: ' . wp_date('Y-m-d H:i:s'),
+        'ok: ' . (!empty($resultado['ok']) ? 'sí' : 'no'),
+        'http: ' . (isset($resultado['http']) ? $resultado['http'] : ''),
+        'error: ' . (isset($resultado['error']) ? $resultado['error'] : ''),
+        '',
+        '===== COMUNICADOS RECONOCIDOS =====',
+    );
+
+    $comunicados = !empty($resultado['comunicados'])
+        ? $resultado['comunicados']
+        : array();
+
+    foreach ($comunicados as $comunicado) {
+
+        $lineas[] = sprintf(
+            '[string %s] codigo=%s | fecha=%s | titulo=%s | titulo_oficial=%s | url=%s',
+            isset($comunicado['indice']) ? $comunicado['indice'] : '',
+            isset($comunicado['codigo']) ? $comunicado['codigo'] : '',
+            isset($comunicado['fecha']) ? $comunicado['fecha'] : '',
+            isset($comunicado['titulo']) ? $comunicado['titulo'] : '',
+            isset($comunicado['titulo_oficial']) ? $comunicado['titulo_oficial'] : '',
+            isset($comunicado['url']) ? $comunicado['url'] : ''
+        );
+    }
+
+    $lineas[] = '';
+    $lineas[] = '===== TODOS LOS TEXTOS DE LA RESPUESTA =====';
+
+    $strings = !empty($resultado['debug_strings'])
+        ? $resultado['debug_strings']
+        : array();
+
+    foreach ($strings as $indice => $string) {
+
+        $lineas[] = '';
+        $lineas[] = '--- #' . $indice . ' ---';
+        $lineas[] = stripcslashes($string);
+    }
+
+    nocache_headers();
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Content-Disposition: attachment; filename="diagnostico-infonavit.txt"');
+
+    echo implode("\n", $lineas);
+
+    exit;
+}
+
+add_action(
+    'admin_post_crm_v3_comunicados_diagnostico',
+    'crm_v3_comunicados_diagnostico'
+);
