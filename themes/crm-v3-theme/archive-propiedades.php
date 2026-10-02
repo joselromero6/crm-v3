@@ -118,63 +118,28 @@ $tipos = get_terms(array(
 
                <div class="property-image">
 
-<?php
-$estado = get_field('estado_comercial');
+<?php $badge = crm_v3_theme_badge_estado(); ?>
 
-$badges = array(
+<?php if ($badge) : ?>
 
-'captada'=>array(
-'texto'=>'CAPTADA',
-'clase'=>'estado-captada'
-),
+<div class="property-status <?php echo esc_attr($badge['clase']); ?>">
 
-'en_preparacion'=>array(
-'texto'=>'EN PREPARACIÓN',
-'clase'=>'estado-preparacion'
-),
-
-'disponible'=>array(
-'texto'=>'DISPONIBLE',
-'clase'=>'estado-disponible'
-),
-
-'tratada'=>array(
-'texto'=>'TRATADA',
-'clase'=>'estado-tratada'
-),
-
-'vendida'=>array(
-'texto'=>'VENDIDA',
-'clase'=>'estado-vendida'
-)
-
-);
-
-if(
-!empty($estado)
-&&
-isset($badges[$estado])
-):
-?>
-
-<div class="property-status">
-
-<?php echo $badges[$estado]['texto']; ?>
+<?php echo esc_html($badge['texto']); ?>
 
 </div>
 
 <?php endif; ?>
 
 
-<?php if (has_post_thumbnail()) : ?>
-
 <a href="<?php the_permalink(); ?>">
 
-<?php the_post_thumbnail('medium_large'); ?>
+<img
+    src="<?php echo esc_url(crm_v3_theme_imagen_propiedad_url()); ?>"
+    alt="<?php the_title_attribute(); ?>"
+    loading="lazy"
+>
 
 </a>
-
-<?php endif; ?>
 
 </div>
 

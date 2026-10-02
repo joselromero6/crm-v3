@@ -99,40 +99,17 @@ if ($imagenes && is_array($imagenes)) :
         $imagen_principal_url = $imagen_principal;
     }
 
-    $estado = get_field('estado_comercial');
-
-    $badges = array(
-        'captada' => array(
-            'texto' => 'CAPTADA',
-            'clase' => 'estado-captada'
-        ),
-        'en_preparacion' => array(
-            'texto' => 'EN PREPARACIÓN',
-            'clase' => 'estado-preparacion'
-        ),
-        'disponible' => array(
-            'texto' => 'DISPONIBLE',
-            'clase' => 'estado-disponible'
-        ),
-        'tratada' => array(
-            'texto' => 'TRATADA',
-            'clase' => 'estado-tratada'
-        ),
-        'vendida' => array(
-            'texto' => 'VENDIDA',
-            'clase' => 'estado-vendida'
-        )
-    );
+    $badge = crm_v3_theme_badge_estado();
 ?>
 
 <div class="property-gallery-main">
 
     <div class="property-main-image">
 
-        <?php if (!empty($estado) && isset($badges[$estado])) : ?>
+        <?php if ($badge) : ?>
 
-            <span class="property-status <?php echo esc_attr($badges[$estado]['clase']); ?>">
-                <?php echo esc_html($badges[$estado]['texto']); ?>
+            <span class="property-status <?php echo esc_attr($badge['clase']); ?>">
+                <?php echo esc_html($badge['texto']); ?>
             </span>
 
         <?php endif; ?>
@@ -180,8 +157,6 @@ if ($imagenes && is_array($imagenes)) :
 
 <?php endif; ?>
 
-</div>
-
 
 
    <!-- CARACTERÍSTICAS -->
@@ -197,8 +172,8 @@ if ($imagenes && is_array($imagenes)) :
         <p><strong>Cochera:</strong> <?php the_field('cochera'); ?></p>
         <p><strong>M² Terreno:</strong> <?php the_field('m2_terreno'); ?></p>
         <p><strong>M² Construcción:</strong> <?php the_field('m2_construccion'); ?></p>
-        <p><strong>Estado del inmueble:</strong> <?php the_field('estado_del_inmueble'); ?></p>
-        <p><strong>Documentación:</strong> <?php the_field('documentacion'); ?></p>
+        <p><strong>Estado del inmueble:</strong> <?php echo esc_html(crm_v3_theme_etiqueta_campo('estado_del_inmueble')); ?></p>
+        <p><strong>Documentación:</strong> <?php echo esc_html(crm_v3_theme_etiqueta_campo('documentacion')); ?></p>
 
     </div>
 
@@ -273,11 +248,13 @@ if ($ciudad_actual) :
 
             <div class="property-card">
 
-                <?php if (has_post_thumbnail()) : ?>
-                    <a href="<?php the_permalink(); ?>">
-                        <?php the_post_thumbnail('medium_large'); ?>
-                    </a>
-                <?php endif; ?>
+                <a href="<?php the_permalink(); ?>">
+                    <img
+                        src="<?php echo esc_url(crm_v3_theme_imagen_propiedad_url()); ?>"
+                        alt="<?php the_title_attribute(); ?>"
+                        loading="lazy"
+                    >
+                </a>
 
                 <div class="property-content">
 
@@ -319,21 +296,17 @@ endif;
 <!-- UBICACIÓN PREMIUM -->
 <?php
 $direccion = get_field('direccion');
-$ciudad = get_field('ciudad');
+$ciudad_nombre = crm_v3_theme_nombre_termino('ciudad');
 
-$ciudad_nombre = '';
-
-if ($ciudad) {
-    if (is_object($ciudad) && isset($ciudad->name)) {
-        $ciudad_nombre = $ciudad->name;
-    } elseif (is_array($ciudad) && isset($ciudad['name'])) {
-        $ciudad_nombre = $ciudad['name'];
-    } else {
-        $ciudad_nombre = $ciudad;
-    }
-}
-
-$ubicacion_completa = trim($direccion . ', ' . $ciudad_nombre . ', Jalisco, México');
+$ubicacion_completa = implode(
+    ', ',
+    array_filter(array(
+        $direccion,
+        $ciudad_nombre,
+        'Jalisco',
+        'México',
+    ))
+);
 ?>
 
 <?php if ($direccion || $ciudad_nombre) : ?>
