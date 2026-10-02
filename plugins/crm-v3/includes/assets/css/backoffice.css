@@ -190,6 +190,128 @@
 }
 
 /* =========================================================
+   COMUNICADOS INMOBILIARIOS
+========================================================= */
+
+.crm-bo-comunicados {
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+}
+
+.crm-bo-comunicados-lista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.crm-bo-comunicado {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f3f5;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.crm-bo-comunicado:last-child {
+    border-bottom: 0;
+}
+
+.crm-bo-comunicado-fecha {
+    flex: 0 0 auto;
+    color: #7b8794;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+}
+
+.crm-bo-comunicado-fuente {
+    flex: 0 0 auto;
+    padding: 1px 6px;
+    border-radius: 9px;
+    background: #f1f5f7;
+    color: #4f7482;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.crm-bo-comunicado-titulo {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    color: #1f5f8b;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+a.crm-bo-comunicado-titulo:hover {
+    text-decoration: underline;
+}
+
+.crm-bo-comunicado.is-nuevo .crm-bo-comunicado-titulo {
+    font-weight: 600;
+}
+
+.crm-bo-comunicado.is-nuevo .crm-bo-comunicado-fecha::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 5px;
+    border-radius: 50%;
+    background: #2e9e6b;
+    vertical-align: middle;
+}
+
+.crm-bo-comunicados-vacio {
+    margin: 0 0 8px;
+    color: #7b8794;
+    font-size: 12px;
+}
+
+.crm-bo-comunicados-aviso {
+    margin: 8px 0 0;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: #fff8e5;
+    color: #7a5b00;
+    font-size: 11px;
+}
+
+.crm-bo-comunicados-pie {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 10px;
+    color: #7b8794;
+    font-size: 11px;
+}
+
+.crm-bo-comunicados-pie form {
+    margin: 0;
+}
+
+.crm-bo-comunicados-btn {
+    padding: 4px 10px;
+    border: 1px solid #d5dde3;
+    border-radius: 6px;
+    background: #fff;
+    color: #263238;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.crm-bo-comunicados-btn:hover {
+    background: #f1f5f7;
+}
+
+
+/* =========================================================
    RESPONSIVE
 ========================================================= */
 
