@@ -888,3 +888,13 @@ input[type="checkbox"] {
     border-color: #9fb6c7;
     text-decoration: none;
 }
+
+
+/* Link de Drive: enlace + campo editable en la misma fila */
+
+.crm-expediente-drive-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}

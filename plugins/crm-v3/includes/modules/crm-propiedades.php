@@ -75,10 +75,14 @@ function crm_v3_propiedades_estados_reales() {
     'post_type'      => 'operaciones',
     'post_status'    => 'publish',
     'posts_per_page' => -1,
-    'meta_key'       => 'fecha_de_operacion',
-    'orderby'        => 'meta_value_num',
+    'orderby'        => 'date',
     'order'          => 'DESC',
 ]);
+
+    $operaciones = crm_v3_ordenar_por_fecha(
+        $operaciones,
+        'fecha_de_operacion'
+    );
 
 
     foreach ($operaciones as $operacion) {
@@ -692,8 +696,7 @@ function crm_v3_propiedades_obtener_filtradas($filtros = []) {
     'post_type'      => 'propiedades',
     'post_status'    => 'publish',
     'posts_per_page' => -1,
-    'meta_key'       => 'fecha_captacion',
-    'orderby'        => 'meta_value_num',
+    'orderby'        => 'date',
     'order'          => 'DESC',
     'meta_query'     => $meta_query,
     'tax_query'      => $tax_query,
@@ -716,7 +719,14 @@ function crm_v3_propiedades_obtener_filtradas($filtros = []) {
     }
 
 
-    return new WP_Query($args);
+    $query = new WP_Query($args);
+
+    $query->posts = crm_v3_ordenar_por_fecha(
+        $query->posts,
+        'fecha_captacion'
+    );
+
+    return $query;
 }
 
 
@@ -745,10 +755,14 @@ function crm_v3_propiedades_render_table($propiedades) {
     'post_type'      => 'operaciones',
     'post_status'    => 'publish',
     'posts_per_page' => -1,
-    'meta_key'       => 'fecha_de_operacion',
-    'orderby'        => 'meta_value_num',
+    'orderby'        => 'date',
     'order'          => 'DESC',
 ]);
+
+    $operaciones = crm_v3_ordenar_por_fecha(
+        $operaciones,
+        'fecha_de_operacion'
+    );
 
     foreach ($operaciones as $operacion) {
 
@@ -1054,11 +1068,15 @@ function crm_v3_propiedad_filtro_acf($campo, $valor_actual = '') {
     'post_type'      => 'propiedades',
     'post_status'    => 'publish',
     'posts_per_page' => -1,
-    'meta_key'       => 'fecha_captacion',
-    'orderby'        => 'meta_value_num',
+    'orderby'        => 'date',
     'order'          => 'DESC',
     'meta_query'     => $meta_query,
 ));
+
+    $propiedades->posts = crm_v3_ordenar_por_fecha(
+        $propiedades->posts,
+        'fecha_captacion'
+    );
     ?>
 
     <div class="wrap crm-v3-propiedades">

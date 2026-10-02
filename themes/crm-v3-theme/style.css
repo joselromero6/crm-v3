@@ -2305,3 +2305,65 @@ background:#fff1f0;
 border:1px solid #d9534f;
 
 }
+
+
+/* Paginación de listados (propiedades y blog) */
+
+.properties-pagination,
+.blog-pagination{
+
+margin:40px 0 10px;
+
+text-align:center;
+
+}
+
+.properties-pagination .screen-reader-text,
+.blog-pagination .screen-reader-text{
+
+position:absolute;
+
+left:-9999px;
+
+}
+
+.properties-pagination .nav-links,
+.blog-pagination .nav-links{
+
+display:flex;
+
+flex-wrap:wrap;
+
+justify-content:center;
+
+gap:8px;
+
+}
+
+.properties-pagination .page-numbers,
+.blog-pagination .page-numbers{
+
+display:inline-block;
+
+padding:10px 16px;
+
+border:1px solid #d9dee5;
+
+border-radius:8px;
+
+text-decoration:none;
+
+color:inherit;
+
+background:#fff;
+
+}
+
+.properties-pagination .page-numbers.current,
+.blog-pagination .page-numbers.current{
+
+font-weight:700;
+
+border-color:currentColor;
+
+}

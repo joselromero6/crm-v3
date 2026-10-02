@@ -298,147 +298,9 @@ function crm_v3_expediente_page() {
  * ========================================================
  */
 
-$documentos_vendedor = [
+$documentos_vendedor = crm_v3_expediente_documentos('vendedor');
 
-    'estado_cuenta_credito' => [
-        'label' => 'Estado de cuenta del crédito, si aplica',
-        'doble' => false,
-    ],
-
-    'identificacion' => [
-        'label' => 'Identificación',
-        'doble' => true,
-    ],
-
-    'comprobante_domicilio' => [
-        'label' => 'Comprobante de domicilio',
-        'doble' => false,
-    ],
-
-    'acta_nacimiento' => [
-        'label' => 'Acta de nacimiento',
-        'doble' => true,
-    ],
-
-    'acta_matrimonio' => [
-        'label' => 'Acta de Matrimonio',
-        'doble' => false,
-    ],
-
-    'curp' => [
-        'label' => 'CURP',
-        'doble' => true,
-    ],
-
-    'rfc' => [
-        'label' => 'RFC',
-        'doble' => true,
-    ],
-
-    'factura_compra' => [
-        'label' => 'Factura de la compra de la propiedad 2014 en adelante',
-        'doble' => false,
-    ],
-
-    'estado_cuenta_bancario' => [
-        'label' => 'Estado de cuenta bancario para el deposito',
-        'doble' => false,
-    ],
-
-    'escritura' => [
-        'label' => 'Escritura, si es 2do testimonio validar la boleta',
-        'doble' => false,
-    ],
-
-    'boleta_registral' => [
-        'label' => 'Boleta Registral',
-        'doble' => false,
-    ],
-
-    'carta_uso_suelo' => [
-        'label' => 'Carta tipo de uso de suelo',
-        'doble' => false,
-    ],
-
-    'alineamiento' => [
-        'label' => 'Alineamiento de numero oficial, si aplica',
-        'doble' => false,
-    ],
-
-    'no_adeudo_predial' => [
-        'label' => 'Constancia de no adeudo predial',
-        'doble' => false,
-    ],
-
-    'no_adeudo_agua' => [
-        'label' => 'Constancia de no adeudo Agua',
-        'doble' => false,
-    ],
-
-    'isr' => [
-        'label' => 'Para exentar ISR se requiere:',
-        'tipo' => 'titulo',
-    ],
-
-    'ine_domicilio' => [
-        'label' => '- INE con domicilio de la casa en venta',
-        'doble' => false,
-    ],
-
-    'recibos_cfe' => [
-        'label' => '- 3 recibos del CFE con la dirección de la casa en venta y el RFC del dueño en el recibo',
-        'doble' => false,
-    ],
-];
-
-
-$documentos_comprador = [
-
-    'solicitud_inscripcion' => [
-        'label' => 'Solicitud de Inscripción',
-        'doble' => false,
-    ],
-
-    'identificacion' => [
-        'label' => 'Identificación',
-        'doble' => true,
-    ],
-
-    'comprobante_domicilio' => [
-        'label' => 'Comprobante de domicilio',
-        'doble' => false,
-    ],
-
-    'acta_nacimiento' => [
-        'label' => 'Acta de nacimiento',
-        'doble' => true,
-    ],
-
-    'acta_matrimonio' => [
-        'label' => 'Acta de Matrimonio',
-        'doble' => false,
-    ],
-
-    'curp' => [
-        'label' => 'CURP',
-        'doble' => true,
-    ],
-
-    'rfc' => [
-        'label' => 'RFC',
-        'doble' => true,
-    ],
-
-    'constancia_taller' => [
-        'label' => 'Constancia del taller saber para decidir mejor',
-        'doble' => true,
-    ],
-
-    'pago_avaluo' => [
-        'label' => 'Pago de Avalúo',
-        'doble' => false,
-    ],
-];
+$documentos_comprador = crm_v3_expediente_documentos('comprador');
 
 
     /*
@@ -451,6 +313,11 @@ $vendedor_total = 0;
 $vendedor_completos = 0;
 
 foreach ($documentos_vendedor as $key => $documento) {
+
+    // Los títulos de sección no son documentos.
+    if (($documento['tipo'] ?? '') === 'titulo') {
+        continue;
+    }
 
     $vendedor_total++;
 
@@ -482,6 +349,11 @@ $comprador_total = 0;
 $comprador_completos = 0;
 
 foreach ($documentos_comprador as $key => $documento) {
+
+    // Los títulos de sección no son documentos.
+    if (($documento['tipo'] ?? '') === 'titulo') {
+        continue;
+    }
 
     $comprador_total++;
 
@@ -551,194 +423,15 @@ $carpeta_google_drive = get_field(
 
     /*
      * ========================================================
-     * GUARDAR
+     * AVISO DE GUARDADO
+     *
+     * El guardado se procesa antes de mostrar la página
+     * (crm_v3_expediente_guardar) y regresa aquí con ?guardado=1,
+     * así la pantalla siempre muestra lo que quedó guardado.
      * ========================================================
      */
 
-    if (
-        isset($_POST['crm_expediente_guardar'])
-    ) {
-
-        check_admin_referer(
-            'crm_guardar_expediente_' . $operacion_id
-        );
-
-/**
- * ========================================================
- * CARPETA GOOGLE DRIVE
- * ========================================================
- */
-
-if (isset($_POST['carpeta_google_drive'])) {
-
-    update_field(
-        'carpeta_google_drive',
-        esc_url_raw(
-            trim($_POST['carpeta_google_drive'])
-        ),
-        $operacion_id
-    );
-
-}
-
-
-        $nuevo_expediente = [
-
-            'vendedor_documentos' =>
-
-    isset($_POST['vendedor_documentos'])
-        ? array_map(
-            function ($documento) {
-
-                return [
-                    'principal' =>
-                        !empty($documento['principal']) ? 1 : 0,
-
-                    'conyuge' =>
-                        !empty($documento['conyuge']) ? 1 : 0,
-                ];
-
-            },
-            (array) $_POST['vendedor_documentos']
-        )
-        : [],
-
-
-'comprador_documentos' =>
-
-    isset($_POST['comprador_documentos'])
-        ? array_map(
-            function ($documento) {
-
-                return [
-                    'principal' =>
-                        !empty($documento['principal']) ? 1 : 0,
-
-                    'conyuge' =>
-                        !empty($documento['conyuge']) ? 1 : 0,
-                ];
-
-            },
-            (array) $_POST['comprador_documentos']
-        )
-        : [],
-
-            'vendedor_notas' =>
-                isset($_POST['vendedor_notas'])
-                    ? sanitize_textarea_field(
-                        $_POST['vendedor_notas']
-                    )
-                    : '',
-
-            'comprador_notas' =>
-                isset($_POST['comprador_notas'])
-                    ? sanitize_textarea_field(
-                        $_POST['comprador_notas']
-                    )
-                    : '',
-
-            'vendedor_manual' => [
-
-                'curp' =>
-                    isset($_POST['vendedor_curp'])
-                        ? sanitize_text_field(
-                            $_POST['vendedor_curp']
-                        )
-                        : '',
-
-                'rfc' =>
-                    isset($_POST['vendedor_rfc'])
-                        ? sanitize_text_field(
-                            $_POST['vendedor_rfc']
-                        )
-                        : '',
-            ],
-
-            'comprador_manual' => [
-
-    // DATOS DEL COMPRADOR
-    'nss' =>
-        isset($_POST['comprador_nss'])
-            ? sanitize_text_field(
-                $_POST['comprador_nss']
-            )
-            : '',
-
-    'curp' =>
-        isset($_POST['comprador_curp'])
-            ? sanitize_text_field(
-                $_POST['comprador_curp']
-            )
-            : '',
-
-    'rfc' =>
-        isset($_POST['comprador_rfc'])
-            ? sanitize_text_field(
-                $_POST['comprador_rfc']
-            )
-            : '',
-
-    // DATOS DEL CÓNYUGE
-    'conyuge' =>
-        isset($_POST['comprador_conyuge'])
-            ? sanitize_text_field(
-                $_POST['comprador_conyuge']
-            )
-            : '',
-
-    'conyuge_nss' =>
-        isset($_POST['comprador_conyuge_nss'])
-            ? sanitize_text_field(
-                $_POST['comprador_conyuge_nss']
-            )
-            : '',
-
-    'conyuge_curp' =>
-        isset($_POST['comprador_conyuge_curp'])
-            ? sanitize_text_field(
-                $_POST['comprador_conyuge_curp']
-            )
-            : '',
-
-    'conyuge_rfc' =>
-        isset($_POST['comprador_conyuge_rfc'])
-            ? sanitize_text_field(
-                $_POST['comprador_conyuge_rfc']
-            )
-            : '',
-],
-        ];
-
-
-        update_post_meta(
-            $operacion_id,
-            '_crm_expediente',
-            $nuevo_expediente
-        );
-
-
-        $expediente =
-            $nuevo_expediente;
-
-        $vendedor_documentos =
-            $expediente['vendedor_documentos'];
-
-        $comprador_documentos =
-            $expediente['comprador_documentos'];
-
-        $vendedor_notas =
-            $expediente['vendedor_notas'];
-
-        $comprador_notas =
-            $expediente['comprador_notas'];
-
-        $vendedor_manual =
-            $expediente['vendedor_manual'];
-
-        $comprador_manual =
-            $expediente['comprador_manual'];
-
-
+    if (isset($_GET['guardado'])) {
 
         echo '<div class="crm-expediente-message">
         <span>Expediente guardado correctamente.</span>
@@ -810,17 +503,15 @@ if (isset($_POST['carpeta_google_drive'])) {
                 📁 Link expediente
             </a>
 
-        <?php else : ?>
-
-            <input
-                type="url"
-                name="carpeta_google_drive"
-                value=""
-                placeholder="Pegar link de Google Drive"
-                class="crm-expediente-drive-input"
-            >
-
         <?php endif; ?>
+
+        <input
+            type="url"
+            name="carpeta_google_drive"
+            value="<?php echo esc_attr($carpeta_google_drive); ?>"
+            placeholder="Pegar link de Google Drive"
+            class="crm-expediente-drive-input"
+        >
 
     </div>
 
@@ -1316,3 +1007,314 @@ if (isset($_POST['carpeta_google_drive'])) {
 
     <?php
 }
+
+
+/**
+ * ============================================================
+ * LISTA DE DOCUMENTOS DEL EXPEDIENTE
+ * ============================================================
+ *
+ * doble = permite marcar PRINCIPAL + CÓNYUGE
+ * simple = solamente PRINCIPAL
+ * tipo "titulo" = encabezado de sección, no es un documento
+ */
+
+function crm_v3_expediente_documentos($quien) {
+
+    $vendedor = [
+    
+        'estado_cuenta_credito' => [
+            'label' => 'Estado de cuenta del crédito, si aplica',
+            'doble' => false,
+        ],
+    
+        'identificacion' => [
+            'label' => 'Identificación',
+            'doble' => true,
+        ],
+    
+        'comprobante_domicilio' => [
+            'label' => 'Comprobante de domicilio',
+            'doble' => false,
+        ],
+    
+        'acta_nacimiento' => [
+            'label' => 'Acta de nacimiento',
+            'doble' => true,
+        ],
+    
+        'acta_matrimonio' => [
+            'label' => 'Acta de Matrimonio',
+            'doble' => false,
+        ],
+    
+        'curp' => [
+            'label' => 'CURP',
+            'doble' => true,
+        ],
+    
+        'rfc' => [
+            'label' => 'RFC',
+            'doble' => true,
+        ],
+    
+        'factura_compra' => [
+            'label' => 'Factura de la compra de la propiedad 2014 en adelante',
+            'doble' => false,
+        ],
+    
+        'estado_cuenta_bancario' => [
+            'label' => 'Estado de cuenta bancario para el deposito',
+            'doble' => false,
+        ],
+    
+        'escritura' => [
+            'label' => 'Escritura, si es 2do testimonio validar la boleta',
+            'doble' => false,
+        ],
+    
+        'boleta_registral' => [
+            'label' => 'Boleta Registral',
+            'doble' => false,
+        ],
+    
+        'carta_uso_suelo' => [
+            'label' => 'Carta tipo de uso de suelo',
+            'doble' => false,
+        ],
+    
+        'alineamiento' => [
+            'label' => 'Alineamiento de numero oficial, si aplica',
+            'doble' => false,
+        ],
+    
+        'no_adeudo_predial' => [
+            'label' => 'Constancia de no adeudo predial',
+            'doble' => false,
+        ],
+    
+        'no_adeudo_agua' => [
+            'label' => 'Constancia de no adeudo Agua',
+            'doble' => false,
+        ],
+    
+        'isr' => [
+            'label' => 'Para exentar ISR se requiere:',
+            'tipo' => 'titulo',
+        ],
+    
+        'ine_domicilio' => [
+            'label' => '- INE con domicilio de la casa en venta',
+            'doble' => false,
+        ],
+    
+        'recibos_cfe' => [
+            'label' => '- 3 recibos del CFE con la dirección de la casa en venta y el RFC del dueño en el recibo',
+            'doble' => false,
+        ],
+    ];
+
+    $comprador = [
+    
+        'solicitud_inscripcion' => [
+            'label' => 'Solicitud de Inscripción',
+            'doble' => false,
+        ],
+    
+        'identificacion' => [
+            'label' => 'Identificación',
+            'doble' => true,
+        ],
+    
+        'comprobante_domicilio' => [
+            'label' => 'Comprobante de domicilio',
+            'doble' => false,
+        ],
+    
+        'acta_nacimiento' => [
+            'label' => 'Acta de nacimiento',
+            'doble' => true,
+        ],
+    
+        'acta_matrimonio' => [
+            'label' => 'Acta de Matrimonio',
+            'doble' => false,
+        ],
+    
+        'curp' => [
+            'label' => 'CURP',
+            'doble' => true,
+        ],
+    
+        'rfc' => [
+            'label' => 'RFC',
+            'doble' => true,
+        ],
+    
+        'constancia_taller' => [
+            'label' => 'Constancia del taller saber para decidir mejor',
+            'doble' => true,
+        ],
+    
+        'pago_avaluo' => [
+            'label' => 'Pago de Avalúo',
+            'doble' => false,
+        ],
+    ];
+
+    return $quien === 'comprador'
+        ? $comprador
+        : $vendedor;
+}
+
+
+/**
+ * ============================================================
+ * GUARDAR EXPEDIENTE
+ * ============================================================
+ *
+ * Se procesa antes de mostrar la página y se redirige, para que:
+ * - la pantalla muestre siempre lo guardado (porcentajes, link),
+ * - recargar no reenvíe el formulario,
+ * - los textos con comillas no acumulen barras invertidas.
+ */
+
+function crm_v3_expediente_guardar() {
+
+    if (
+        !isset($_GET['page']) ||
+        $_GET['page'] !== 'crm-expediente' ||
+        !isset($_POST['crm_expediente_guardar'])
+    ) {
+        return;
+    }
+
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
+    $operacion_id = isset($_GET['operacion_id'])
+        ? absint($_GET['operacion_id'])
+        : 0;
+
+    if (
+        !$operacion_id ||
+        get_post_type($operacion_id) !== 'operaciones'
+    ) {
+        return;
+    }
+
+    check_admin_referer(
+        'crm_guardar_expediente_' . $operacion_id
+    );
+
+    $post = wp_unslash($_POST);
+
+    $texto = function ($clave) use ($post) {
+
+        return isset($post[$clave])
+            ? sanitize_text_field($post[$clave])
+            : '';
+    };
+
+    /*
+     * Documentos: solo se aceptan las claves de la lista.
+     */
+    $documentos = function ($quien) use ($post) {
+
+        $recibidos = isset($post[$quien . '_documentos']) &&
+            is_array($post[$quien . '_documentos'])
+                ? $post[$quien . '_documentos']
+                : array();
+
+        $resultado = array();
+
+        foreach (crm_v3_expediente_documentos($quien) as $clave => $documento) {
+
+            if (($documento['tipo'] ?? '') === 'titulo') {
+                continue;
+            }
+
+            if (
+                !isset($recibidos[$clave]) ||
+                !is_array($recibidos[$clave])
+            ) {
+                continue;
+            }
+
+            $resultado[$clave] = array(
+                'principal' => !empty($recibidos[$clave]['principal']) ? 1 : 0,
+                'conyuge'   => !empty($recibidos[$clave]['conyuge']) ? 1 : 0,
+            );
+        }
+
+        return $resultado;
+    };
+
+    $expediente = array(
+
+        'vendedor_documentos'  => $documentos('vendedor'),
+        'comprador_documentos' => $documentos('comprador'),
+
+        'vendedor_notas' => isset($post['vendedor_notas'])
+            ? sanitize_textarea_field($post['vendedor_notas'])
+            : '',
+
+        'comprador_notas' => isset($post['comprador_notas'])
+            ? sanitize_textarea_field($post['comprador_notas'])
+            : '',
+
+        'vendedor_manual' => array(
+            'curp' => $texto('vendedor_curp'),
+            'rfc'  => $texto('vendedor_rfc'),
+        ),
+
+        'comprador_manual' => array(
+            'nss'          => $texto('comprador_nss'),
+            'curp'         => $texto('comprador_curp'),
+            'rfc'          => $texto('comprador_rfc'),
+            'conyuge'      => $texto('comprador_conyuge'),
+            'conyuge_nss'  => $texto('comprador_conyuge_nss'),
+            'conyuge_curp' => $texto('comprador_conyuge_curp'),
+            'conyuge_rfc'  => $texto('comprador_conyuge_rfc'),
+        ),
+    );
+
+    // update_post_meta espera datos con barras, como llegan de $_POST.
+    update_post_meta(
+        $operacion_id,
+        '_crm_expediente',
+        wp_slash($expediente)
+    );
+
+    if (isset($post['carpeta_google_drive'])) {
+
+        update_field(
+            'carpeta_google_drive',
+            esc_url_raw(trim($post['carpeta_google_drive'])),
+            $operacion_id
+        );
+    }
+
+    $destino = array(
+        'page'         => 'crm-expediente',
+        'operacion_id' => $operacion_id,
+        'guardado'     => 1,
+    );
+
+    if (!empty($_GET['cliente_id'])) {
+        $destino['cliente_id'] = absint($_GET['cliente_id']);
+    }
+
+    wp_safe_redirect(
+        add_query_arg($destino, admin_url('admin.php'))
+    );
+
+    exit;
+}
+
+add_action(
+    'admin_init',
+    'crm_v3_expediente_guardar'
+);
+
