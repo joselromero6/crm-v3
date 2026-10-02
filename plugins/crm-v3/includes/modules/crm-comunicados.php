@@ -40,9 +40,9 @@ function crm_v3_comunicados_fuentes() {
             'funcion' => 'crm_v3_comunicados_leer_infonavit',
         ),
 
-        'oficial' => array(
-            'nombre'  => 'Gobierno',
-            'funcion' => 'crm_v3_comunicados_leer_avisos_oficiales',
+        'noticias' => array(
+            'nombre'  => 'Noticias',
+            'funcion' => 'crm_v3_comunicados_leer_noticias',
         ),
     );
 
@@ -51,21 +51,154 @@ function crm_v3_comunicados_fuentes() {
 
 
 /**
- * Palabras que debe mencionar un aviso oficial para mostrarse.
+ * ============================================================
+ * QUÉ SE CONSIDERA RELEVANTE
+ * ============================================================
+ *
+ * Solo interesan los cambios de reglas, políticas, impuestos o
+ * requisitos que afectan o benefician al sector inmobiliario.
+ * Ejemplos: sube el predial, Infonavit cambia cómo consulta el buró,
+ * nuevas tasas, nuevos requisitos de crédito.
+ *
+ * NO interesan las notas de eventos: entregas de casas, arranques de
+ * obra, ferias, cifras de créditos entregados.
+ *
+ * Un texto es relevante cuando cumple las tres condiciones:
+ *
+ * 1. Habla de un TEMA inmobiliario.
+ * 2. Habla de un CAMBIO.
+ * 3. No es una nota de EVENTO.
+ *
+ * Las tres listas se pueden ajustar aquí mismo. Se escriben en
+ * minúsculas y sin acentos; basta con el inicio de la palabra
+ * ("requisit" reconoce requisito y requisitos).
  */
-function crm_v3_comunicados_palabras_clave() {
+
+function crm_v3_comunicados_palabras_tema() {
 
     return apply_filters(
-        'crm_v3_comunicados_palabras_clave',
+        'crm_v3_comunicados_palabras_tema',
         array(
-            'infonavit',
-            'fovissste',
-            'derechohabiente',
-            'crédito hipotecario',
-            'credito hipotecario',
-            'vivienda',
+            'infonavit', 'fovissste', 'derechohabient', 'predial',
+            'catastr', 'hipotec', 'vivienda', 'inmobiliari', 'inmueble',
+            'escritura', 'notari', 'isr', 'isai', 'plusvalia',
+            'arrendamiento', 'renta de casa', 'uso de suelo',
+            'credito para casa', 'subcuenta', 'buro de credito',
+            'mejoravit', 'unamos creditos', 'cofinavit',
         )
     );
+}
+
+
+function crm_v3_comunicados_palabras_cambio() {
+
+    return apply_filters(
+        'crm_v3_comunicados_palabras_cambio',
+        array(
+            'cambi', 'modific', 'reform', 'nueva regla', 'nuevas reglas',
+            'nuevo esquema', 'nuevo programa', 'nuevo requisito',
+            'nuevos requisitos', 'nueva ley', 'nuevo modelo',
+            'regla', 'requisit', 'lineamient', 'decreto',
+            'iniciativa', 'aprueb', 'aprob', 'entra en vigor', 'vigor',
+            'a partir de', 'ya no', 'ahora', 'dejara de', 'deja de',
+            'elimin', 'desaparec', 'sustitu', 'aument', 'increment',
+            'sube', 'subira', 'alza', 'bajan', 'bajara', 'reduc',
+            'descuento', 'condon', 'congel', 'tope', 'tasa',
+            'puntos', 'puntaje', 'buro', 'actualiz', 'ajust', 'tarifa',
+            'impuesto', 'tabla de valores', 'valores catastrales',
+            'ley de ingresos', 'miscelanea', 'prohib', 'obligatori',
+            'requerira', 'permitira', 'podran', 'anuncia cambios',
+            'reestructura', 'quitan', 'quitara',
+        )
+    );
+}
+
+
+function crm_v3_comunicados_palabras_evento() {
+
+    return apply_filters(
+        'crm_v3_comunicados_palabras_evento',
+        array(
+            'entrega de vivienda', 'entregan vivienda', 'entrega vivienda',
+            'entregaron', 'entrega de llaves', 'entregan llaves',
+            'entrega de escrituras', 'entregan escrituras',
+            'viviendas del bienestar', 'primera piedra', 'arranca',
+            'arranque', 'inicia construccion', 'inicio de construccion',
+            'construccion de', 'construira', 'se construyen',
+            'fraccionamiento', 'conjunto habitacional', 'recorrido',
+            'supervisa', 'visita', 'gira', 'inaugura', 'feria',
+            'jornada', 'sorteo', 'liquida', 'familias beneficiadas',
+            'da a conocer intervencion', 'convenio de colaboracion',
+            'firma convenio', 'reunion', 'se reune', 'conmemora',
+            'aniversario', 'reconocimiento', 'premio', 'torneo',
+        )
+    );
+}
+
+
+/**
+ * Texto en minúsculas y sin acentos, para comparar.
+ */
+function crm_v3_comunicados_texto_plano($texto) {
+
+    $texto = remove_accents(
+        wp_strip_all_tags((string) $texto)
+    );
+
+    $texto = function_exists('mb_strtolower')
+        ? mb_strtolower($texto, 'UTF-8')
+        : strtolower($texto);
+
+    return ' ' . trim(preg_replace('/[^a-z0-9ñ]+/u', ' ', $texto)) . ' ';
+}
+
+
+/**
+ * ¿Aparece alguna palabra de la lista? Las palabras se buscan al
+ * inicio de palabra, para que "isr" no coincida dentro de otra.
+ */
+function crm_v3_comunicados_contiene($texto_plano, $palabras) {
+
+    foreach ($palabras as $palabra) {
+
+        $palabra = trim((string) $palabra);
+
+        if ($palabra === '') {
+            continue;
+        }
+
+        // Las siglas cortas deben ser la palabra completa.
+        $buscar = strlen($palabra) <= 3
+            ? ' ' . $palabra . ' '
+            : ' ' . $palabra;
+
+        if (strpos($texto_plano, $buscar) !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+/**
+ * ¿El comunicado trata de un cambio que afecta al sector?
+ *
+ * $titulo  Encabezado.
+ * $extracto  Primeras líneas del texto, si se tienen.
+ */
+function crm_v3_comunicados_es_relevante($titulo, $extracto = '') {
+
+    $plano_todo   = crm_v3_comunicados_texto_plano($titulo . ' ' . $extracto);
+
+    // Las notas de evento se descartan.
+    if (crm_v3_comunicados_contiene($plano_todo, crm_v3_comunicados_palabras_evento())) {
+        return false;
+    }
+
+    return
+        crm_v3_comunicados_contiene($plano_todo, crm_v3_comunicados_palabras_tema()) &&
+        crm_v3_comunicados_contiene($plano_todo, crm_v3_comunicados_palabras_cambio());
 }
 
 
@@ -180,7 +313,15 @@ function crm_v3_comunicados_normalizar($item, $fuente) {
         ? trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) $item['titulo'])))
         : '';
 
-    if ($titulo === '' || crm_v3_comunicados_es_ruido($titulo)) {
+    $extracto = isset($item['extracto'])
+        ? wp_html_excerpt(wp_strip_all_tags((string) $item['extracto']), 400)
+        : '';
+
+    if (
+        $titulo === '' ||
+        crm_v3_comunicados_es_ruido($titulo) ||
+        !crm_v3_comunicados_es_relevante($titulo, $extracto)
+    ) {
         return null;
     }
 
@@ -208,6 +349,7 @@ function crm_v3_comunicados_normalizar($item, $fuente) {
         'fecha'     => $fecha,
         'url'       => $url,
         'fuente'    => $fuente,
+        'extracto'  => $extracto,
         'detectado' => time(),
     );
 }
@@ -257,6 +399,7 @@ function crm_v3_comunicados_leer_infonavit() {
         $lista[] = array(
             'titulo' => isset($comunicado['titulo']) ? $comunicado['titulo'] : '',
             'fecha'  => isset($comunicado['fecha']) ? $comunicado['fecha'] : '',
+            'extracto' => isset($comunicado['resumen']) ? $comunicado['resumen'] : '',
             'url'    => !empty($comunicado['url'])
                 ? $comunicado['url']
                 : crm_v3_comunicados_url_sala_prensa(),
@@ -276,73 +419,103 @@ function crm_v3_comunicados_leer_infonavit() {
 
 /**
  * ============================================================
- * FUENTE 2 — AVISOS OFICIALES (GOBIERNO)
+ * FUENTE 2 — NOTICIAS DEL SECTOR
  * ============================================================
  *
- * Busca publicaciones recientes en sitios oficiales (gob.mx,
- * Diario Oficial e Infonavit) que mencionen a Infonavit o Fovissste.
+ * Busca noticias recientes (últimos 30 días) sobre cambios en
+ * Infonavit, Fovissste, predial e impuestos de la vivienda.
+ * Cada línea de la lista es una búsqueda; se pueden agregar más.
  */
 
-function crm_v3_comunicados_url_avisos_oficiales() {
+function crm_v3_comunicados_busquedas() {
 
-    $busqueda =
-        '(infonavit OR fovissste) ' .
-        '(site:gob.mx OR site:dof.gob.mx OR site:infonavit.org.mx) ' .
-        'when:30d';
+    $zona = '(Jalisco OR Guadalajara OR Zapopan OR Tlajomulco OR Tlaquepaque OR Tonalá)';
 
-    $url = add_query_arg(
+    return apply_filters(
+        'crm_v3_comunicados_busquedas',
         array(
-            'q'    => rawurlencode($busqueda),
+            'Infonavit (cambios OR "nuevas reglas" OR reforma OR requisitos OR buró OR tasa OR "a partir de" OR "ya no")',
+            'Fovissste (cambios OR "nuevas reglas" OR reforma OR requisitos OR tasa OR "a partir de")',
+            'predial (aumento OR incremento OR descuento OR tarifas OR "valores catastrales") ' . $zona,
+            '(escrituración OR "crédito hipotecario" OR "ley de vivienda" OR ISR OR notarios) vivienda (reforma OR cambios OR "nuevas reglas" OR decreto)',
+            '(Infonavit OR Fovissste OR vivienda) (decreto OR acuerdo OR reforma) (site:dof.gob.mx OR site:gob.mx)',
+        )
+    );
+}
+
+
+function crm_v3_comunicados_url_busqueda($busqueda) {
+
+    return add_query_arg(
+        array(
+            'q'    => rawurlencode($busqueda . ' when:30d'),
             'hl'   => 'es-419',
             'gl'   => 'MX',
             'ceid' => 'MX:es-419',
         ),
         'https://news.google.com/rss/search'
     );
-
-    return apply_filters('crm_v3_comunicados_url_avisos_oficiales', $url);
 }
 
 
-function crm_v3_comunicados_leer_avisos_oficiales() {
+function crm_v3_comunicados_leer_noticias() {
 
-    $respuesta = wp_remote_get(
-        crm_v3_comunicados_url_avisos_oficiales(),
-        array(
-            'timeout'    => 20,
-            'user-agent' => 'Mozilla/5.0 (compatible; CRM-CIBR)',
-        )
-    );
+    $lista   = array();
+    $errores = array();
 
-    if (is_wp_error($respuesta)) {
+    foreach (crm_v3_comunicados_busquedas() as $busqueda) {
+
+        $respuesta = wp_remote_get(
+            crm_v3_comunicados_url_busqueda($busqueda),
+            array(
+                'timeout'    => 20,
+                'user-agent' => 'Mozilla/5.0 (compatible; CRM-CIBR)',
+            )
+        );
+
+        if (is_wp_error($respuesta)) {
+            $errores[] = $respuesta->get_error_message();
+            continue;
+        }
+
+        $codigo = (int) wp_remote_retrieve_response_code($respuesta);
+
+        if ($codigo !== 200) {
+            $errores[] = 'código ' . $codigo;
+            continue;
+        }
+
+        $resultado = crm_v3_comunicados_leer_rss(
+            wp_remote_retrieve_body($respuesta)
+        );
+
+        if (is_wp_error($resultado)) {
+            $errores[] = $resultado->get_error_message();
+            continue;
+        }
+
+        $lista = array_merge($lista, $resultado);
+    }
+
+    // Solo es un error si no respondió ninguna búsqueda.
+    if (empty($lista) && count($errores) === count(crm_v3_comunicados_busquedas())) {
         return new WP_Error(
-            'oficial',
-            'No se pudo consultar los avisos oficiales: ' . $respuesta->get_error_message()
+            'noticias',
+            'No se pudieron consultar las noticias: ' . $errores[0]
         );
     }
 
-    $codigo = (int) wp_remote_retrieve_response_code($respuesta);
-
-    if ($codigo !== 200) {
-        return new WP_Error(
-            'oficial',
-            'Los avisos oficiales no respondieron (código ' . $codigo . ').'
-        );
-    }
-
-    return crm_v3_comunicados_leer_rss(
-        wp_remote_retrieve_body($respuesta)
-    );
+    return $lista;
 }
 
 
 /**
- * Leer una lista RSS y quedarse con lo que menciona las palabras clave.
+ * Leer una lista RSS. La relevancia se decide después, al guardar.
  */
 function crm_v3_comunicados_leer_rss($xml) {
 
     if (!function_exists('simplexml_load_string') || trim((string) $xml) === '') {
-        return new WP_Error('rss', 'La respuesta de avisos oficiales llegó vacía.');
+        return new WP_Error('rss', 'La respuesta de noticias llegó vacía.');
     }
 
     $anterior = libxml_use_internal_errors(true);
@@ -351,37 +524,19 @@ function crm_v3_comunicados_leer_rss($xml) {
     libxml_use_internal_errors($anterior);
 
     if (!$rss || !isset($rss->channel)) {
-        return new WP_Error('rss', 'La respuesta de avisos oficiales no se pudo leer.');
+        return new WP_Error('rss', 'La respuesta de noticias no se pudo leer.');
     }
 
-    $palabras = crm_v3_comunicados_palabras_clave();
-    $lista    = array();
+    $lista = array();
 
     foreach ($rss->channel->item as $item) {
 
         $titulo = trim((string) $item->title);
         $medio  = trim((string) $item->source);
 
-        // Los títulos llegan como "Título - Nombre del sitio".
+        // Los títulos llegan como "Título - Nombre del medio".
         if ($medio !== '' && substr($titulo, -strlen(' - ' . $medio)) === ' - ' . $medio) {
             $titulo = substr($titulo, 0, -strlen(' - ' . $medio));
-        }
-
-        $minusculas = function_exists('mb_strtolower')
-            ? mb_strtolower($titulo, 'UTF-8')
-            : strtolower($titulo);
-
-        $relevante = false;
-
-        foreach ($palabras as $palabra) {
-            if ($palabra !== '' && strpos($minusculas, $palabra) !== false) {
-                $relevante = true;
-                break;
-            }
-        }
-
-        if (!$relevante) {
-            continue;
         }
 
         $lista[] = array(
@@ -494,13 +649,20 @@ function crm_v3_comunicados_visibles($limite = 8) {
 function crm_v3_comunicados_actualizar() {
 
     $guardados = array();
+    $fuentes   = crm_v3_comunicados_fuentes();
 
     foreach (crm_v3_comunicados_lista() as $comunicado) {
 
-        // Lo guardado que hoy se considera "ruido" se descarta.
+        // Lo guardado que hoy ya no pasa los filtros se descarta:
+        // así, al ajustar las listas de palabras, la tarjeta se limpia sola.
         if (
             !empty($comunicado['id']) &&
-            !crm_v3_comunicados_es_ruido($comunicado['titulo'])
+            isset($fuentes[$comunicado['fuente']]) &&
+            !crm_v3_comunicados_es_ruido($comunicado['titulo']) &&
+            crm_v3_comunicados_es_relevante(
+                $comunicado['titulo'],
+                isset($comunicado['extracto']) ? $comunicado['extracto'] : ''
+            )
         ) {
             $guardados[$comunicado['id']] = $comunicado;
         }
@@ -515,7 +677,7 @@ function crm_v3_comunicados_actualizar() {
         'fuentes'  => array(),
     );
 
-    foreach (crm_v3_comunicados_fuentes() as $clave => $fuente) {
+    foreach ($fuentes as $clave => $fuente) {
 
         $resultado = is_callable($fuente['funcion'])
             ? call_user_func($fuente['funcion'])
@@ -532,6 +694,7 @@ function crm_v3_comunicados_actualizar() {
         }
 
         $encontrados = 0;
+        $vistos      = array();
 
         foreach ((array) $resultado as $item) {
 
@@ -541,6 +704,12 @@ function crm_v3_comunicados_actualizar() {
                 continue;
             }
 
+            // Una misma noticia puede salir en varias búsquedas.
+            if (isset($vistos[$comunicado['id']])) {
+                continue;
+            }
+
+            $vistos[$comunicado['id']] = true;
             $encontrados++;
 
             if (isset($guardados[$comunicado['id']])) {
@@ -816,3 +985,81 @@ function crm_v3_comunicados_render($limite = 8) {
 
     <?php
 }
+
+
+/**
+ * ============================================================
+ * DIAGNÓSTICO (temporal)
+ * ============================================================
+ *
+ * Descarga en un archivo de texto la respuesta completa del portal
+ * de Infonavit, para poder ajustar la lectura de títulos y enlaces.
+ *
+ * Solo administradores:
+ * wp-admin/admin-post.php?action=crm_v3_comunicados_diagnostico
+ */
+
+function crm_v3_comunicados_diagnostico() {
+
+    if (!current_user_can('manage_options')) {
+        wp_die('No tienes permisos para esta acción.');
+    }
+
+    $resultado = function_exists('crm_infonavit_gwt_leer_comunicados')
+        ? crm_infonavit_gwt_leer_comunicados()
+        : array('ok' => false, 'error' => 'Lector no disponible.');
+
+    $lineas = array(
+        'DIAGNÓSTICO COMUNICADOS INFONAVIT',
+        'Fecha: ' . wp_date('Y-m-d H:i:s'),
+        'ok: ' . (!empty($resultado['ok']) ? 'sí' : 'no'),
+        'http: ' . (isset($resultado['http']) ? $resultado['http'] : ''),
+        'error: ' . (isset($resultado['error']) ? $resultado['error'] : ''),
+        '',
+        '===== COMUNICADOS RECONOCIDOS =====',
+    );
+
+    $comunicados = !empty($resultado['comunicados'])
+        ? $resultado['comunicados']
+        : array();
+
+    foreach ($comunicados as $comunicado) {
+
+        $lineas[] = sprintf(
+            '[string %s] codigo=%s | fecha=%s | titulo=%s | titulo_oficial=%s | url=%s',
+            isset($comunicado['indice']) ? $comunicado['indice'] : '',
+            isset($comunicado['codigo']) ? $comunicado['codigo'] : '',
+            isset($comunicado['fecha']) ? $comunicado['fecha'] : '',
+            isset($comunicado['titulo']) ? $comunicado['titulo'] : '',
+            isset($comunicado['titulo_oficial']) ? $comunicado['titulo_oficial'] : '',
+            isset($comunicado['url']) ? $comunicado['url'] : ''
+        );
+    }
+
+    $lineas[] = '';
+    $lineas[] = '===== TODOS LOS TEXTOS DE LA RESPUESTA =====';
+
+    $strings = !empty($resultado['debug_strings'])
+        ? $resultado['debug_strings']
+        : array();
+
+    foreach ($strings as $indice => $string) {
+
+        $lineas[] = '';
+        $lineas[] = '--- #' . $indice . ' ---';
+        $lineas[] = stripcslashes($string);
+    }
+
+    nocache_headers();
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Content-Disposition: attachment; filename="diagnostico-infonavit.txt"');
+
+    echo implode("\n", $lineas);
+
+    exit;
+}
+
+add_action(
+    'admin_post_crm_v3_comunicados_diagnostico',
+    'crm_v3_comunicados_diagnostico'
+);
