@@ -114,75 +114,10 @@ function crm_v3_propiedades_estados_reales() {
      * --------------------------------------------------------
      */
 
-    $operaciones_por_propiedad = [];
-
-    $operaciones = get_posts([
-    'post_type'      => 'operaciones',
-    'post_status'    => 'publish',
-    'posts_per_page' => -1,
-    'orderby'        => 'date',
-    'order'          => 'DESC',
-]);
-
-    $operaciones = crm_v3_ordenar_por_fecha(
-        $operaciones,
-        'fecha_de_operacion'
+    $operaciones_por_propiedad = array_map(
+        'crm_v3_valor_normalizado',
+        crm_v3_estatus_ultima_operacion_por_propiedad()
     );
-
-
-    foreach ($operaciones as $operacion) {
-
-        $propiedad = get_field(
-            'propiedad',
-            $operacion->ID
-        );
-
-        $propiedad_id = crm_v3_get_related_id(
-            $propiedad
-        );
-
-        if (!$propiedad_id) {
-            continue;
-        }
-
-
-        /*
-         * Como las operaciones vienen DESC,
-         * la primera es la más reciente.
-         */
-        if (isset($operaciones_por_propiedad[$propiedad_id])) {
-            continue;
-        }
-
-
-        $estatus_operacion = get_field(
-            'estatus_de_operacion',
-            $operacion->ID
-        );
-
-
-        /*
-         * Normalizar estatus de operación.
-         */
-        if (is_array($estatus_operacion)) {
-            $estatus_operacion = reset($estatus_operacion);
-        }
-
-        if (
-            is_object($estatus_operacion) &&
-            isset($estatus_operacion->value)
-        ) {
-            $estatus_operacion = $estatus_operacion->value;
-        }
-
-
-        $operaciones_por_propiedad[$propiedad_id] =
-            strtolower(
-                trim(
-                    (string) $estatus_operacion
-                )
-            );
-    }
 
 
     /*
@@ -229,48 +164,14 @@ function crm_v3_propiedades_estados_reales() {
 
 
         /*
-         * Normalizar estatus de propiedad.
-         */
-        if (is_array($estatus_propiedad)) {
-            $estatus_propiedad = reset($estatus_propiedad);
-        }
-
-        if (
-            is_object($estatus_propiedad) &&
-            isset($estatus_propiedad->value)
-        ) {
-            $estatus_propiedad = $estatus_propiedad->value;
-        }
-
-
-        /*
-         * Normalizar tipo de operación.
-         */
-        if (is_array($tipo_operacion)) {
-            $tipo_operacion = reset($tipo_operacion);
-        }
-
-        if (
-            is_object($tipo_operacion) &&
-            isset($tipo_operacion->value)
-        ) {
-            $tipo_operacion = $tipo_operacion->value;
-        }
-
-
-        /*
          * Convertir valores a formato comparable.
          */
-        $estatus_propiedad = strtolower(
-            trim(
-                (string) $estatus_propiedad
-            )
+        $estatus_propiedad = crm_v3_valor_normalizado(
+            $estatus_propiedad
         );
 
-        $tipo_operacion = strtolower(
-            trim(
-                (string) $tipo_operacion
-            )
+        $tipo_operacion = crm_v3_valor_normalizado(
+            $tipo_operacion
         );
 
 
@@ -771,45 +672,8 @@ function crm_v3_propiedades_render_table($propiedades) {
      * ============================================================
      */
 
-    $operaciones_por_propiedad = [];
-
-    $operaciones = get_posts([
-    'post_type'      => 'operaciones',
-    'post_status'    => 'publish',
-    'posts_per_page' => -1,
-    'orderby'        => 'date',
-    'order'          => 'DESC',
-]);
-
-    $operaciones = crm_v3_ordenar_por_fecha(
-        $operaciones,
-        'fecha_de_operacion'
-    );
-
-    foreach ($operaciones as $operacion) {
-
-        $propiedad_relacionada = get_field(
-            'propiedad',
-            $operacion->ID
-        );
-
-        $propiedad_relacionada_id = crm_v3_get_related_id(
-            $propiedad_relacionada
-        );
-
-        if (!$propiedad_relacionada_id) {
-            continue;
-        }
-
-        if (isset($operaciones_por_propiedad[$propiedad_relacionada_id])) {
-            continue;
-        }
-
-        $operaciones_por_propiedad[$propiedad_relacionada_id] = get_field(
-            'estatus_de_operacion',
-            $operacion->ID
-        );
-    }
+    $operaciones_por_propiedad =
+        crm_v3_estatus_ultima_operacion_por_propiedad();
 
     ?>
 
@@ -957,15 +821,11 @@ function crm_v3_propiedades_render_table($propiedades) {
                     </td>
 
                     <td class="crm-monto">
-                        <?php echo $valor_catastral !== '' && $valor_catastral !== null
-                            ? '$' . esc_html(number_format((float) $valor_catastral, 2))
-                            : '—'; ?>
+                        <?php echo esc_html(crm_v3_format_money($valor_catastral)); ?>
                     </td>
 
                     <td class="crm-monto">
-                        <?php echo $precio_venta !== '' && $precio_venta !== null
-                            ? '$' . esc_html(number_format((float) $precio_venta, 2))
-                            : '—'; ?>
+                        <?php echo esc_html(crm_v3_format_money($precio_venta)); ?>
                     </td>
 
                     <td>
@@ -1310,35 +1170,7 @@ $estados_reales = crm_v3_propiedades_estados_reales();
 
 function crm_v3_propiedad_taxonomia($valor, $taxonomia) {
 
-    if (!$valor) {
-        return '—';
-    }
-
-    if (is_array($valor)) {
-
-        $nombres = array();
-
-        foreach ($valor as $term_id) {
-
-            $term = get_term($term_id, $taxonomia);
-
-            if ($term && !is_wp_error($term)) {
-                $nombres[] = $term->name;
-            }
-        }
-
-        return !empty($nombres)
-            ? implode(', ', $nombres)
-            : '—';
-    }
-
-    $term = get_term($valor, $taxonomia);
-
-    if (!$term || is_wp_error($term)) {
-        return '—';
-    }
-
-    return $term->name;
+    return crm_v3_nombres_terminos($valor, $taxonomia);
 }
 
 

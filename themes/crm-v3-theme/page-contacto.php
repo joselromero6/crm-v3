@@ -151,14 +151,14 @@ get_header();
 
             <div class="contact-card">
                 <h3>WhatsApp</h3>
-                <a href="https://wa.me/523312869601" target="_blank">
-                    +52 33 1286 9601
+                <a href="<?php echo esc_url(crm_v3_theme_whatsapp_url()); ?>" target="_blank">
+                    <?php echo esc_html(crm_v3_theme_telefono_visible()); ?>
                 </a>
             </div>
 
             <div class="contact-card">
                 <h3>Teléfono</h3>
-                <a href="tel:+523312869601">
+                <a href="tel:+<?php echo esc_attr(crm_v3_theme_telefono()); ?>">
                     Llamar ahora
                 </a>
             </div>

@@ -42,7 +42,7 @@
 
     <a href="/contacto" class="btn-secondary">Contactar asesor</a>
 
-    <a href="https://wa.me/523312869601" class="btn-whatsapp" target="_blank">
+    <a href="<?php echo esc_url(crm_v3_theme_whatsapp_url()); ?>" class="btn-whatsapp" target="_blank">
         WhatsApp
     </a>
 
@@ -248,7 +248,7 @@
         <h3>¿Buscas asesoría?</h3>
         <p>Compra, vende o invierte con expertos inmobiliarios.</p>
 
-        <a href="https://wa.me/523312869601" class="btn-whatsapp" target="_blank">
+        <a href="<?php echo esc_url(crm_v3_theme_whatsapp_url()); ?>" class="btn-whatsapp" target="_blank">
             WhatsApp
         </a>
     </div>

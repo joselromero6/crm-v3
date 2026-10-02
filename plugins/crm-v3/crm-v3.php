@@ -22,515 +22,212 @@ define('CRM_V3_URL', plugin_dir_url(__FILE__));
 
 
 
-/**
- * Cargar estilos de la ficha del cliente.
- */
-function crm_v3_enqueue_ficha_cliente_styles($hook) {
+/*
+|--------------------------------------------------------------------------
+| Estilos y scripts de las pantallas del CRM
+|--------------------------------------------------------------------------
+|
+| Una sola lista indica qué archivos carga cada pantalla. Para agregar un
+| archivo nuevo basta con añadir una línea a la lista.
+|
+| Cada línea: nombre => array(archivo, dependencias).
+| En los scripts se puede añadir 'datos' => array(variable JS, nonce): esos
+| scripts (y los estilos de la misma pantalla marcada con 'solo_admin')
+| solo se entregan a administradores, porque llevan un código de seguridad.
+*/
 
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-ficha-cliente'
-    ) {
-        return;
-    }
+function crm_v3_assets_por_pantalla() {
 
-    $css_file = CRM_V3_PATH . 'includes/assets/css/ficha-cliente.css';
+    return array(
 
-    wp_enqueue_style(
-        'crm-v3-ficha-cliente',
-        CRM_V3_URL . 'includes/assets/css/ficha-cliente.css',
-        array(),
-        file_exists($css_file) ? filemtime($css_file) : '3.0.0'
-    );
-}
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_ficha_cliente_styles'
-);
-
-
-/**
- * Cargar estilos del cálculo ISR.
- */
-function crm_v3_enqueue_isr_styles($hook) {
-
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-ficha-cliente'
-    ) {
-        return;
-    }
-
-    $css_file =
-        CRM_V3_PATH .
-        'includes/assets/css/crm-isr.css';
-
-    wp_enqueue_style(
-        'crm-v3-isr',
-        CRM_V3_URL .
-        'includes/assets/css/crm-isr.css',
-        array('crm-v3-ficha-cliente'),
-        file_exists($css_file)
-            ? filemtime($css_file)
-            : '1.0.0'
-    );
-}
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_isr_styles'
-);
-
-
-
-/**
- * Cargar estilos del Pipeline y Análisis Financiero.
- */
-function crm_v3_enqueue_pipeline_financiero_styles($hook) {
-
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-ficha-cliente'
-    ) {
-        return;
-    }
-
-    $pipeline_css =
-        CRM_V3_PATH .
-        'includes/assets/css/pipeline.css';
-
-    $financiero_css =
-        CRM_V3_PATH .
-        'includes/assets/css/analisis-financiero.css';
-
-    wp_enqueue_style(
-        'crm-v3-pipeline',
-        CRM_V3_URL .
-        'includes/assets/css/pipeline.css',
-        array('crm-v3-ficha-cliente'),
-        file_exists($pipeline_css)
-            ? filemtime($pipeline_css)
-            : '1.0.0'
-    );
-
-    wp_enqueue_style(
-        'crm-v3-analisis-financiero',
-        CRM_V3_URL .
-        'includes/assets/css/analisis-financiero.css',
-        array('crm-v3-pipeline', 'crm-v3-isr'),
-        file_exists($financiero_css)
-            ? filemtime($financiero_css)
-            : '1.0.0'
-    );
-}
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_pipeline_financiero_styles'
-);
-
-
-
-
-/**
- * Cargar estilos de la lista de crm-clientes.
- */
-function crm_v3_enqueue_clientes_styles($hook) {
-
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-clientes'
-    ) {
-        return;
-    }
-
-    $css_file = CRM_V3_PATH . 'includes/assets/css/clientes.css';
-
-    wp_enqueue_style(
-        'crm-v3-clientes',
-        CRM_V3_URL . 'includes/assets/css/clientes.css',
-        array(),
-        file_exists($css_file) ? filemtime($css_file) : '3.0.0'
-    );
-}
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_clientes_styles'
-);
-
-function crm_v3_enqueue_propiedades_assets($hook) {
-
-    // Los códigos de seguridad solo se entregan a administradores.
-    if (!current_user_can('manage_options')) {
-        return;
-    }
-
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-propiedades'
-    ) {
-        return;
-    }
-
-    $css_file = CRM_V3_PATH . 'includes/assets/css/propiedades.css';
-    $js_file  = CRM_V3_PATH . 'includes/assets/js/propiedades.js';
-
-    wp_enqueue_style(
-        'crm-v3-propiedades',
-        CRM_V3_URL . 'includes/assets/css/propiedades.css',
-        array(),
-        file_exists($css_file) ? filemtime($css_file) : '1.0.0'
-    );
-
-    wp_enqueue_script(
-        'crm-v3-propiedades',
-        CRM_V3_URL . 'includes/assets/js/propiedades.js',
-        array('jquery'),
-        file_exists($js_file) ? filemtime($js_file) : '1.0.0',
-        true
-    );
-
-    wp_localize_script(
-        'crm-v3-propiedades',
-        'crmPropiedades',
-        array(
-            'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce'   => wp_create_nonce(
-                'crm_v3_propiedades_nonce'
+        'crm-ficha-cliente' => array(
+            'css' => array(
+                'crm-v3-ficha-cliente'       => array('ficha-cliente.css', array()),
+                'crm-v3-isr'                 => array('crm-isr.css', array('crm-v3-ficha-cliente')),
+                'crm-v3-pipeline'            => array('pipeline.css', array('crm-v3-ficha-cliente')),
+                'crm-v3-analisis-financiero' => array('analisis-financiero.css', array('crm-v3-pipeline', 'crm-v3-isr')),
             ),
-        )
-    );
-}
+        ),
 
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_propiedades_assets'
-);
-
-function crm_v3_enqueue_operaciones_styles($hook) {
-
-    // Los códigos de seguridad solo se entregan a administradores.
-    if (!current_user_can('manage_options')) {
-        return;
-    }
-
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-operaciones'
-    ) {
-        return;
-    }
-
-    $css_file = CRM_V3_PATH . 'includes/assets/css/operaciones.css';
-    $js_file  = CRM_V3_PATH . 'includes/assets/js/operaciones.js';
-
-    wp_enqueue_style(
-        'crm-v3-operaciones',
-        CRM_V3_URL . 'includes/assets/css/operaciones.css',
-        array(),
-        file_exists($css_file) ? filemtime($css_file) : '1.0.0'
-    );
-
-    wp_enqueue_script(
-        'crm-v3-operaciones',
-        CRM_V3_URL . 'includes/assets/js/operaciones.js',
-        array('jquery'),
-        file_exists($js_file) ? filemtime($js_file) : '1.0.0',
-        true
-    );
-
-    wp_localize_script(
-        'crm-v3-operaciones',
-        'crmOperaciones',
-        array(
-            'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce'   => wp_create_nonce(
-                'crm_v3_operaciones_nonce'
+        'crm-clientes' => array(
+            'css' => array(
+                'crm-v3-clientes' => array('clientes.css', array()),
             ),
-        )
-    );
-}
+        ),
 
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_operaciones_styles'
-);
-
-/**
- * Cargar estilos de Catálogos.
- */
-function crm_v3_enqueue_catalogos_styles($hook) {
-
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-v3-catalogos'
-    ) {
-        return;
-    }
-
-    $css_file = CRM_V3_PATH . 'includes/assets/css/catalogos.css';
-
-    wp_enqueue_style(
-        'crm-v3-catalogos',
-        CRM_V3_URL . 'includes/assets/css/catalogos.css',
-        array(),
-        file_exists($css_file) ? filemtime($css_file) : '1.0.0'
-    );
-}
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_catalogos_styles'
-);
-
-/**
- * Cargar estilos del Backoffice.
- */
-
-function crm_v3_enqueue_backoffice_styles($hook) {
-
-    // Los códigos de seguridad solo se entregan a administradores.
-    if (!current_user_can('manage_options')) {
-        return;
-    }
-
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-v3-cibr'
-    ) {
-        return;
-    }
-
-    $css_file = CRM_V3_PATH . 'includes/assets/css/backoffice.css';
-    $js_file  = CRM_V3_PATH . 'includes/assets/js/backoffice.js';
-
-    wp_enqueue_style(
-        'crm-v3-backoffice',
-        CRM_V3_URL . 'includes/assets/css/backoffice.css',
-        array(),
-        file_exists($css_file)
-            ? filemtime($css_file)
-            : '1.0.0'
-    );
-
-    wp_enqueue_script(
-        'crm-v3-backoffice',
-        CRM_V3_URL . 'includes/assets/js/backoffice.js',
-        array(),
-        file_exists($js_file)
-            ? filemtime($js_file)
-            : '1.0.0',
-        true
-    );
-
-    wp_localize_script(
-        'crm-v3-backoffice',
-        'crmBackoffice',
-        array(
-            'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce'   => wp_create_nonce(
-                'crm_v3_backoffice_nonce'
+        'crm-propiedades' => array(
+            'solo_admin' => true,
+            'css' => array(
+                'crm-v3-propiedades' => array('propiedades.css', array()),
             ),
-        )
+            'js' => array(
+                'crm-v3-propiedades' => array(
+                    'propiedades.js',
+                    array('jquery'),
+                    'datos' => array('crmPropiedades', 'crm_v3_propiedades_nonce'),
+                ),
+            ),
+        ),
+
+        'crm-operaciones' => array(
+            'solo_admin' => true,
+            'css' => array(
+                'crm-v3-operaciones' => array('operaciones.css', array()),
+            ),
+            'js' => array(
+                'crm-v3-operaciones' => array(
+                    'operaciones.js',
+                    array('jquery'),
+                    'datos' => array('crmOperaciones', 'crm_v3_operaciones_nonce'),
+                ),
+            ),
+        ),
+
+        'crm-v3-catalogos' => array(
+            'css' => array(
+                'crm-v3-catalogos' => array('catalogos.css', array()),
+            ),
+        ),
+
+        'crm-v3-cibr' => array(
+            'css' => array(
+                'crm-v3-backoffice'       => array('backoffice.css', array(), 'solo_admin' => true),
+                'crm-v3-analisis-mercado' => array('crm-analisis-mercado.css', array('crm-v3-backoffice')),
+            ),
+            'js' => array(
+                'crm-v3-backoffice' => array(
+                    'backoffice.js',
+                    array(),
+                    'solo_admin' => true,
+                    'datos' => array('crmBackoffice', 'crm_v3_backoffice_nonce'),
+                ),
+            ),
+        ),
+
+        'crm-nuevos-registros' => array(
+            'css' => array(
+                'crm-v3-formulario' => array('crm-formulario.css', array()),
+            ),
+            'js' => array(
+                'crm-v3-formulario' => array('crm-formulario.js', array('jquery')),
+            ),
+        ),
+
+        'crm-leads' => array(
+            'solo_admin' => true,
+            'css' => array(
+                'crm-v3-leads' => array('crm-leads.css', array()),
+            ),
+            'js' => array(
+                'crm-v3-leads' => array(
+                    'crm-leads.js',
+                    array(),
+                    'datos' => array('crmLeadsData', 'crm_v3_lead_notas'),
+                ),
+            ),
+        ),
+
+        'crm-expediente' => array(
+            'css' => array(
+                'crm-v3-expediente' => array('crm-expediente.css', array()),
+            ),
+        ),
     );
 }
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_backoffice_styles'
-);
 
 
 /**
- * Cargar estilos del widget CRM en el Escritorio WordPress.
+ * Versión de un archivo: su fecha de modificación, para que el navegador
+ * descargue la versión nueva cuando el archivo cambia.
  */
-function crm_v3_enqueue_dashboard_styles($hook) {
+function crm_v3_asset_version($ruta_relativa) {
 
-    if ($hook !== 'index.php') {
-        return;
-    }
+    $archivo = CRM_V3_PATH . $ruta_relativa;
 
-    $css_file = CRM_V3_PATH . 'includes/assets/css/crm-dashboard.css';
-
-    wp_enqueue_style(
-        'crm-v3-dashboard',
-        CRM_V3_URL . 'includes/assets/css/crm-dashboard.css',
-        array(),
-        file_exists($css_file)
-            ? filemtime($css_file)
-            : '1.0.0'
-    );
+    return file_exists($archivo) ? filemtime($archivo) : '3.0.0';
 }
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_dashboard_styles'
-);
 
 
 /**
- * Cargar estilos del Análisis de Mercado.
+ * Cargar los estilos y scripts de la pantalla del CRM que se está viendo.
  */
-function crm_v3_enqueue_analisis_mercado_styles($hook) {
+function crm_v3_enqueue_assets($hook) {
 
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-v3-cibr'
-    ) {
+    // Widget del CRM en el Escritorio de WordPress.
+    if ($hook === 'index.php') {
+
+        wp_enqueue_style(
+            'crm-v3-dashboard',
+            CRM_V3_URL . 'includes/assets/css/crm-dashboard.css',
+            array(),
+            crm_v3_asset_version('includes/assets/css/crm-dashboard.css')
+        );
+    }
+
+    $pantallas = crm_v3_assets_por_pantalla();
+    $pagina    = isset($_GET['page']) ? $_GET['page'] : '';
+
+    if (!is_string($pagina) || !isset($pantallas[$pagina])) {
         return;
     }
 
-    $css_file =
-        CRM_V3_PATH .
-        'includes/assets/css/crm-analisis-mercado.css';
+    $pantalla = $pantallas[$pagina];
+    $es_admin = current_user_can('manage_options');
 
-    wp_enqueue_style(
-        'crm-v3-analisis-mercado',
-        CRM_V3_URL .
-        'includes/assets/css/crm-analisis-mercado.css',
-        array('crm-v3-backoffice'),
-        file_exists($css_file)
-            ? filemtime($css_file)
-            : '1.0.0'
-    );
+    if (!empty($pantalla['solo_admin']) && !$es_admin) {
+        return;
+    }
+
+    $css = isset($pantalla['css']) ? $pantalla['css'] : array();
+    $js  = isset($pantalla['js']) ? $pantalla['js'] : array();
+
+    foreach ($css as $nombre => $estilo) {
+
+        if (!empty($estilo['solo_admin']) && !$es_admin) {
+            continue;
+        }
+
+        $ruta = 'includes/assets/css/' . $estilo[0];
+
+        wp_enqueue_style(
+            $nombre,
+            CRM_V3_URL . $ruta,
+            $estilo[1],
+            crm_v3_asset_version($ruta)
+        );
+    }
+
+    foreach ($js as $nombre => $script) {
+
+        if (!empty($script['solo_admin']) && !$es_admin) {
+            continue;
+        }
+
+        $ruta = 'includes/assets/js/' . $script[0];
+
+        wp_enqueue_script(
+            $nombre,
+            CRM_V3_URL . $ruta,
+            $script[1],
+            crm_v3_asset_version($ruta),
+            true
+        );
+
+        if (!empty($script['datos'])) {
+
+            wp_localize_script(
+                $nombre,
+                $script['datos'][0],
+                array(
+                    'ajaxUrl' => admin_url('admin-ajax.php'),
+                    'nonce'   => wp_create_nonce($script['datos'][1]),
+                )
+            );
+        }
+    }
 }
 
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_analisis_mercado_styles'
-);
-
-
-/**
- * Cargar estilos y scripts de Nuevos Registros.
- */
-function crm_v3_enqueue_formulario_styles($hook) {
-
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-nuevos-registros'
-    ) {
-        return;
-    }
-
-    $css_file = CRM_V3_PATH . 'includes/assets/css/crm-formulario.css';
-    $js_file  = CRM_V3_PATH . 'includes/assets/js/crm-formulario.js';
-
-    wp_enqueue_style(
-        'crm-v3-formulario',
-        CRM_V3_URL . 'includes/assets/css/crm-formulario.css',
-        array(),
-        file_exists($css_file)
-            ? filemtime($css_file)
-            : '1.0.0'
-    );
-
-    wp_enqueue_script(
-        'crm-v3-formulario',
-        CRM_V3_URL . 'includes/assets/js/crm-formulario.js',
-        array('jquery'),
-        file_exists($js_file)
-            ? filemtime($js_file)
-            : '1.0.0',
-        true
-    );
-}
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_formulario_styles'
-);
-
-
-/**
- * Cargar estilos de CRM Leads.
- */
-function crm_v3_enqueue_leads_styles($hook) {
-
-    // Los códigos de seguridad solo se entregan a administradores.
-    if (!current_user_can('manage_options')) {
-        return;
-    }
-
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-leads'
-    ) {
-        return;
-    }
-
-    $css_file = CRM_V3_PATH . 'includes/assets/css/crm-leads.css';
-    $js_file = CRM_V3_PATH . 'includes/assets/js/crm-leads.js';
-
-    wp_enqueue_style(
-        'crm-v3-leads',
-        CRM_V3_URL . 'includes/assets/css/crm-leads.css',
-        array(),
-        file_exists($css_file)
-            ? filemtime($css_file)
-            : '1.0.0'
-    );
-    wp_enqueue_script(
-    'crm-v3-leads',
-    CRM_V3_URL . 'includes/assets/js/crm-leads.js',
-    [],
-        file_exists($js_file) ? filemtime($js_file) : null,
-        true
-    );
-
-    wp_localize_script(
-    'crm-v3-leads',
-    'crmLeadsData',
-    [
-        'ajaxUrl' => admin_url('admin-ajax.php'),
-        'nonce'   => wp_create_nonce('crm_v3_lead_notas'),
-    ]
-    );
-}
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_leads_styles'
-);
-
-
-/**
- * Cargar estilos del Expediente.
- */
-function crm_v3_enqueue_expediente_styles($hook) {
-
-    if (
-        !isset($_GET['page']) ||
-        $_GET['page'] !== 'crm-expediente'
-    ) {
-        return;
-    }
-
-    $css_file = CRM_V3_PATH . 'includes/assets/css/crm-expediente.css';
-
-    wp_enqueue_style(
-        'crm-v3-expediente',
-        CRM_V3_URL . 'includes/assets/css/crm-expediente.css',
-        array(),
-        file_exists($css_file)
-            ? filemtime($css_file)
-            : '1.0.0'
-    );
-}
-
-add_action(
-    'admin_enqueue_scripts',
-    'crm_v3_enqueue_expediente_styles'
-);
-
-
-
-
-
-
+add_action('admin_enqueue_scripts', 'crm_v3_enqueue_assets');
 
 
 /*

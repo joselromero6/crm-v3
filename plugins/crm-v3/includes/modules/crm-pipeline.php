@@ -388,49 +388,9 @@ function crm_v3_pipeline_editor_operacion($operacion_id) {
      * El campo visual utiliza Y-m-d.
      */
 
-    $fecha_cierre_input = '';
-
-    if (!empty($fecha_cierre)) {
-
-        $fecha_obj = DateTime::createFromFormat(
-            'd/m/Y',
-            $fecha_cierre
-        );
-
-        if ($fecha_obj) {
-
-            $fecha_cierre_input = $fecha_obj->format('Y-m-d');
-
-        } elseif (
-            preg_match(
-                '/^\d{8}$/',
-                $fecha_cierre
-            )
-        ) {
-
-            $fecha_obj = DateTime::createFromFormat(
-                'Ymd',
-                $fecha_cierre
-            );
-
-            if ($fecha_obj) {
-
-                $fecha_cierre_input = $fecha_obj->format('Y-m-d');
-
-            }
-
-        } elseif (
-            preg_match(
-                '/^\d{4}-\d{2}-\d{2}$/',
-                $fecha_cierre
-            )
-        ) {
-
-            $fecha_cierre_input = $fecha_cierre;
-
-        }
-
-    }
+    $fecha_cierre_input = crm_v3_fecha_para_input(
+        $fecha_cierre
+    );
 
 
     /*
@@ -725,35 +685,19 @@ function crm_v3_pipeline_editor_operacion($operacion_id) {
                         Seleccionar
                     </option>
 
-                    <option
-                        value="en_proceso"
-                        <?php selected(
-                            $estatus_operacion,
-                            'en_proceso'
-                        ); ?>
-                    >
-                        En proceso
-                    </option>
+                    <?php foreach (crm_v3_pipeline_estatus_opciones() as $estatus_valor => $estatus_nombre) : ?>
 
-                    <option
-                        value="perdida"
-                        <?php selected(
-                            $estatus_operacion,
-                            'perdida'
-                        ); ?>
-                    >
-                        Perdida
-                    </option>
+                        <option
+                            value="<?php echo esc_attr($estatus_valor); ?>"
+                            <?php selected(
+                                $estatus_operacion,
+                                $estatus_valor
+                            ); ?>
+                        >
+                            <?php echo esc_html($estatus_nombre); ?>
+                        </option>
 
-                    <option
-                        value="cerrada"
-                        <?php selected(
-                            $estatus_operacion,
-                            'cerrada'
-                        ); ?>
-                    >
-                        Cerrada
-                    </option>
+                    <?php endforeach; ?>
 
                 </select>
 
@@ -1018,10 +962,9 @@ function crm_v3_actualizar_operacion_desde_ficha() {
             )
             : '';
 
-    $estatus_permitidos = array(
-        'en_proceso',
-        'perdida',
-        'cerrada',
+    $estatus_permitidos = array_map(
+        'strval',
+        array_keys(crm_v3_pipeline_estatus_opciones())
     );
 
     if (
@@ -1111,4 +1054,21 @@ add_action(
 );
 
 
+/**
+ * Opciones de estatus de una operación.
+ *
+ * Se toman de la lista definida en ACF, para que exista un solo lugar
+ * donde se dan de alta. Si ACF no responde, se usan las de siempre.
+ */
+function crm_v3_pipeline_estatus_opciones() {
 
+    $opciones = crm_v3_opciones_campo('estatus_de_operacion');
+
+    return !empty($opciones)
+        ? $opciones
+        : array(
+            'en_proceso' => 'En proceso',
+            'perdida'    => 'Perdida',
+            'cerrada'    => 'Cerrada',
+        );
+}

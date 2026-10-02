@@ -89,7 +89,7 @@
 
         </p>
 
-        <a href="https://wa.me/523312869601"
+        <a href="<?php echo esc_url(crm_v3_theme_whatsapp_url()); ?>"
 
            class="btn-whatsapp"
 
