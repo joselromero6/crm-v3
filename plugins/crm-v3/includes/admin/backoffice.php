@@ -374,20 +374,11 @@ function crm_v3_backoffice_page() {
 
         <div class="crm-bo-next-content">
 
-            <div class="crm-bo-next-placeholder">
-
-                <div class="crm-bo-next-icon">
-                    <span class="dashicons dashicons-chart-pie"></span>
-                </div>
-
-                <h3>Indicadores clave</h3>
-
-                <p>
-                    Próximamente encontrarás métricas
-                    e indicadores relevantes.
-                </p>
-
-            </div>
+            <?php
+            if (function_exists('crm_v3_comunicados_render')) {
+                crm_v3_comunicados_render();
+            }
+            ?>
 
         </div>
 
