@@ -997,9 +997,6 @@ if ($monto_despues_costos !== null) {
 
         </div>
 
-
-    </div>
-
     <?php
 }
 
