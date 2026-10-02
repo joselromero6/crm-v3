@@ -540,9 +540,3 @@ require_once CRM_V3_PATH . 'includes/modules/crm-formulario.php';
 require_once CRM_V3_PATH . 'includes/modules/comunicados.php';
 
 
-
-register_activation_hook(
-    __FILE__,
-    'crm_comunicados_crear_tabla'
-);
-
