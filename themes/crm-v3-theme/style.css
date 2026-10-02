@@ -2296,5 +2296,12 @@ font-weight:700;
 }
 
 
+/* Aviso del formulario de contacto cuando el envío no se procesó */
 
+.contact-alert-error{
 
+background:#fff1f0;
+
+border:1px solid #d9534f;
+
+}

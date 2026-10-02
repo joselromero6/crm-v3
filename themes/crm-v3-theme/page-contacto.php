@@ -4,68 +4,17 @@ Template Name: Página Contacto
 */
 
 
-if (
-    isset($_POST['crm_contact_submit'])
-    &&
-    wp_verify_nonce($_POST['_wpnonce'],'crm_contact_form')
-) {
-
-if ( empty($_POST['aviso_privacidad']) ) {
-    wp_die('Debes aceptar el Aviso de privacidad para enviar la solicitud.');
-}
-
-    $nombre = sanitize_text_field($_POST['nombre']);
-    $telefono = sanitize_text_field($_POST['telefono']);
-    $email = sanitize_email($_POST['email']);
-    $operacion = sanitize_text_field($_POST['operacion']);
-    $mensaje = sanitize_textarea_field($_POST['mensaje']);
-
-    $destino = 'admin@cibr.com.mx';
-
-    $asunto = 'Nuevo contacto desde sitio web';
-
-    $contenido =
-    "Nombre: {$nombre}\n".
-    "Teléfono: {$telefono}\n".
-    "Email: {$email}\n".
-    "Operación: {$operacion}\n\n".
-    "Mensaje:\n{$mensaje}";
-
-    $headers = array(
-        'Reply-To: '.$nombre.' <'.$email.'>'
-    );
-
-
-    $enviado = wp_mail(
-    $destino,
-    $asunto,
-    $contenido,
-    $headers
-);
-
-
 /*
 |--------------------------------------------------------------------------
-| Crear Lead automático
+| El formulario lo procesa el plugin CRM-V3
+| (includes/modules/crm-contacto-web.php): crea el Lead, envía el
+| correo y regresa aquí con el resultado en ?contacto=...
 |--------------------------------------------------------------------------
 */
 
-    wp_insert_post(array(
-'post_type' => 'leads',
-'post_status' => 'publish',
-'post_title' => $nombre,
-'meta_input' => array(
-    'telefono' => $telefono,
-    'notas' => $mensaje,
-    'correo' => $email,
-    'tipo_de_cliente' => $operacion,
-    'origen_lead' => 72,
-    'fecha_captacion' => date('Ymd')
-
-)
-
-));
-}
+$crm_contacto_mensaje = function_exists('crm_v3_contacto_web_mensaje')
+    ? crm_v3_contacto_web_mensaje()
+    : null;
 
 
 get_header();
@@ -111,20 +60,19 @@ get_header();
     <section class="contact-main container">
 
         <!-- FORMULARIO -->
-        <div class="contact-form-box">
+        <div class="contact-form-box" id="contacto-form">
 
             <h2>Solicita información</h2>
 
 
-<?php if(isset($enviado)) : ?>
+<?php if ($crm_contacto_mensaje) : ?>
 
-<div class="contact-alert">
+<div
+    class="contact-alert contact-alert-<?php echo esc_attr($crm_contacto_mensaje['tipo']); ?>"
+    role="status"
+>
 
-<?php
-echo $enviado
-? 'Solicitud enviada correctamente.'
-: 'Error al enviar. Intenta nuevamente.';
-?>
+<?php echo esc_html($crm_contacto_mensaje['texto']); ?>
 
 </div>
 
@@ -132,9 +80,19 @@ echo $enviado
 
 
 
-            <form method="post">
-            <?php wp_nonce_field('crm_contact_form'); ?>
-            <input type="hidden" name="crm_contact_submit" value="1">
+            <form
+                method="post"
+                action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
+            >
+            <input type="hidden" name="action" value="crm_v3_contacto_web">
+
+                <!-- Campo trampa contra spam: las personas no lo ven. -->
+                <div style="position:absolute; left:-9999px;" aria-hidden="true">
+                    <label>
+                        No llenar este campo
+                        <input type="text" name="crm_campo_extra" value="" tabindex="-1" autocomplete="off">
+                    </label>
+                </div>
 
                 <input type="text" name="nombre" placeholder="Nombre completo" required>
 

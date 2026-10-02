@@ -140,9 +140,27 @@ function crm_v3_guardar_lead() {
 
         if (
             $campo === 'telefono' ||
-            $campo === 'nss' ||
-            $campo === 'monto_de_credito'
+            $campo === 'nss'
         ) {
+
+            /*
+             * Se conservan solo los dígitos: "33 1234-5678"
+             * se guarda como 3312345678 en lugar de perderse.
+             */
+            $valor = preg_replace(
+                '/\D+/',
+                '',
+                (string) $valor
+            );
+        }
+
+        elseif ($campo === 'monto_de_credito') {
+
+            $valor = str_replace(
+                array(',', '$', ' '),
+                '',
+                (string) $valor
+            );
 
             $valor = is_numeric($valor)
                 ? $valor
@@ -1816,6 +1834,29 @@ document.addEventListener('DOMContentLoaded', function () {
                                                 $lead->post_title
                                             ); ?>
                                         </strong>
+
+                                        <?php
+                                        $email_lead = get_field(
+                                            'e-mail',
+                                            $lead->ID
+                                        );
+                                        ?>
+
+                                        <?php if ($email_lead) : ?>
+
+                                            <br>
+
+                                            <a
+                                                href="<?php echo esc_url(
+                                                    'mailto:' . $email_lead
+                                                ); ?>"
+                                            >
+                                                <?php echo esc_html(
+                                                    $email_lead
+                                                ); ?>
+                                            </a>
+
+                                        <?php endif; ?>
 
                                     </td>
 
