@@ -1530,8 +1530,6 @@ unset($crm_opciones);
     wp_reset_postdata();
 
 
-    crm_v3_clientes_styles();
-
     crm_v3_clientes_counters();
 }
 
@@ -1670,24 +1668,6 @@ function crm_v3_cliente_select_label(
      */
 
     return (string) $valor;
-}
-
-
-/**
- * ============================================================
- * ESTILOS
- * ============================================================
- *
- * El CSS principal vive en:
- *
- * assets/css/clientes.css
- *
- * Esta función se conserva para compatibilidad
- * con la estructura actual del módulo.
- * ============================================================
- */
-
-function crm_v3_clientes_styles() {
 }
 
 

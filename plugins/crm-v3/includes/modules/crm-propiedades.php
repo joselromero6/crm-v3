@@ -430,29 +430,6 @@ function crm_v3_propiedades_estados_reales() {
     return $resultado;
 }
 
-/**
- * ============================================================
- * CONTADOR DE PROPIEDADES
- * ============================================================
- */
-
-function crm_v3_propiedades_contador($categoria) {
-
-    $estados =
-        crm_v3_propiedades_estados_reales();
-
-    if (
-        !isset(
-            $estados[$categoria]
-        )
-    ) {
-        return 0;
-    }
-
-    return count(
-        $estados[$categoria]
-    );
-}
 
 // ============================================================
 // OBTENER OPCIONES ACF UTILIZADAS EN PROPIEDADES
@@ -1045,8 +1022,10 @@ function crm_v3_propiedades_page() {
     }
 
 
-$meta_query = array();
-
+/*
+ * Valores de los filtros en la URL. Solo marcan la opción
+ * seleccionada en cada lista; el filtrado se hace por AJAX.
+ */
 $colonia          = isset($_GET['colonia']) ? absint($_GET['colonia']) : 0;
 $ciudad           = isset($_GET['ciudad']) ? absint($_GET['ciudad']) : 0;
 $tipo_propiedad   = isset($_GET['tipo_propiedad']) ? absint($_GET['tipo_propiedad']) : 0;
@@ -1055,59 +1034,6 @@ $estado_inmueble  = isset($_GET['estado_inmueble']) ? sanitize_key($_GET['estado
 $estado_comercial = isset($_GET['estado_comercial']) ? sanitize_key($_GET['estado_comercial']) : '';
 $documentacion    = isset($_GET['documentacion']) ? sanitize_key($_GET['documentacion']) : '';
 
-$tax_query = array();
-
-if ($colonia) {
-    $tax_query[] = array(
-        'taxonomy' => 'fraccionamiento-o-colonia',
-        'field'    => 'term_id',
-        'terms'    => $colonia,
-    );
-}
-
-if ($ciudad) {
-    $tax_query[] = array(
-        'taxonomy' => 'ciudad',
-        'field'    => 'term_id',
-        'terms'    => $ciudad,
-    );
-}
-
-if ($tipo_propiedad) {
-    $tax_query[] = array(
-        'taxonomy' => 'tipo-de-propiedad',
-        'field'    => 'term_id',
-        'terms'    => $tipo_propiedad,
-    );
-}
-
-if (!empty($tax_query)) {
-    $tax_query['relation'] = 'AND';
-}
-
-
-// ============================================================
-// FILTRO SELECT DESDE ACF
-// ============================================================
-
-function crm_v3_propiedad_filtro_acf($campo, $valor_actual = '') {
-
-    $field = get_field_object($campo);
-
-    if (!$field || empty($field['choices'])) {
-        return;
-    }
-
-    foreach ($field['choices'] as $valor => $etiqueta) {
-        ?>
-        <option value="<?php echo esc_attr($valor); ?>"
-            <?php selected($valor_actual, $valor); ?>>
-            <?php echo esc_html($etiqueta); ?>
-        </option>
-        <?php
-    }
-}
-
 
     $propiedades = new WP_Query(array(
     'post_type'      => 'propiedades',
@@ -1115,7 +1041,6 @@ function crm_v3_propiedad_filtro_acf($campo, $valor_actual = '') {
     'posts_per_page' => -1,
     'orderby'        => 'date',
     'order'          => 'DESC',
-    'meta_query'     => $meta_query,
 ));
 
     $propiedades->posts = crm_v3_ordenar_por_fecha(
@@ -1416,74 +1341,6 @@ function crm_v3_propiedad_taxonomia($valor, $taxonomia) {
     return $term->name;
 }
 
-
-/**
- * ============================================================
- * FORMATOS
- * ============================================================
- */
-
-function crm_v3_propiedad_numero($valor) {
-
-    if ($valor === '' || $valor === null) {
-        return '—';
-    }
-
-    return number_format(
-        (float) $valor,
-        0,
-        '.',
-        ','
-    );
-}
-
-
-function crm_v3_propiedad_moneda($valor) {
-
-    if ($valor === '' || $valor === null) {
-        return '—';
-    }
-
-    return '$' . number_format(
-        (float) $valor,
-        2,
-        '.',
-        ','
-    );
-}
-
-
-/**
- * ============================================================
- * SELECT ACF
- * ============================================================
- */
-
-function crm_v3_propiedad_select_label(
-    $post_id,
-    $campo,
-    $valor
-) {
-
-    if (!$valor) {
-        return '—';
-    }
-
-    $field = get_field_object(
-        $campo,
-        $post_id
-    );
-
-    if (
-        $field &&
-        !empty($field['choices']) &&
-        isset($field['choices'][$valor])
-    ) {
-        return $field['choices'][$valor];
-    }
-
-    return $valor;
-}
 
 /**
  * ============================================================

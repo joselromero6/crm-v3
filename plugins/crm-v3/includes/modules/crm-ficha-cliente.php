@@ -318,10 +318,6 @@ function crm_v3_operacion_ficha($cliente_id, $propiedad_id = 0) {
         $operacion_id
     );
 
-    $operacion_cerrada = get_field(
-        'operacion_cerrada',
-        $operacion_id
-    );
 
 
     /* --------------------------------------------------------
