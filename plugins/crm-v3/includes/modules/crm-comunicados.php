@@ -108,7 +108,9 @@ function crm_v3_comunicados_palabras_cambio() {
             'impuesto', 'tabla de valores', 'valores catastrales',
             'ley de ingresos', 'miscelanea', 'prohib', 'obligatori',
             'requerira', 'permitira', 'podran', 'anuncia cambios',
-            'reestructura', 'quitan', 'quitara',
+            'reestructura', 'quitan', 'quitara', 'nuev', 'ya se',
+            'se pueden', 'se podra', 'lanza', 'amplia', 'extiende',
+            'prorrog', 'flexibiliz', 'facilidades', 'esquema',
         )
     );
 }
@@ -131,6 +133,30 @@ function crm_v3_comunicados_palabras_evento() {
             'da a conocer intervencion', 'convenio de colaboracion',
             'firma convenio', 'reunion', 'se reune', 'conmemora',
             'aniversario', 'reconocimiento', 'premio', 'torneo',
+            'presenta avances', 'mananera', 'ha contratado', 'entregado',
+            'entrega en', 'entrega escrituras', 'entrega primeras',
+            'entrega de', 'trabajos de limpieza', 'reitera',
+        )
+    );
+}
+
+
+/**
+ * Palabras que indican que la nota es de otro país.
+ */
+function crm_v3_comunicados_palabras_otro_pais() {
+
+    return apply_filters(
+        'crm_v3_comunicados_palabras_otro_pais',
+        array(
+            'espana', 'junts', 'vox', 'psoe', 'pp', 'podemos',
+            'real decreto', 'decreto ley', 'decretos ley',
+            'congreso de los diputados', 'generalitat', 'moncloa',
+            'madrid', 'barcelona', 'cataluna', 'andalucia', 'valencia',
+            'euskadi', 'alquiler', 'ibi', 'colombia', 'bogota',
+            'argentina', 'buenos aires', 'chile', 'peru', 'ecuador',
+            'venezuela', 'uruguay', 'paraguay', 'bolivia', 'guatemala',
+            'costa rica', 'panama', 'honduras', 'el salvador',
         )
     );
 }
@@ -189,16 +215,29 @@ function crm_v3_comunicados_contiene($texto_plano, $palabras) {
  */
 function crm_v3_comunicados_es_relevante($titulo, $extracto = '') {
 
-    $plano_todo   = crm_v3_comunicados_texto_plano($titulo . ' ' . $extracto);
+    // "Nuevo León" no es una novedad.
+    $plano_titulo = str_replace(
+        ' nuevo leon ',
+        ' ',
+        crm_v3_comunicados_texto_plano($titulo)
+    );
 
-    // Las notas de evento se descartan.
-    if (crm_v3_comunicados_contiene($plano_todo, crm_v3_comunicados_palabras_evento())) {
+    $plano_todo = $plano_titulo . crm_v3_comunicados_texto_plano($extracto);
+
+    // Las notas de evento y las de otros países se reconocen
+    // por su encabezado.
+    if (
+        crm_v3_comunicados_contiene($plano_titulo, crm_v3_comunicados_palabras_evento()) ||
+        crm_v3_comunicados_contiene($plano_titulo, crm_v3_comunicados_palabras_otro_pais())
+    ) {
         return false;
     }
 
+    // El tema puede estar en el encabezado o en el resumen;
+    // el cambio debe anunciarse en el encabezado.
     return
         crm_v3_comunicados_contiene($plano_todo, crm_v3_comunicados_palabras_tema()) &&
-        crm_v3_comunicados_contiene($plano_todo, crm_v3_comunicados_palabras_cambio());
+        crm_v3_comunicados_contiene($plano_titulo, crm_v3_comunicados_palabras_cambio());
 }
 
 
@@ -388,28 +427,156 @@ function crm_v3_comunicados_leer_infonavit() {
         );
     }
 
-    $lista = array();
-
-    $comunicados = !empty($resultado['comunicados']) && is_array($resultado['comunicados'])
-        ? $resultado['comunicados']
-        : array();
-
-    foreach ($comunicados as $comunicado) {
-
-        $lista[] = array(
-            'titulo' => isset($comunicado['titulo']) ? $comunicado['titulo'] : '',
-            'fecha'  => isset($comunicado['fecha']) ? $comunicado['fecha'] : '',
-            'extracto' => isset($comunicado['resumen']) ? $comunicado['resumen'] : '',
-            'url'    => !empty($comunicado['url'])
-                ? $comunicado['url']
-                : crm_v3_comunicados_url_sala_prensa(),
-        );
-    }
+    $lista = crm_v3_comunicados_boletines_infonavit(
+        !empty($resultado['debug_strings']) && is_array($resultado['debug_strings'])
+            ? $resultado['debug_strings']
+            : array()
+    );
 
     if (empty($lista)) {
         return new WP_Error(
             'infonavit_vacio',
             'El portal de Infonavit respondió, pero no se reconoció ningún boletín. Es probable que Infonavit haya cambiado su página.'
+        );
+    }
+
+    return $lista;
+}
+
+
+/**
+ * Texto limpio de un fragmento de la respuesta de Infonavit:
+ * sin etiquetas, sin espacios especiales ni caracteres dañados.
+ */
+function crm_v3_comunicados_texto_infonavit($html) {
+
+    $html = (string) $html;
+
+    // Caracteres que no son UTF-8 válido (espacios especiales sueltos).
+    if (function_exists('mb_scrub')) {
+        $anterior = mb_substitute_character();
+        mb_substitute_character(0x20);
+        $html = mb_scrub($html, 'UTF-8');
+        mb_substitute_character($anterior);
+    } else {
+        $html = wp_check_invalid_utf8($html, true);
+    }
+
+    // Algunos boletines traen su propio HTML escrito como texto.
+    $html = html_entity_decode($html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+    // Cada párrafo o viñeta termina una frase.
+    $html = preg_replace('#</(p|li|div|h[1-6])>|<br\s*/?>#i', ' | ', $html);
+
+    $texto = html_entity_decode(
+        wp_strip_all_tags($html),
+        ENT_QUOTES | ENT_HTML5,
+        'UTF-8'
+    );
+
+    $texto = str_replace(
+        array("\xC2\xA0", "\xEF\xBF\xBD"),
+        ' ',
+        $texto
+    );
+
+    $texto = preg_replace('/\s+/u', ' ', $texto);
+    $texto = preg_replace('/(\s*\|\s*)+/u', ' | ', $texto);
+
+    return trim($texto, " |\t\n");
+}
+
+
+/**
+ * Reconocer los boletines dentro de la respuesta de Infonavit.
+ *
+ * Cada boletín llega como una serie de textos seguidos:
+ *
+ *   fecha  →  cuerpo  →  número de boletín  →  resumen
+ *
+ * El resumen empieza con el encabezado (en negritas rojas) y sigue
+ * con dos o tres viñetas. De ahí se toman el título y el extracto.
+ */
+function crm_v3_comunicados_boletines_infonavit($strings) {
+
+    $patron_fecha =
+        '/\b(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre)\s+de\s+(\d{4})\b/iu';
+
+    $strings = array_values($strings);
+    $total   = count($strings);
+    $lista   = array();
+
+    for ($i = 0; $i < $total; $i++) {
+
+        $crudo = stripcslashes((string) $strings[$i]);
+
+        // El resumen es un texto con negritas que no es el cuerpo
+        // (el cuerpo trae el carrusel de fotos o es mucho más largo).
+        if (
+            stripos($crudo, 'strong') === false ||
+            stripos($crudo, 'carousel') !== false ||
+            strlen($crudo) > 2500
+        ) {
+            continue;
+        }
+
+        // Justo antes del resumen va el número de boletín.
+        $anterior = $i > 0
+            ? trim(stripcslashes((string) $strings[$i - 1]))
+            : '';
+
+        if (!preg_match('/^\d{1,4}$/', $anterior)) {
+            continue;
+        }
+
+        $texto  = crm_v3_comunicados_texto_infonavit($crudo);
+        $partes = array_values(array_filter(array_map('trim', explode('|', $texto))));
+
+        if (empty($partes)) {
+            continue;
+        }
+
+        $titulo = array_shift($partes);
+
+        // La fecha puede venir en el propio resumen
+        // ("Ciudad de México, a 4 de agosto de 2026")…
+        $fecha    = '';
+        $extracto = array();
+
+        foreach ($partes as $parte) {
+
+            if (mb_strlen($parte) < 90 && preg_match($patron_fecha, $parte, $coincide)) {
+
+                if ($fecha === '') {
+                    $fecha = $coincide[0];
+                }
+
+                continue;
+            }
+
+            $extracto[] = $parte;
+        }
+
+        // …o como texto suelto dos lugares antes del número.
+        if ($fecha === '' && $i >= 3) {
+
+            $candidata = trim(stripcslashes((string) $strings[$i - 3]));
+
+            if (mb_strlen($candidata) < 40 && preg_match($patron_fecha, $candidata, $coincide)) {
+                $fecha = $coincide[0];
+            }
+        }
+
+        // Último recurso: la misma fecha del boletín anterior de la lista.
+        if ($fecha === '' && !empty($lista)) {
+            $fecha = $lista[count($lista) - 1]['fecha'];
+        }
+
+        $lista[] = array(
+            'titulo'   => $titulo,
+            'fecha'    => $fecha,
+            'extracto' => implode(' ', $extracto),
+            'url'      => crm_v3_comunicados_url_sala_prensa(),
         );
     }
 
@@ -437,7 +604,7 @@ function crm_v3_comunicados_busquedas() {
             'Infonavit (cambios OR "nuevas reglas" OR reforma OR requisitos OR buró OR tasa OR "a partir de" OR "ya no")',
             'Fovissste (cambios OR "nuevas reglas" OR reforma OR requisitos OR tasa OR "a partir de")',
             'predial (aumento OR incremento OR descuento OR tarifas OR "valores catastrales") ' . $zona,
-            '(escrituración OR "crédito hipotecario" OR "ley de vivienda" OR ISR OR notarios) vivienda (reforma OR cambios OR "nuevas reglas" OR decreto)',
+            '(escrituración OR "crédito hipotecario" OR "ley de vivienda" OR ISR OR notarios) vivienda México (reforma OR cambios OR "nuevas reglas" OR decreto)',
             '(Infonavit OR Fovissste OR vivienda) (decreto OR acuerdo OR reforma) (site:dof.gob.mx OR site:gob.mx)',
         )
     );
