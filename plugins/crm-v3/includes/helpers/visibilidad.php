@@ -3,8 +3,9 @@
  * CRM V3 — Visibilidad pública
  *
  * 1. Los tipos de contenido internos del CRM (clientes, leads,
- *    operaciones y catálogos) nunca son públicos: sin página propia,
- *    sin REST API, sin buscador y sin sitemap.
+ *    operaciones y catálogos) y sus taxonomías internas nunca son
+ *    públicos: sin página propia, sin REST API, sin buscador y sin
+ *    sitemap.
  *
  * 2. Las propiedades con "Mostrar en web" apagado no se muestran
  *    a visitantes por ninguna vía: URL directa, listados, buscador,
@@ -69,6 +70,54 @@ function crm_v3_forzar_tipos_internos_privados($args, $post_type) {
 add_filter(
     'register_post_type_args',
     'crm_v3_forzar_tipos_internos_privados',
+    99,
+    2
+);
+
+
+/**
+ * Taxonomías de uso interno.
+ *
+ * Las de propiedades que sí se usan en el sitio (ciudad, estado,
+ * fraccionamiento-o-colonia y tipo-de-propiedad) siguen públicas.
+ */
+function crm_v3_taxonomias_internas() {
+
+    return array(
+        'origen-lead',
+        'origen-de-recurso',
+        'perfil-de-cliente',
+        'relacion-comercial',
+        'tipo-de-creditos',
+        'tipo-de-cartera',
+        'tipo-de-operacion',
+    );
+}
+
+
+function crm_v3_forzar_taxonomias_internas_privadas($args, $taxonomy) {
+
+    if (!in_array($taxonomy, crm_v3_taxonomias_internas(), true)) {
+        return $args;
+    }
+
+    $args['public']             = false;
+    $args['publicly_queryable'] = false;
+    $args['show_in_rest']       = false;
+    $args['show_in_nav_menus']  = false;
+    $args['show_tagcloud']      = false;
+    $args['rewrite']            = false;
+    $args['query_var']          = false;
+
+    // El panel de administración se conserva.
+    $args['show_ui'] = true;
+
+    return $args;
+}
+
+add_filter(
+    'register_taxonomy_args',
+    'crm_v3_forzar_taxonomias_internas_privadas',
     99,
     2
 );
@@ -392,7 +441,7 @@ add_filter(
 
 function crm_v3_actualizar_rutas_visibilidad() {
 
-    $version = '2026-10-visibilidad';
+    $version = '2026-10-visibilidad-2';
 
     if (get_option('crm_v3_rutas_version') === $version) {
         return;
