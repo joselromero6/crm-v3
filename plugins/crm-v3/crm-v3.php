@@ -522,6 +522,7 @@ add_action(
 require_once CRM_V3_PATH . 'includes/acf/acf-json.php';
 require_once CRM_V3_PATH . 'includes/helpers/helpers.php';
 require_once CRM_V3_PATH . 'includes/helpers/visibilidad.php';
+require_once CRM_V3_PATH . 'includes/helpers/migraciones.php';
 require_once CRM_V3_PATH . 'includes/ajax/crm-ajax.php';
 require_once CRM_V3_PATH . 'includes/admin/admin-pages.php';
 require_once CRM_V3_PATH . 'includes/admin/catalogos.php';

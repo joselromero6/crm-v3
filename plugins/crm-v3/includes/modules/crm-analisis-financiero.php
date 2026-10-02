@@ -156,8 +156,7 @@ function crm_v3_analisis_financiero($operacion_id) {
             $propiedad_id
         );
 
-        $adeudo_predial = get_field(
-            'adeudo_predial',
+        $adeudo_predial = crm_v3_get_adeudo_predial(
             $propiedad_id
         );
 

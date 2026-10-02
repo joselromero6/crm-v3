@@ -45,7 +45,7 @@ $operaciones = get_posts($operaciones_args);
 
         $id = $operacion->ID;
 
-        $estatus = get_field('estatus_de_operecion', $id);
+        $estatus = get_field('estatus_de_operacion', $id);
         $expediente = get_field('expediente_completo', $id);
 
         if ($estatus === 'en_proceso') {
@@ -159,7 +159,7 @@ $campo_tipo_avaluo = acf_get_field(
 );
 
 $campo_estatus = acf_get_field(
-    'estatus_de_operecion'
+    'estatus_de_operacion'
 );
 
 $tipos_avaluo = (
@@ -412,7 +412,7 @@ if (
 ) {
 
     $estatus = get_field(
-        'estatus_de_operecion',
+        'estatus_de_operacion',
         $operacion_id
     );
 
@@ -573,7 +573,7 @@ if (
         ) {
 
             $estatus = get_field(
-                'estatus_de_operecion',
+                'estatus_de_operacion',
                 $operacion_id
             );
 
@@ -704,7 +704,7 @@ function crm_v3_operaciones_render_table($operaciones) {
                 $valor_mercado = get_field('valor_mercado', $operacion_id);
                 $precio_cierre = get_field('precio_de_cierre', $operacion_id);
                 $fecha_cierre = get_field('fecha_cierre', $operacion_id);
-                $estatus = get_field('estatus_de_operecion', $operacion_id);
+                $estatus = get_field('estatus_de_operacion', $operacion_id);
 
                 $propiedad_id = crm_v3_get_related_id($propiedad);
 

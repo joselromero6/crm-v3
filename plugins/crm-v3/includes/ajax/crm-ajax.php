@@ -865,7 +865,7 @@ function crm_v3_ajax_backoffice_cliente_resumen() {
 
             'estatus' => crm_v3_display_value(
                 get_field(
-                    'estatus_de_operecion',
+                    'estatus_de_operacion',
                     $operacion_id
                 )
             ),

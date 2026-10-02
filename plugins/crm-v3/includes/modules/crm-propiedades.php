@@ -107,7 +107,7 @@ function crm_v3_propiedades_estados_reales() {
 
 
         $estatus_operacion = get_field(
-            'estatus_de_operecion',
+            'estatus_de_operacion',
             $operacion->ID
         );
 
@@ -770,7 +770,7 @@ function crm_v3_propiedades_render_table($propiedades) {
         }
 
         $operaciones_por_propiedad[$propiedad_relacionada_id] = get_field(
-            'estatus_de_operecion',
+            'estatus_de_operacion',
             $operacion->ID
         );
     }

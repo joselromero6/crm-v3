@@ -113,7 +113,7 @@ function crm_v3_dashboard_contadores() {
         'no_found_rows'  => false,
         'meta_query'     => [
             [
-                'key'     => 'estatus_de_operecion',
+                'key'     => 'estatus_de_operacion',
                 'value'   => 'en_proceso',
                 'compare' => '=',
             ],
