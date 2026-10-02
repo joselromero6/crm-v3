@@ -591,7 +591,7 @@ $carpeta_google_drive = get_field(
                                 <strong>Adeudo Hipoteca</strong>
                                 <span>
                                     <?php echo esc_html(
-                                        $vendedor_adeudo ?: '—'
+                                        crm_v3_format_money($vendedor_adeudo)
                                     ); ?>
                                 </span>
                             </div>
@@ -609,7 +609,7 @@ $carpeta_google_drive = get_field(
                                 <strong>Precio mercado</strong>
                                 <span>
                                     <?php echo esc_html(
-                                        $valor_mercado ?: '—'
+                                        crm_v3_format_money($valor_mercado)
                                     ); ?>
                                 </span>
                             </div>
@@ -625,7 +625,7 @@ $carpeta_google_drive = get_field(
                                 <strong>Precio de venta</strong>
                                 <span>
                                     <?php echo esc_html(
-                                        $precio_venta ?: '—'
+                                        crm_v3_format_money($precio_venta)
                                     ); ?>
                                 </span>
                             </div>
@@ -898,7 +898,7 @@ $carpeta_google_drive = get_field(
                                 <strong>Presupuesto</strong>
                                 <span>
                                     <?php echo esc_html(
-                                        $comprador_presupuesto ?: '—'
+                                        crm_v3_format_money($comprador_presupuesto)
                                     ); ?>
                                 </span>
                             </div>

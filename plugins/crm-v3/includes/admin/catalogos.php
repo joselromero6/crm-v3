@@ -190,9 +190,28 @@ function crm_v3_catalogos_page() {
             </div>
 
             <div class="crm-catalogos-header-actions">
-                <a href="#" class="crm-catalogos-btn">
-                    + Nuevo catálogo
-                </a>
+                <?php
+                $crm_catalogos_nuevos = array(
+                    'valuadores' => '+ Valuador',
+                    'bancos'     => '+ Banco',
+                    'notarias'   => '+ Notaría',
+                    'servicios'  => '+ Servicio',
+                );
+                ?>
+
+                <?php foreach ($crm_catalogos_nuevos as $crm_tipo => $crm_texto) : ?>
+
+                    <a
+                        href="<?php echo esc_url(
+                            admin_url('post-new.php?post_type=' . $crm_tipo)
+                        ); ?>"
+                        class="crm-catalogos-btn"
+                    >
+                        <?php echo esc_html($crm_texto); ?>
+                    </a>
+
+                <?php endforeach; ?>
+
             </div>
 
         </div>

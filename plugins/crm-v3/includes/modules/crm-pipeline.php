@@ -3,8 +3,12 @@
  * CRM V3 - PIPELINE DE OPERACIÓN
  *
  * El pipeline representa visualmente el avance de una operación.
- * No crea ni modifica datos de la operación.
+ * También incluye el editor de datos de la operación, que sí guarda.
  */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 
 /* ============================================================
