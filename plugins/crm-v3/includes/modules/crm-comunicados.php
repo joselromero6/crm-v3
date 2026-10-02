@@ -148,6 +148,27 @@ function crm_v3_comunicados_palabras_evento() {
 
 
 /**
+ * Frases de las notas tipo "guía" o "paso a paso": explican un
+ * trámite que ya existe, no anuncian un cambio.
+ */
+function crm_v3_comunicados_palabras_guia() {
+
+    return apply_filters(
+        'crm_v3_comunicados_palabras_guia',
+        array(
+            'paso a paso', 'como solicitar', 'como sacar', 'como tramitar',
+            'como obtener', 'como consultar', 'como saber', 'como puedo',
+            'como pedir', 'como usar', 'como funciona', 'como hacer',
+            'asi puedes', 'asi puede', 'te decimos', 'te contamos',
+            'te explicamos', 'guia para', 'guia completa', 'que es el',
+            'que es la', 'que significa', 'cuanto presta', 'cuanto te presta',
+            'cuantos puntos necesit', 'donde consultar', 'tutorial',
+        )
+    );
+}
+
+
+/**
  * Palabras que indican que la nota es de otro país.
  */
 function crm_v3_comunicados_palabras_otro_pais() {
@@ -234,6 +255,7 @@ function crm_v3_comunicados_es_relevante($titulo, $extracto = '') {
     // por su encabezado.
     if (
         crm_v3_comunicados_contiene($plano_titulo, crm_v3_comunicados_palabras_evento()) ||
+        crm_v3_comunicados_contiene($plano_titulo, crm_v3_comunicados_palabras_guia()) ||
         crm_v3_comunicados_contiene($plano_titulo, crm_v3_comunicados_palabras_otro_pais())
     ) {
         return false;
@@ -411,8 +433,10 @@ function crm_v3_comunicados_palabras_de($titulo) {
     foreach (explode(' ', crm_v3_comunicados_texto_plano($titulo)) as $palabra) {
 
         // Se ignoran las palabras cortas (el, de, para, que…).
+        // De cada palabra cuentan sus primeras 5 letras, para que
+        // "quién puede" y "quiénes pueden" se consideren iguales.
         if (strlen($palabra) >= 4) {
-            $palabras[$palabra] = true;
+            $palabras[substr($palabra, 0, 5)] = true;
         }
     }
 
@@ -436,9 +460,23 @@ function crm_v3_comunicados_son_parecidos($titulo_a, $titulo_b) {
         return false;
     }
 
+    // Si una habla de Infonavit y la otra de Fovissste (o de
+    // municipios distintos), son noticias diferentes.
+    $claves = array_fill_keys(
+        array(
+            'infon', 'fovis', 'predi', 'guada', 'zapop',
+            'tlajo', 'tlaqu', 'tonal', 'jalis', 'banco', 'notar',
+        ),
+        true
+    );
+
+    if (array_intersect_key($a, $claves) != array_intersect_key($b, $claves)) {
+        return false;
+    }
+
     $comunes = count(array_intersect_key($a, $b));
 
-    return ($comunes / min(count($a), count($b))) >= 0.7;
+    return ($comunes / min(count($a), count($b))) >= 0.6;
 }
 
 
