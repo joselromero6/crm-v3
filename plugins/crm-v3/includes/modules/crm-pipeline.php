@@ -714,11 +714,11 @@ function crm_v3_pipeline_editor_operacion($operacion_id) {
                     class="crm-v3-operacion-editor-save"
                 >
                     Guardar cambios
-                </button>           
+                </button>
 
-                </form>
+            </div>
 
-        </div>
+        </form>
 
 
         <!-- =====================================================
@@ -741,7 +741,9 @@ function crm_v3_pipeline_editor_operacion($operacion_id) {
 
         </div>
 
-    </div>
+        </div><!-- /crm-v3-operacion-editor-panel -->
+
+    </div><!-- /crm-v3-operacion-editor-left -->
 
 
     <!-- =====================================================
