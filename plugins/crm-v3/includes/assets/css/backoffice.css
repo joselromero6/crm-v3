@@ -235,6 +235,10 @@
     color: #4f7482;
     font-size: 10px;
     font-weight: 600;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .crm-bo-comunicado-titulo {

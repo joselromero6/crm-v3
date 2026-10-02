@@ -163,8 +163,80 @@ function crm_v3_comunicados_palabras_guia() {
             'te explicamos', 'guia para', 'guia completa', 'que es el',
             'que es la', 'que significa', 'cuanto presta', 'cuanto te presta',
             'cuantos puntos necesit', 'donde consultar', 'tutorial',
+            // Notas hechas para atraer clics.
+            'cuanto', 'cuanta', 'deposita', 'depositara', 'requisitos y pasos',
+            'pasos para', 'quien puede', 'quienes pueden', 'si cumples',
+            'estos son los requisitos', 'esto es lo que', 'checa',
+            'te conviene', 'tips', 'calendario', 'fechas de pago',
+            'pensionados', 'jubilados', 'que pasa si', 'esto debes',
         )
     );
+}
+
+
+/**
+ * Medios de los que se aceptan noticias.
+ *
+ * Solo fuentes oficiales y medios serios; así se evita la mayor parte
+ * de las notas hechas para atraer clics. Se escribe la dirección del
+ * sitio sin "www". Un sitio de la lista incluye sus secciones
+ * (por ejemplo "gob.mx" incluye "jalisco.gob.mx").
+ */
+function crm_v3_comunicados_medios_confiables() {
+
+    return apply_filters(
+        'crm_v3_comunicados_medios_confiables',
+        array(
+            // Oficiales
+            'gob.mx', 'infonavit.org.mx', 'fovissste.gob.mx',
+            'diputados.gob.mx', 'senado.gob.mx', 'banxico.org.mx',
+            'shf.gob.mx', 'congresojal.gob.mx',
+
+            // Economía y negocios
+            'eleconomista.com.mx', 'elfinanciero.com.mx', 'expansion.mx',
+            'forbes.com.mx', 'elceo.com',
+
+            // Sector inmobiliario
+            'realestatemarket.com.mx', 'inmobiliare.com', 'centrourbano.com',
+
+            // Nacionales
+            'eluniversal.com.mx', 'milenio.com', 'excelsior.com.mx',
+            'reforma.com', 'jornada.com.mx', 'proceso.com.mx',
+            'animalpolitico.com', 'elsoldemexico.com.mx',
+
+            // Jalisco
+            'informador.mx', 'mural.com.mx', 'eloccidental.com.mx',
+            'ntrguadalajara.com', 'udgtv.com',
+        )
+    );
+}
+
+
+/**
+ * ¿La dirección pertenece a un medio de la lista?
+ */
+function crm_v3_comunicados_es_medio_confiable($url) {
+
+    $dominio = strtolower((string) wp_parse_url((string) $url, PHP_URL_HOST));
+    $dominio = preg_replace('/^www\./', '', $dominio);
+
+    if ($dominio === '') {
+        return false;
+    }
+
+    foreach (crm_v3_comunicados_medios_confiables() as $medio) {
+
+        $medio = strtolower(trim($medio));
+
+        if (
+            $dominio === $medio ||
+            substr($dominio, -strlen('.' . $medio)) === '.' . $medio
+        ) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 
@@ -241,6 +313,12 @@ function crm_v3_comunicados_contiene($texto_plano, $palabras) {
  * $extracto  Primeras líneas del texto, si se tienen.
  */
 function crm_v3_comunicados_es_relevante($titulo, $extracto = '') {
+
+    // Un título con una cantidad en pesos ("te deposita $170,000")
+    // casi siempre es una nota para atraer clics.
+    if (preg_match('/\$\s?\d/', (string) $titulo)) {
+        return false;
+    }
 
     // "Nuevo León" no es una novedad.
     $plano_titulo = str_replace(
@@ -418,6 +496,7 @@ function crm_v3_comunicados_normalizar($item, $fuente) {
         'fuente'    => $fuente,
         'extracto'  => $extracto,
         'cuerpo'    => isset($item['cuerpo']) ? (string) $item['cuerpo'] : '',
+        'medio'     => isset($item['medio']) ? sanitize_text_field((string) $item['medio']) : '',
         'detectado' => time(),
     );
 }
@@ -795,11 +874,17 @@ function crm_v3_comunicados_leer_noticias() {
             continue;
         }
 
-        $lista = array_merge($lista, $resultado);
+        // Solo se aceptan fuentes oficiales y medios de la lista.
+        foreach ($resultado as $noticia) {
+
+            if (crm_v3_comunicados_es_medio_confiable($noticia['medio_url'])) {
+                $lista[] = $noticia;
+            }
+        }
     }
 
     // Solo es un error si no respondió ninguna búsqueda.
-    if (empty($lista) && count($errores) === count(crm_v3_comunicados_busquedas())) {
+    if (!empty($errores) && count($errores) === count(crm_v3_comunicados_busquedas())) {
         return new WP_Error(
             'noticias',
             'No se pudieron consultar las noticias: ' . $errores[0]
@@ -841,9 +926,11 @@ function crm_v3_comunicados_leer_rss($xml) {
         }
 
         $lista[] = array(
-            'titulo' => $titulo,
-            'fecha'  => (string) $item->pubDate,
-            'url'    => (string) $item->link,
+            'titulo'    => $titulo,
+            'fecha'     => (string) $item->pubDate,
+            'url'       => (string) $item->link,
+            'medio'     => $medio,
+            'medio_url' => isset($item->source['url']) ? (string) $item->source['url'] : '',
         );
     }
 
@@ -959,6 +1046,8 @@ function crm_v3_comunicados_actualizar() {
         if (
             !empty($comunicado['id']) &&
             isset($fuentes[$comunicado['fuente']]) &&
+            // Las noticias guardadas antes de la lista de medios se descartan.
+            ($comunicado['fuente'] !== 'noticias' || !empty($comunicado['medio'])) &&
             !crm_v3_comunicados_es_ruido($comunicado['titulo']) &&
             crm_v3_comunicados_es_relevante(
                 $comunicado['titulo'],
@@ -1202,6 +1291,11 @@ function crm_v3_comunicados_render($limite = 8) {
                     $fuente = isset($fuentes[$comunicado['fuente']])
                         ? $fuentes[$comunicado['fuente']]['nombre']
                         : $comunicado['fuente'];
+
+                    // En las noticias se muestra el nombre del medio.
+                    if (!empty($comunicado['medio'])) {
+                        $fuente = $comunicado['medio'];
+                    }
 
                     // "Nuevo": detectado en los últimos 3 días.
                     $es_nuevo =
