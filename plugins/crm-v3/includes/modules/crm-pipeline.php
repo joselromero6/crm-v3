@@ -65,7 +65,7 @@ function crm_v3_pipeline_operacion($operacion_id) {
     );
 
    $estatus_operacion = get_field(
-        'estatus_de_operecion',
+        'estatus_de_operacion',
         $operacion_id
     );
 
@@ -317,7 +317,7 @@ function crm_v3_pipeline_editor_operacion($operacion_id) {
     );
 
    $estatus_operacion = get_field(
-        'estatus_de_operecion',
+        'estatus_de_operacion',
         $operacion_id
     );
 
@@ -699,7 +699,7 @@ function crm_v3_pipeline_editor_operacion($operacion_id) {
                     Estatus
                 </label>
 
-                <select name="estatus_de_operecion">
+                <select name="estatus_de_operacion">
 
                     <option
                         value=""
@@ -995,9 +995,9 @@ function crm_v3_actualizar_operacion_desde_ficha() {
      */
 
     $estatus =
-        isset($_POST['estatus_de_operecion'])
+        isset($_POST['estatus_de_operacion'])
             ? sanitize_text_field(
-                $_POST['estatus_de_operecion']
+                $_POST['estatus_de_operacion']
             )
             : '';
 
@@ -1018,7 +1018,7 @@ function crm_v3_actualizar_operacion_desde_ficha() {
     ) {
 
         update_field(
-            'estatus_de_operecion',
+            'estatus_de_operacion',
             $estatus,
             $operacion_id
         );

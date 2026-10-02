@@ -732,7 +732,7 @@ input[type="checkbox"] {
 }
 
 .crm-v3-operation-card
-.acf-field[data-name="estatus_de_operecion"] {
+.acf-field[data-name="estatus_de_operacion"] {
     grid-column: span 1;
 }
 

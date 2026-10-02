@@ -299,7 +299,7 @@ function crm_v3_operacion_ficha($cliente_id, $propiedad_id = 0) {
     );
 
     $estatus_operacion = get_field(
-        'estatus_de_operecion',
+        'estatus_de_operacion',
         $operacion_id
     );
 
@@ -1295,7 +1295,7 @@ if (stripos($tipo_cliente_ficha, 'vendedor') !== false) {
         $prop_m2_terreno          = get_field('m2_terreno', $propiedad_id);
         $prop_m2_construccion     = get_field('m2_construccion', $propiedad_id);
         $prop_adeudo_agua         = get_field('adeudo_agua', $propiedad_id);
-        $prop_adeudo_predial      = get_field('adeudo_predial', $propiedad_id);
+        $prop_adeudo_predial      = crm_v3_get_adeudo_predial($propiedad_id);
         $prop_rehabilitacion      = get_field('costo_rehabilitacion', $propiedad_id);
         $prop_tipo_cartera        = get_field('tipo_de_cartera', $propiedad_id);
         $prop_valor_catastral     = get_field('valor_catastral', $propiedad_id);

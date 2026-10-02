@@ -221,3 +221,31 @@ function crm_v3_get_related_name($value, $empty = '—') {
 
     return (string) $value;
 }
+
+
+/**
+ * Adeudo predial de una propiedad.
+ *
+ * El campo en ACF se llama "adeudo_pedial" (sin la "r").
+ * Se lee primero el nombre correcto y después el actual, para
+ * que funcione igual si algún día se renombra el campo en ACF.
+ */
+function crm_v3_get_adeudo_predial($propiedad_id) {
+
+    $propiedad_id = (int) $propiedad_id;
+
+    if (!$propiedad_id) {
+        return null;
+    }
+
+    foreach (array('adeudo_predial', 'adeudo_pedial') as $campo) {
+
+        $valor = get_post_meta($propiedad_id, $campo, true);
+
+        if ($valor !== '' && $valor !== null && $valor !== false) {
+            return $valor;
+        }
+    }
+
+    return null;
+}
