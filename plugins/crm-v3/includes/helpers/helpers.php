@@ -375,6 +375,111 @@ function crm_v3_etiqueta_campo($campo, $post_id, $valor = null, $empty = '—') 
 
     $valor = (string) $valor;
 
+    $etiqueta = crm_v3_opcion_acf($campo, $post_id, $valor);
+
+    return $etiqueta !== null
+        ? $etiqueta
+        : ucfirst(str_replace('_', ' ', $valor));
+}
+
+
+
+/**
+ * Valor simple de un campo de ACF.
+ *
+ * Según la configuración del campo, ACF puede devolver el valor solo,
+ * dentro de una lista, o como objeto. Aquí siempre se obtiene el valor solo.
+ */
+function crm_v3_valor_simple($valor) {
+
+    if (is_array($valor)) {
+        $valor = reset($valor);
+    }
+
+    if (is_object($valor) && isset($valor->value)) {
+        $valor = $valor->value;
+    }
+
+    return $valor;
+}
+
+
+/**
+ * Valor simple, en minúsculas y sin espacios, listo para comparar.
+ */
+function crm_v3_valor_normalizado($valor) {
+
+    return strtolower(
+        trim(
+            (string) crm_v3_valor_simple($valor)
+        )
+    );
+}
+
+
+/**
+ * Nombre(s) de los términos de un catálogo (taxonomía).
+ *
+ * Acepta un ID, un término o una lista de ellos.
+ * Si son varios, los devuelve separados por coma.
+ */
+function crm_v3_nombres_terminos($valor, $taxonomia, $empty = '—') {
+
+    if (empty($valor)) {
+        return $empty;
+    }
+
+    $nombres = array();
+
+    foreach ((array) (is_object($valor) ? array($valor) : $valor) as $item) {
+
+        if (is_object($item) && isset($item->term_id)) {
+            $nombres[] = $item->name;
+            continue;
+        }
+
+        $term = get_term($item, $taxonomia);
+
+        if ($term && !is_wp_error($term)) {
+            $nombres[] = $term->name;
+        }
+    }
+
+    return !empty($nombres)
+        ? implode(', ', $nombres)
+        : $empty;
+}
+
+
+/**
+ * Opciones (clave => etiqueta) de un campo de lista de ACF.
+ */
+function crm_v3_opciones_campo($campo) {
+
+    $objeto = function_exists('acf_get_field')
+        ? acf_get_field($campo)
+        : null;
+
+    return (
+        is_array($objeto) &&
+        !empty($objeto['choices']) &&
+        is_array($objeto['choices'])
+    )
+        ? $objeto['choices']
+        : array();
+}
+
+
+/**
+ * Etiqueta definida en ACF para una opción de un campo de lista.
+ * Devuelve null si el campo o la opción no existen.
+ */
+function crm_v3_opcion_acf($campo, $post_id, $valor) {
+
+    if (!is_string($valor) && !is_int($valor)) {
+        return null;
+    }
+
     $objeto = get_field_object($campo, $post_id);
 
     if (
@@ -385,6 +490,89 @@ function crm_v3_etiqueta_campo($campo, $post_id, $valor = null, $empty = '—') 
         return $objeto['choices'][$valor];
     }
 
-    return ucfirst(str_replace('_', ' ', $valor));
+    return null;
 }
 
+
+/**
+ * Fecha en el formato que usan los campos de fecha del navegador (AAAA-MM-DD).
+ *
+ * Acepta d/m/Y, Ymd y Y-m-d. Devuelve '' si no reconoce la fecha.
+ */
+function crm_v3_fecha_para_input($valor) {
+
+    if (empty($valor)) {
+        return '';
+    }
+
+    $valor = (string) $valor;
+
+    $fecha = DateTime::createFromFormat('d/m/Y', $valor);
+
+    if ($fecha) {
+        return $fecha->format('Y-m-d');
+    }
+
+    if (preg_match('/^\d{8}$/', $valor)) {
+
+        $fecha = DateTime::createFromFormat('Ymd', $valor);
+
+        return $fecha ? $fecha->format('Y-m-d') : '';
+    }
+
+    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $valor)) {
+        return $valor;
+    }
+
+    return '';
+}
+
+
+/**
+ * Estatus de la operación más reciente de cada propiedad.
+ *
+ * Devuelve una lista: ID de propiedad => estatus de su última operación.
+ * Se calcula una sola vez por carga de página.
+ */
+function crm_v3_estatus_ultima_operacion_por_propiedad() {
+
+    static $resultado = null;
+
+    if ($resultado !== null) {
+        return $resultado;
+    }
+
+    $resultado = array();
+
+    $operaciones = get_posts(array(
+        'post_type'      => 'operaciones',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ));
+
+    $operaciones = crm_v3_ordenar_por_fecha(
+        $operaciones,
+        'fecha_de_operacion'
+    );
+
+    foreach ($operaciones as $operacion) {
+
+        $propiedad_id = crm_v3_get_related_id(
+            get_field('propiedad', $operacion->ID)
+        );
+
+        // La lista viene de la más reciente a la más antigua:
+        // la primera operación de cada propiedad es la que cuenta.
+        if (!$propiedad_id || isset($resultado[$propiedad_id])) {
+            continue;
+        }
+
+        $resultado[$propiedad_id] = crm_v3_valor_simple(
+            get_field('estatus_de_operacion', $operacion->ID)
+        );
+    }
+
+    return $resultado;
+}

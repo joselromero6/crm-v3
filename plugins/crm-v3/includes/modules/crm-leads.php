@@ -246,11 +246,14 @@ add_action(
 
 /**
  * ============================================================
- * AGREGAR NOTA AL HISTORIAL DEL LEAD
+ * GUARDAR EL COMENTARIO DEL LEAD
  * ============================================================
+ *
+ * Sirve tanto para escribir el comentario por primera vez
+ * como para editarlo: siempre es el mismo comentario.
  */
 
-function crm_v3_agregar_nota_lead() {
+function crm_v3_guardar_nota_lead() {
 
     if (!current_user_can('manage_options')) {
         wp_send_json_error(
@@ -307,8 +310,7 @@ function crm_v3_agregar_nota_lead() {
     }
 
     /*
-     * La nota inicial vive en el campo ACF "notas".
-     * No se agrega una nueva entrada cada vez que se guarda.
+     * El comentario vive en el campo ACF "notas".
      */
     update_field(
         'notas',
@@ -317,9 +319,8 @@ function crm_v3_agregar_nota_lead() {
     );
 
     /*
-     * Conservamos el historial existente para compatibilidad.
-     * Si no existe una entrada, creamos una sola correspondiente
-     * al comentario original.
+     * El historial se conserva por compatibilidad: su primera
+     * entrada siempre refleja el comentario, sin crear nuevas.
      */
     $historial = get_post_meta(
         $lead_id,
@@ -364,131 +365,12 @@ function crm_v3_agregar_nota_lead() {
 
 add_action(
     'wp_ajax_crm_v3_agregar_nota_lead',
-    'crm_v3_agregar_nota_lead'
+    'crm_v3_guardar_nota_lead'
 );
-
-
-/**
- * ============================================================
- * EDITAR COMENTARIO ORIGINAL DEL LEAD
- * ============================================================
- */
-
-function crm_v3_editar_nota_lead() {
-
-    if (!current_user_can('manage_options')) {
-        wp_send_json_error(
-            [
-                'message' => 'No tienes permisos.'
-            ],
-            403
-        );
-    }
-
-    if (
-        !isset($_POST['nonce']) ||
-        !wp_verify_nonce(
-            sanitize_text_field(
-                wp_unslash($_POST['nonce'])
-            ),
-            'crm_v3_lead_notas'
-        )
-    ) {
-        wp_send_json_error(
-            [
-                'message' => 'Solicitud no válida.'
-            ],
-            403
-        );
-    }
-
-    $lead_id = isset($_POST['lead_id'])
-        ? absint($_POST['lead_id'])
-        : 0;
-
-    $nota = isset($_POST['nota'])
-        ? sanitize_textarea_field(
-            wp_unslash($_POST['nota'])
-        )
-        : '';
-
-    if (!$lead_id || get_post_type($lead_id) !== 'leads') {
-        wp_send_json_error(
-            [
-                'message' => 'Lead no válido.'
-            ],
-            400
-        );
-    }
-
-    if (trim($nota) === '') {
-        wp_send_json_error(
-            [
-                'message' => 'El comentario no puede estar vacío.'
-            ],
-            400
-        );
-    }
-
-    /*
-     * Actualiza exactamente el mismo comentario original.
-     */
-    update_field(
-        'notas',
-        $nota,
-        $lead_id
-    );
-
-    /*
-     * Mantener sincronizada la primera entrada histórica,
-     * sin crear una nueva.
-     */
-    $historial = get_post_meta(
-        $lead_id,
-        '_crm_lead_notas_historial',
-        true
-    );
-
-    if (!is_array($historial)) {
-        $historial = [];
-    }
-
-    if (!empty($historial)) {
-
-        $historial[0]['nota'] = $nota;
-
-        update_post_meta(
-            $lead_id,
-            '_crm_lead_notas_historial',
-            $historial
-        );
-
-    } else {
-
-        $historial[] = [
-            'id'      => wp_generate_uuid4(),
-            'fecha'   => current_time('mysql'),
-            'usuario' => get_current_user_id(),
-            'nota'    => $nota,
-        ];
-
-        update_post_meta(
-            $lead_id,
-            '_crm_lead_notas_historial',
-            $historial
-        );
-    }
-
-    wp_send_json_success(
-        [
-            'nota' => $nota,
-        ]
-    );
-}
 
 add_action(
     'wp_ajax_crm_v3_editar_nota_lead',
-    'crm_v3_editar_nota_lead'
+    'crm_v3_guardar_nota_lead'
 );
 
 
@@ -527,49 +409,14 @@ function crm_v3_leads_get_terms($taxonomy) {
 
 function crm_v3_leads_term_name($value, $taxonomy) {
 
-    if (empty($value)) {
-        return '—';
-    }
-
-
-    /*
-     * ACF puede devolver array
-     */
-
+    // En leads solo se muestra el primer término.
     if (is_array($value)) {
         $value = reset($value);
     }
 
-
-    /*
-     * ACF puede devolver objeto WP_Term
-     */
-
-    if (
-        is_object($value) &&
-        isset($value->term_id)
-    ) {
-
-        return esc_html($value->name);
-    }
-
-
-    /*
-     * ACF devuelve ID
-     */
-
-    $term = get_term(
-        absint($value),
-        $taxonomy
+    return esc_html(
+        crm_v3_nombres_terminos($value, $taxonomy)
     );
-
-
-    if (!$term || is_wp_error($term)) {
-        return '—';
-    }
-
-
-    return esc_html($term->name);
 }
 
 
@@ -585,25 +432,11 @@ function crm_v3_leads_acf_choice_label($field_name, $value, $post_id) {
         return '—';
     }
 
-    $field = get_field_object(
-        $field_name,
-        $post_id
+    $etiqueta = crm_v3_opcion_acf($field_name, $post_id, $value);
+
+    return esc_html(
+        $etiqueta !== null ? $etiqueta : $value
     );
-
-    if (!$field) {
-        return esc_html($value);
-    }
-
-    if (
-        isset($field['choices']) &&
-        isset($field['choices'][$value])
-    ) {
-        return esc_html(
-            $field['choices'][$value]
-        );
-    }
-
-    return esc_html($value);
 }
 
 
@@ -1988,10 +1821,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                             $monto !== null
                                         ) : ?>
 
-                                            $<?php echo number_format(
-                                                (float) $monto,
-                                                2
-                                            ); ?>
+                                            <?php echo esc_html(crm_v3_format_money($monto)); ?>
 
                                         <?php else : ?>
 

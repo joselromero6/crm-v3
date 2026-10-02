@@ -32,7 +32,7 @@
         <div class="footer-contact">
             <h4>Contacto</h4>
             <p>Guadalajara, Jalisco</p>
-            <p>+52 33 1286 9601</p>
+            <p><?php echo esc_html(crm_v3_theme_telefono_visible()); ?></p>
             <p>contactanos@cibr.com.mx</p>
         </div>
 

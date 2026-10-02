@@ -24,21 +24,7 @@
 
     <?php
 
-$ids_visibles = get_posts(array(
-'post_type' => 'propiedades',
-'post_status' => 'publish',
-'fields' => 'ids',
-'posts_per_page' => -1,
-
-'meta_query' => array(
-array(
-'key' => 'mostrar_web',
-'value' => 1
-)
-
-)
-
-));
+$ids_visibles = crm_v3_theme_propiedades_visibles();
 
 $ciudades = get_terms(array(
 'taxonomy' => 'ciudad',
@@ -61,22 +47,7 @@ foreach ($ciudades as $ciudad_item) :
         <option value="">Todos los tipos</option>
         <?php
 
-        $ids_visibles = get_posts(array(
-
-'post_type' => 'propiedades',
-'post_status' => 'publish',
-'fields' => 'ids',
-'posts_per_page' => -1,
-
-'meta_query' => array(
-array(
-'key' => 'mostrar_web',
-'value' => 1
-)
-
-)
-
-));
+        $ids_visibles = crm_v3_theme_propiedades_visibles();
 
 $tipos = get_terms(array(
 

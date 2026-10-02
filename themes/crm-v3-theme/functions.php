@@ -316,3 +316,62 @@ function crm_v3_theme_imagen_propiedad_url($post_id = 0, $tamano = 'medium_large
 
     return get_template_directory_uri() . '/assets/img/default-property.svg';
 }
+
+
+/**
+ * Teléfono de contacto de la inmobiliaria.
+ *
+ * Es el único lugar donde se escribe el número: si cambia,
+ * se cambia aquí y se actualiza en todo el sitio.
+ */
+function crm_v3_theme_telefono() {
+    return '523312869601';
+}
+
+/**
+ * Teléfono con el formato que se muestra al visitante.
+ */
+function crm_v3_theme_telefono_visible() {
+    return '+52 33 1286 9601';
+}
+
+/**
+ * Enlace de WhatsApp de la inmobiliaria, con un mensaje opcional.
+ */
+function crm_v3_theme_whatsapp_url($mensaje = '') {
+
+    $url = 'https://wa.me/' . crm_v3_theme_telefono();
+
+    if ($mensaje !== '') {
+        $url .= '?text=' . rawurlencode($mensaje);
+    }
+
+    return $url;
+}
+
+/**
+ * IDs de las propiedades que se muestran en la web.
+ * Se consulta una sola vez por página.
+ */
+function crm_v3_theme_propiedades_visibles() {
+
+    static $ids = null;
+
+    if ($ids === null) {
+
+        $ids = get_posts(array(
+            'post_type'      => 'propiedades',
+            'post_status'    => 'publish',
+            'fields'         => 'ids',
+            'posts_per_page' => -1,
+            'meta_query'     => array(
+                array(
+                    'key'   => 'mostrar_web',
+                    'value' => 1,
+                ),
+            ),
+        ));
+    }
+
+    return $ids;
+}

@@ -105,28 +105,8 @@ function crm_v3_clientes_page() {
         );
 
 
-        if (is_array($crm_estatus_operacion)) {
-
-            $crm_estatus_operacion = reset(
-                $crm_estatus_operacion
-            );
-        }
-
-
-        if (
-            is_object($crm_estatus_operacion) &&
-            isset($crm_estatus_operacion->value)
-        ) {
-
-            $crm_estatus_operacion =
-                $crm_estatus_operacion->value;
-        }
-
-
-        $crm_estatus_operacion = strtolower(
-            trim(
-                (string) $crm_estatus_operacion
-            )
+        $crm_estatus_operacion = crm_v3_valor_normalizado(
+            $crm_estatus_operacion
         );
 
 
@@ -1374,27 +1354,9 @@ unset($crm_opciones);
 
                                 <?php
 
-                                if (
-                                    $presupuesto !== '' &&
-                                    $presupuesto !== null
-                                ) {
-
-                                    echo esc_html(
-                                        '$' .
-                                        number_format(
-                                            (float)
-                                            $presupuesto,
-                                            2,
-                                            '.',
-                                            ','
-                                        )
-                                    );
-
-                                } else {
-
-                                    echo '—';
-
-                                }
+                                echo esc_html(
+                                    crm_v3_format_money($presupuesto)
+                                );
 
                                 ?>
 
@@ -1407,27 +1369,9 @@ unset($crm_opciones);
 
                                 <?php
 
-                                if (
-                                    $adeudo_hipoteca !== '' &&
-                                    $adeudo_hipoteca !== null
-                                ) {
-
-                                    echo esc_html(
-                                        '$' .
-                                        number_format(
-                                            (float)
-                                            $adeudo_hipoteca,
-                                            2,
-                                            '.',
-                                            ','
-                                        )
-                                    );
-
-                                } else {
-
-                                    echo '—';
-
-                                }
+                                echo esc_html(
+                                    crm_v3_format_money($adeudo_hipoteca)
+                                );
 
                                 ?>
 
@@ -1546,67 +1490,10 @@ function crm_v3_cliente_taxonomia(
     $taxonomia
 ) {
 
-    $valor =
-        get_field(
-            $campo,
-            $post_id
-        );
-
-
-    if (!$valor) {
-        return '—';
-    }
-
-
-    if (is_array($valor)) {
-
-        $terminos = array();
-
-
-        foreach ($valor as $term_id) {
-
-            $term =
-                get_term(
-                    $term_id,
-                    $taxonomia
-                );
-
-
-            if (
-                $term &&
-                !is_wp_error($term)
-            ) {
-
-                $terminos[] =
-                    $term->name;
-            }
-
-        }
-
-
-        return !empty($terminos)
-            ? implode(', ', $terminos)
-            : '—';
-    }
-
-
-    $term =
-        get_term(
-            $valor,
-            $taxonomia
-        );
-
-
-    if (
-        !$term ||
-        is_wp_error($term)
-    ) {
-
-        return '—';
-    }
-
-
-    return $term->name;
+    return crm_v3_nombres_terminos(
+        get_field($campo, $post_id),
+        $taxonomia
+    );
 }
 
 
@@ -1638,36 +1525,15 @@ function crm_v3_cliente_select_label(
         return '—';
     }
 
-
-    $field =
-        get_field_object(
-            $campo,
-            $post_id
-        );
-
-
-    if (
-        $field &&
-        !empty(
-            $field['choices']
-        ) &&
-        isset(
-            $field['choices'][$valor]
-        )
-    ) {
-
-        return $field['choices'][$valor];
-    }
-
+    $etiqueta = crm_v3_opcion_acf($campo, $post_id, $valor);
 
     /*
-     * Si ACF no tiene la opción,
-     * devolvemos el valor almacenado.
-     *
-     * No inventamos una etiqueta.
+     * Si ACF no tiene la opción, devolvemos el valor
+     * almacenado. No inventamos una etiqueta.
      */
-
-    return (string) $valor;
+    return $etiqueta !== null
+        ? $etiqueta
+        : (string) $valor;
 }
 
 

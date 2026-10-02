@@ -341,7 +341,7 @@ $ubicacion_completa = implode(
 
     <!-- CTA -->
     <div class="single-property-contact">
-        <a href="https://wa.me/523312869601?text=Hola,%20me%20interesa%20la%20propiedad:%20<?php echo urlencode(get_the_title()); ?>" 
+        <a href="<?php echo esc_url(crm_v3_theme_whatsapp_url('Hola, me interesa la propiedad: ' . get_the_title())); ?>" 
    class="btn-whatsapp" 
    target="_blank"> Contactar por WhatsApp
 </a>

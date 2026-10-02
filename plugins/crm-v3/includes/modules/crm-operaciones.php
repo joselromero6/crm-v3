@@ -162,9 +162,6 @@ $campo_tipo_avaluo = acf_get_field(
     'tipo_de_avaluo'
 );
 
-$campo_estatus = acf_get_field(
-    'estatus_de_operacion'
-);
 
 $tipos_avaluo = (
     is_array($campo_tipo_avaluo) &&
@@ -173,12 +170,9 @@ $tipos_avaluo = (
 ? $campo_tipo_avaluo['choices']
 : [];
 
-$estatus_operacion = (
-    is_array($campo_estatus) &&
-    !empty($campo_estatus['choices'])
-)
-? $campo_estatus['choices']
-: [];
+$estatus_operacion = crm_v3_opciones_campo(
+    'estatus_de_operacion'
+);
 
 
 
@@ -419,21 +413,9 @@ if (
     $filtros['contador'] !== 'total'
 ) {
 
-    $estatus = get_field(
-        'estatus_de_operacion',
-        $operacion_id
+    $estatus = crm_v3_valor_simple(
+        get_field('estatus_de_operacion', $operacion_id)
     );
-
-    if (is_array($estatus)) {
-        $estatus = reset($estatus);
-    }
-
-    if (
-        is_object($estatus) &&
-        isset($estatus->value)
-    ) {
-        $estatus = $estatus->value;
-    }
 
 
     if ($filtros['contador'] === 'sin_expediente') {
@@ -574,21 +556,9 @@ if (
             $filtros['estatus'] !== ''
         ) {
 
-            $estatus = get_field(
-                'estatus_de_operacion',
-                $operacion_id
+            $estatus = crm_v3_valor_simple(
+                get_field('estatus_de_operacion', $operacion_id)
             );
-
-            if (is_array($estatus)) {
-                $estatus = reset($estatus);
-            }
-
-            if (
-                is_object($estatus) &&
-                isset($estatus->value)
-            ) {
-                $estatus = $estatus->value;
-            }
 
             if (
                 (string) $estatus !==

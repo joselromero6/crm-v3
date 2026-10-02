@@ -368,24 +368,8 @@ if ($valor_mercado_num > 0 && $precio_cierre_num > 0) {
      * DESVIACIÓN VS MERCADO
      * ======================================================== */
 
-    $desviacion_mercado = null;
-
-
-    if (
-        $valor_mercado_num > 0 &&
-        $precio_cierre_num > 0
-    ) {
-
-        $desviacion_mercado =
-            (
-                (
-                    $precio_cierre_num
-                    - $valor_mercado_num
-                )
-                / $valor_mercado_num
-            )
-            * 100;
-    }
+    // Es el mismo cálculo que "precio de cierre vs valor de mercado".
+    $desviacion_mercado = $comparacion_cierre_mercado;
 
 
 /* ========================================================
