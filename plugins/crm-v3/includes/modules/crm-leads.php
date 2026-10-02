@@ -722,34 +722,6 @@ if ($filtro_zona !== '') {
 }
 
 
-/*
- * Origen — TAXONOMÍA ACF
- */
-
-if ($filtro_origen) {
-
-    $tax_query[] = [
-        'taxonomy' => 'origen-lead',
-        'field'    => 'term_id',
-        'terms'    => $filtro_origen,
-    ];
-}
-
-
-/*
- * Institución financiera — TAXONOMÍA ACF
- */
-
-if ($filtro_institucion) {
-
-    $tax_query[] = [
-        'taxonomy' => 'tipo-de-creditos',
-        'field'    => 'term_id',
-        'terms'    => $filtro_institucion,
-    ];
-}
-
-
 if (!empty($meta_query)) {
     $args_leads['meta_query'] = $meta_query;
 }
@@ -771,6 +743,47 @@ if ($filtro_busqueda !== '') {
 
 
 $leads = get_posts($args_leads);
+
+
+/*
+ * Origen e Institución — campos de taxonomía de ACF.
+ *
+ * Estos campos guardan el término en el propio Lead (no como
+ * taxonomía de WordPress), así que se filtra por el valor del campo.
+ */
+
+if ($filtro_origen || $filtro_institucion) {
+
+    $leads = array_values(
+        array_filter(
+            $leads,
+            function ($lead) use ($filtro_origen, $filtro_institucion) {
+
+                if (
+                    $filtro_origen &&
+                    !crm_v3_valor_incluye_termino(
+                        get_field('origen_captacion', $lead->ID),
+                        $filtro_origen
+                    )
+                ) {
+                    return false;
+                }
+
+                if (
+                    $filtro_institucion &&
+                    !crm_v3_valor_incluye_termino(
+                        get_field('institucion_crediticia', $lead->ID),
+                        $filtro_institucion
+                    )
+                ) {
+                    return false;
+                }
+
+                return true;
+            }
+        )
+    );
+}
 
     /*
      * --------------------------------------------------------
@@ -817,6 +830,7 @@ $leads_filtro = get_posts([
 ]);
 
 $origenes_filtro = [];
+$instituciones_filtro = [];
 $tipos_filtro = [];
 $estatus_filtro = [];
 

@@ -17,8 +17,7 @@ function crm_v3_operaciones_page() {
     'post_type'      => 'operaciones',
     'post_status'    => 'publish',
     'posts_per_page' => -1,
-    'meta_key'       => 'fecha_de_operacion',
-    'orderby'        => 'meta_value_num',
+    'orderby'        => 'date',
     'order'          => 'DESC',
 ];
 
@@ -34,6 +33,11 @@ if ($expediente_actual !== '') {
 }
 
 $operaciones = get_posts($operaciones_args);
+
+$operaciones = crm_v3_ordenar_por_fecha(
+    $operaciones,
+    'fecha_de_operacion'
+);
 
     $total = count($operaciones);
     $en_proceso = 0;
@@ -387,10 +391,14 @@ function crm_v3_operaciones_obtener_filtradas($filtros = []) {
     'post_type'      => 'operaciones',
     'post_status'    => 'publish',
     'posts_per_page' => -1,
-    'meta_key'       => 'fecha_de_operacion',
-    'orderby'        => 'meta_value_num',
+    'orderby'        => 'date',
     'order'          => 'DESC',
 ]);
+
+    $operaciones = crm_v3_ordenar_por_fecha(
+        $operaciones,
+        'fecha_de_operacion'
+    );
 
 
     $operaciones_filtradas = [];
@@ -520,17 +528,11 @@ if (
                 $operacion_id
             );
 
-            $institucion_id = 0;
-
-            if ($institucion instanceof WP_Term) {
-                $institucion_id = (int) $institucion->term_id;
-            } elseif (is_numeric($institucion)) {
-                $institucion_id = (int) $institucion;
-            }
-
             if (
-                $institucion_id !==
-                (int) $filtros['institucion']
+                !crm_v3_valor_incluye_termino(
+                    $institucion,
+                    $filtros['institucion']
+                )
             ) {
                 continue;
             }

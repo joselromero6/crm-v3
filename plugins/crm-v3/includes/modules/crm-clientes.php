@@ -48,10 +48,14 @@ function crm_v3_clientes_page() {
             'post_type'      => 'clientes',
             'post_status'    => 'publish',
             'posts_per_page' => -1,
-            'meta_key'       => 'fecha_de_registro',
-            'orderby'        => 'meta_value_num',
+            'orderby'        => 'date',
             'order'          => 'DESC',
         ));
+
+        $clientes->posts = crm_v3_ordenar_por_fecha(
+            $clientes->posts,
+            'fecha_de_registro'
+        );
 
 
     /*
@@ -71,10 +75,14 @@ function crm_v3_clientes_page() {
         'post_type'      => 'operaciones',
         'post_status'    => 'publish',
         'posts_per_page' => -1,
-        'meta_key'       => 'fecha_de_operacion',
-        'orderby'        => 'meta_value_num',
+        'orderby'        => 'date',
         'order'          => 'DESC'
     ));
+
+    $crm_operaciones = crm_v3_ordenar_por_fecha(
+        $crm_operaciones,
+        'fecha_de_operacion'
+    );
 
 
     foreach ($crm_operaciones as $crm_operacion) {

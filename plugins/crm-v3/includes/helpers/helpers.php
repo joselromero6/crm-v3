@@ -249,3 +249,87 @@ function crm_v3_get_adeudo_predial($propiedad_id) {
 
     return null;
 }
+
+
+/**
+ * Ordena una lista de registros por un campo de fecha de ACF,
+ * del más reciente al más antiguo.
+ *
+ * Los registros sin fecha NO se descartan: quedan al final,
+ * ordenados por su fecha de creación. (Ordenar desde la consulta
+ * con meta_key excluía a todo registro que no tuviera el campo.)
+ */
+function crm_v3_ordenar_por_fecha($posts, $campo) {
+
+    if (!is_array($posts) || count($posts) < 2) {
+        return $posts;
+    }
+
+    $claves = array();
+
+    foreach ($posts as $post) {
+
+        $id = is_object($post) ? $post->ID : (int) $post;
+
+        $valor = get_post_meta($id, $campo, true);
+
+        // ACF guarda las fechas como Ymd (20260930).
+        $claves[$id] = is_numeric($valor) ? (int) $valor : 0;
+    }
+
+    usort(
+        $posts,
+        function ($a, $b) use ($claves) {
+
+            $id_a = is_object($a) ? $a->ID : (int) $a;
+            $id_b = is_object($b) ? $b->ID : (int) $b;
+
+            if ($claves[$id_a] !== $claves[$id_b]) {
+                return $claves[$id_b] <=> $claves[$id_a];
+            }
+
+            $fecha_a = is_object($a) ? $a->post_date : '';
+            $fecha_b = is_object($b) ? $b->post_date : '';
+
+            if ($fecha_a !== $fecha_b) {
+                return strcmp($fecha_b, $fecha_a);
+            }
+
+            return $id_b <=> $id_a;
+        }
+    );
+
+    return $posts;
+}
+
+
+/**
+ * ¿El valor de un campo de taxonomía de ACF incluye este término?
+ *
+ * ACF puede devolver un ID, un objeto WP_Term o una lista de
+ * cualquiera de los dos, según cómo esté configurado el campo.
+ */
+function crm_v3_valor_incluye_termino($valor, $term_id) {
+
+    $term_id = (int) $term_id;
+
+    if (!$term_id || empty($valor)) {
+        return false;
+    }
+
+    $valores = is_array($valor) ? $valor : array($valor);
+
+    foreach ($valores as $item) {
+
+        if (is_object($item) && isset($item->term_id)) {
+            $item = $item->term_id;
+        }
+
+        if (is_numeric($item) && (int) $item === $term_id) {
+            return true;
+        }
+    }
+
+    return false;
+}
+

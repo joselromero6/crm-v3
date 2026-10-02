@@ -10,7 +10,7 @@
 
 
 <!-- FILTROS PRO -->
-<form class="properties-filters" method="GET">
+<form class="properties-filters" method="GET" action="<?php echo esc_url(get_post_type_archive_link('propiedades')); ?>">
 
     <input 
         type="text" 
@@ -50,7 +50,7 @@ foreach ($ciudades as $ciudad_item) :
 ?>
 
             <option value="<?php echo esc_attr($ciudad_item->slug); ?>"
-                <?php selected(isset($_GET['ciudad']) ? $_GET['ciudad'] : '', $ciudad_item->term_id); ?>>
+                <?php selected(isset($_GET['ciudad']) ? sanitize_title(wp_unslash($_GET['ciudad'])) : '', $ciudad_item->slug); ?>>
                 <?php echo esc_html($ciudad_item->name); ?>
             </option>
         <?php endforeach; ?>
@@ -257,6 +257,17 @@ isset($badges[$estado])
         <?php endif; ?>
 
     </div>
+
+    <div class="pagination properties-pagination">
+        <?php
+        the_posts_pagination(array(
+            'mid_size'  => 1,
+            'prev_text' => '« Anterior',
+            'next_text' => 'Siguiente »',
+        ));
+        ?>
+    </div>
+
 </section>
 
 <?php get_footer(); ?>
