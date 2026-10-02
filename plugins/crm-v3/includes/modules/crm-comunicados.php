@@ -70,6 +70,44 @@ function crm_v3_comunicados_palabras_clave() {
 
 
 /**
+ * ¿El título es de una página que no es un comunicado?
+ *
+ * Los sitios oficiales también publican páginas de "archivo" o de
+ * categoría ("Presupuesto Archives » Fondo de la Vivienda…"): son
+ * índices, no avisos, y no deben aparecer en la lista.
+ */
+function crm_v3_comunicados_es_ruido($titulo) {
+
+    $titulo = trim((string) $titulo);
+
+    if ($titulo === '') {
+        return true;
+    }
+
+    $senales = apply_filters(
+        'crm_v3_comunicados_senales_ruido',
+        array(
+            'Archives',
+            'Archivos »',
+            '»',
+            'Página ',
+            'Inicio |',
+            'Aviso de privacidad',
+        )
+    );
+
+    foreach ($senales as $senal) {
+        if ($senal !== '' && stripos($titulo, $senal) !== false) {
+            return true;
+        }
+    }
+
+    // Un título de comunicado real tiene al menos unas cuantas palabras.
+    return str_word_count(remove_accents($titulo)) < 4;
+}
+
+
+/**
  * Página de la sala de prensa de Infonavit (enlace de respaldo).
  */
 function crm_v3_comunicados_url_sala_prensa() {
@@ -142,7 +180,7 @@ function crm_v3_comunicados_normalizar($item, $fuente) {
         ? trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) $item['titulo'])))
         : '';
 
-    if ($titulo === '') {
+    if ($titulo === '' || crm_v3_comunicados_es_ruido($titulo)) {
         return null;
     }
 
@@ -405,6 +443,49 @@ function crm_v3_comunicados_ordenar($lista) {
 
 
 /**
+ * Comunicados que se muestran en la tarjeta.
+ *
+ * Se reparte el espacio entre las fuentes (por ejemplo, 4 y 4) y,
+ * si a una le sobran lugares, los aprovecha la otra. El resultado
+ * se muestra ordenado por fecha.
+ */
+function crm_v3_comunicados_visibles($limite = 8) {
+
+    $lista      = crm_v3_comunicados_lista();
+    $por_fuente = array();
+
+    foreach ($lista as $comunicado) {
+        $por_fuente[$comunicado['fuente']][] = $comunicado;
+    }
+
+    if (count($por_fuente) < 2) {
+        return array_slice($lista, 0, $limite);
+    }
+
+    $visibles = array();
+
+    // Se toma uno de cada fuente por turno hasta llenar la tarjeta.
+    while (count($visibles) < $limite && !empty($por_fuente)) {
+
+        foreach (array_keys($por_fuente) as $clave) {
+
+            if (count($visibles) >= $limite) {
+                break;
+            }
+
+            $visibles[] = array_shift($por_fuente[$clave]);
+
+            if (empty($por_fuente[$clave])) {
+                unset($por_fuente[$clave]);
+            }
+        }
+    }
+
+    return crm_v3_comunicados_ordenar($visibles);
+}
+
+
+/**
  * ============================================================
  * REVISAR LAS FUENTES Y GUARDAR LO NUEVO
  * ============================================================
@@ -415,7 +496,12 @@ function crm_v3_comunicados_actualizar() {
     $guardados = array();
 
     foreach (crm_v3_comunicados_lista() as $comunicado) {
-        if (!empty($comunicado['id'])) {
+
+        // Lo guardado que hoy se considera "ruido" se descarta.
+        if (
+            !empty($comunicado['id']) &&
+            !crm_v3_comunicados_es_ruido($comunicado['titulo'])
+        ) {
             $guardados[$comunicado['id']] = $comunicado;
         }
     }
@@ -475,12 +561,23 @@ function crm_v3_comunicados_actualizar() {
         );
     }
 
-    // Se conservan los 60 más recientes.
-    $lista = array_slice(
-        crm_v3_comunicados_ordenar(array_values($guardados)),
-        0,
-        60
-    );
+    // Se conservan los 40 más recientes de cada fuente, para que una
+    // fuente con muchas publicaciones no desplace a las demás.
+    $lista      = array();
+    $por_fuente = array();
+
+    foreach (crm_v3_comunicados_ordenar(array_values($guardados)) as $comunicado) {
+
+        $clave = $comunicado['fuente'];
+
+        $por_fuente[$clave] = isset($por_fuente[$clave])
+            ? $por_fuente[$clave] + 1
+            : 1;
+
+        if ($por_fuente[$clave] <= 40) {
+            $lista[] = $comunicado;
+        }
+    }
 
     update_option('crm_v3_comunicados', $lista, false);
     update_option('crm_v3_comunicados_estado', $estado, false);
@@ -561,7 +658,7 @@ add_action(
 
 function crm_v3_comunicados_render($limite = 8) {
 
-    $lista   = array_slice(crm_v3_comunicados_lista(), 0, $limite);
+    $lista   = crm_v3_comunicados_visibles($limite);
     $estado  = crm_v3_comunicados_estado();
     $fuentes = crm_v3_comunicados_fuentes();
 
@@ -663,6 +760,26 @@ function crm_v3_comunicados_render($limite = 8) {
 
                     Última revisión:
                     <?php echo esc_html(wp_date('d/m/Y H:i', $estado['revisado'])); ?>
+
+                    <?php
+                    $resumen = array();
+
+                    if (!empty($estado['fuentes'])) {
+
+                        foreach ($estado['fuentes'] as $clave => $resultado) {
+
+                            if (!empty($resultado['ok'])) {
+                                $resumen[] =
+                                    (isset($fuentes[$clave]) ? $fuentes[$clave]['nombre'] : $clave) .
+                                    ' ' . (int) $resultado['encontrados'];
+                            }
+                        }
+                    }
+                    ?>
+
+                    <?php if (!empty($resumen)) : ?>
+                        · <?php echo esc_html(implode(', ', $resumen)); ?>
+                    <?php endif; ?>
 
                     <?php if (isset($_GET['comunicados'])) : ?>
                         ·
