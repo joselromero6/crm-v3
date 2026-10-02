@@ -539,6 +539,7 @@ require_once CRM_V3_PATH . 'includes/modules/crm-pipeline.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-propiedades.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-operaciones.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-formulario.php';
+require_once CRM_V3_PATH . 'includes/modules/crm-contacto-web.php';
 require_once CRM_V3_PATH . 'includes/modules/comunicados.php';
 
 
