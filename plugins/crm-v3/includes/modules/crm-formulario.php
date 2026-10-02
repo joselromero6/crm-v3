@@ -24,6 +24,10 @@ function crm_v3_formulario_acf_head() {
         return;
     }
 
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return;
+    }
+
     if ( function_exists( 'acf_form_head' ) ) {
         acf_form_head();
     }
@@ -158,6 +162,34 @@ function crm_v3_nuevos_registros_page() {
             <span>NUEVOS REGISTROS</span>
         </div>
 
+        <?php
+        /*
+         * Tras guardar se regresa a esta página con ?registro=...,
+         * así recargar no vuelve a crear el registro.
+         */
+        $crm_registros_guardados = array(
+            'cliente'   => 'Cliente guardado correctamente.',
+            'propiedad' => 'Propiedad guardada correctamente.',
+            'operacion' => 'Operación guardada correctamente.',
+        );
+
+        $crm_registro = isset($_GET['registro'])
+            ? sanitize_key($_GET['registro'])
+            : '';
+        ?>
+
+        <?php if (isset($crm_registros_guardados[$crm_registro])) : ?>
+
+            <div class="notice notice-success is-dismissible">
+                <p>
+                    <strong>
+                        <?php echo esc_html($crm_registros_guardados[$crm_registro]); ?>
+                    </strong>
+                </p>
+            </div>
+
+        <?php endif; ?>
+
 
         <!-- =====================================================
              REGISTRO DE CLIENTE
@@ -186,7 +218,7 @@ function crm_v3_nuevos_registros_page() {
                             'group_69fa45838143b',
                         ),
                         'form'         => true,
-                        'return'       => '',
+                        'return'       => admin_url('admin.php?page=crm-nuevos-registros&registro=cliente'),
                         'html_submit_button' => '<button type="submit" class="crm-v3-form-submit">%s</button>',
                         'submit_value' => 'Guardar cliente',
                     )
@@ -225,7 +257,7 @@ function crm_v3_nuevos_registros_page() {
                     'group_69fa4597c55be',
                 ),
                 'form'         => true,
-                'return'       => '',
+                'return'       => admin_url('admin.php?page=crm-nuevos-registros&registro=propiedad'),
                 'html_submit_button' => '<button type="submit" class="crm-v3-form-submit">%s</button>',
                 'submit_value' => 'Guardar propiedad',
             )
@@ -263,7 +295,7 @@ function crm_v3_nuevos_registros_page() {
                     'group_69fa45a722a01',
                 ),
                 'form'         => true,
-                'return'       => '',
+                'return'       => admin_url('admin.php?page=crm-nuevos-registros&registro=operacion'),
                 'html_submit_button' => '<button type="submit" class="crm-v3-form-submit">%s</button>',
                 'submit_value' => 'Guardar operación',
             )

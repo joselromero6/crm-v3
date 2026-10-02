@@ -333,3 +333,21 @@ function crm_v3_valor_incluye_termino($valor, $term_id) {
     return false;
 }
 
+
+/**
+ * Título de un registro como texto plano.
+ *
+ * Para enviarlo por AJAX: sin etiquetas y sin entidades HTML,
+ * de modo que el navegador lo escape al mostrarlo.
+ */
+function crm_v3_titulo_plano($post_id) {
+
+    return wp_strip_all_tags(
+        html_entity_decode(
+            (string) get_the_title($post_id),
+            ENT_QUOTES,
+            'UTF-8'
+        )
+    );
+}
+

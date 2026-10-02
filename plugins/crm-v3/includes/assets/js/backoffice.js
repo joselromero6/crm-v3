@@ -1,5 +1,21 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    /*
+     * Escapa un valor antes de insertarlo como HTML.
+     */
+    function esc(valor) {
+
+        const div = document.createElement('div');
+
+        div.textContent =
+            valor === null || valor === undefined
+                ? ''
+                : String(valor);
+
+        return div.innerHTML;
+    }
+
+
     const counters = document.querySelectorAll(
         '.crm-bo-client-counter'
     );
@@ -193,50 +209,50 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="crm-bo-client-summary">
 
                         <div class="crm-bo-client-summary-header">
-                            <strong>${cliente.nombre}</strong>
-                            <span>${cliente.tipo}</span>
+                            <strong>${esc(cliente.nombre)}</strong>
+                            <span>${esc(cliente.tipo)}</span>
                         </div>
 
                         <div class="crm-bo-client-summary-data">
 
                             <div>
                                 <small>Estatus</small>
-                                <strong>${cliente.estatus}</strong>
+                                <strong>${esc(cliente.estatus)}</strong>
                             </div>
 
                             <div>
                                 <small>Prioridad</small>
-                                <strong>${cliente.prioridad}</strong>
+                                <strong>${esc(cliente.prioridad)}</strong>
                             </div>
 
                             <div>
                                 <small>Origen</small>
-                                <strong>${cliente.origen_lead}</strong>
+                                <strong>${esc(cliente.origen_lead)}</strong>
                             </div>
 
                             <div>
                                 <small>Relación comercial</small>
-                                <strong>${cliente.relacion_comercial}</strong>
+                                <strong>${esc(cliente.relacion_comercial)}</strong>
                             </div>
 
                             <div>
                                 <small>Origen de recursos</small>
-                                <strong>${cliente.origen_recursos}</strong>
+                                <strong>${esc(cliente.origen_recursos)}</strong>
                             </div>
 
                             <div>
                                 <small>Tipo de crédito</small>
-                                <strong>${cliente.tipo_credito}</strong>
+                                <strong>${esc(cliente.tipo_credito)}</strong>
                             </div>
 
                             <div>
                                 <small>Presupuesto</small>
-                                <strong>${cliente.presupuesto}</strong>
+                                <strong>${esc(cliente.presupuesto)}</strong>
                             </div>
 
                             <div>
                                 <small>Adeudo hipoteca</small>
-                                <strong>${cliente.adeudo_hipoteca}</strong>
+                                <strong>${esc(cliente.adeudo_hipoteca)}</strong>
                             </div>
 
                         </div>
@@ -280,27 +296,27 @@ document.addEventListener('DOMContentLoaded', function () {
                             <div class="crm-bo-client-property">
 
                                 <strong>
-                                    ${propiedad.nombre}
+                                    ${esc(propiedad.nombre)}
                                 </strong>
 
                                 <span>
-                                    ${propiedad.tipo}
+                                    ${esc(propiedad.tipo)}
                                 </span>
 
                                 <span>
-                                    ${propiedad.colonia}
+                                    ${esc(propiedad.colonia)}
                                 </span>
 
                                 <span>
-                                    ${propiedad.ciudad}
+                                    ${esc(propiedad.ciudad)}
                                 </span>
 
                                 <span>
-                                    ${propiedad.precio_venta}
+                                    ${esc(propiedad.precio_venta)}
                                 </span>
 
                                 <span>
-                                    ${propiedad.estatus}
+                                    ${esc(propiedad.estatus)}
                                 </span>
 
                             </div>
@@ -340,37 +356,37 @@ document.addEventListener('DOMContentLoaded', function () {
                             <div class="crm-bo-client-operation">
 
                                 <strong>
-                                    ${operacion.nombre}
+                                    ${esc(operacion.nombre)}
                                 </strong>
 
                                 <span>
                                     Propiedad:
-                                    ${operacion.propiedad}
+                                    ${esc(operacion.propiedad)}
                                 </span>
 
                                 <span>
                                     Comprador:
-                                    ${operacion.comprador}
+                                    ${esc(operacion.comprador)}
                                 </span>
 
                                 <span>
                                     Estatus:
-                                    ${operacion.estatus}
+                                    ${esc(operacion.estatus)}
                                 </span>
 
                                 <span>
                                     Valor mercado:
-                                    ${operacion.valor_mercado}
+                                    ${esc(operacion.valor_mercado)}
                                 </span>
 
                                 <span>
                                     Precio cierre:
-                                    ${operacion.precio_cierre}
+                                    ${esc(operacion.precio_cierre)}
                                 </span>
 
                                 <span>
                                     Fecha cierre:
-                                    ${operacion.fecha_cierre}
+                                    ${esc(operacion.fecha_cierre)}
                                 </span>
 
                             </div>
@@ -665,7 +681,7 @@ if (
 
         html +=
             '<div class="crm-v3-mercado-comparable-title">' +
-            propiedad.nombre +
+            esc(propiedad.nombre) +
             '</div>';
 
         html +=
@@ -675,7 +691,7 @@ if (
             '<div>' +
                 '<small>Fecha</small>' +
                 '<strong>' +
-                    (propiedad.fecha || '—') +
+                    esc(propiedad.fecha || '—') +
                 '</strong>' +
             '</div>';
 
@@ -683,7 +699,7 @@ if (
             '<div>' +
                 '<small>Terreno</small>' +
                 '<strong>' +
-                    (propiedad.m2_terreno || '—') +
+                    esc(propiedad.m2_terreno || '—') +
                     ' m²' +
                 '</strong>' +
             '</div>';
@@ -692,7 +708,7 @@ if (
             '<div>' +
                 '<small>Construcción</small>' +
                 '<strong>' +
-                    (propiedad.m2_construccion || '—') +
+                    esc(propiedad.m2_construccion || '—') +
                     ' m²' +
                 '</strong>' +
             '</div>';
@@ -701,7 +717,7 @@ if (
             '<div>' +
                 '<small>Valor catastral</small>' +
                 '<strong>' +
-                    (propiedad.valor_catastral || '—') +
+                    esc(propiedad.valor_catastral || '—') +
                 '</strong>' +
             '</div>';
 
@@ -709,7 +725,7 @@ if (
             '<div>' +
                 '<small>Precio venta</small>' +
                 '<strong>' +
-                    (propiedad.precio_venta || '—') +
+                    esc(propiedad.precio_venta || '—') +
                 '</strong>' +
             '</div>';
 
@@ -717,7 +733,7 @@ if (
             '<div>' +
                 '<small>Valor mercado</small>' +
                 '<strong>' +
-                    (propiedad.valor_mercado || '—') +
+                    esc(propiedad.valor_mercado || '—') +
                 '</strong>' +
             '</div>';
 

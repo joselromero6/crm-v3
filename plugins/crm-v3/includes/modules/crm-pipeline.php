@@ -469,7 +469,7 @@ function crm_v3_pipeline_editor_operacion($operacion_id) {
     ?>
 
 
-</================== DATOS DE OPERACION FICHA DEL CLIENTE ===============/>
+<!-- ================== DATOS DE OPERACION FICHA DEL CLIENTE =============== -->
 
         <div class="crm-v3-operacion-editor crm-v3-operacion-editor-layout">
 
@@ -496,6 +496,16 @@ function crm_v3_pipeline_editor_operacion($operacion_id) {
     ); ?>"
 >
 
+
+        <input
+            type="hidden"
+            name="propiedad_id"
+            value="<?php echo esc_attr(
+                isset($_GET['propiedad_id'])
+                    ? absint($_GET['propiedad_id'])
+                    : 0
+            ); ?>"
+        >
 
             <?php
             wp_nonce_field(
@@ -836,7 +846,7 @@ function crm_v3_actualizar_operacion_desde_ficha() {
     }
 
     if (
-        !current_user_can('edit_posts')
+        !current_user_can('manage_options')
     ) {
         return;
     }
@@ -847,7 +857,10 @@ function crm_v3_actualizar_operacion_desde_ficha() {
         ? absint($_POST['crm_v3_operacion_id'])
         : 0;
 
-    if (!$operacion_id) {
+    if (
+        !$operacion_id ||
+        get_post_type($operacion_id) !== 'operaciones'
+    ) {
         return;
     }
 
@@ -1050,11 +1063,24 @@ $cliente_id = isset($_POST['cliente_id'])
 
 if ($cliente_id) {
 
+    $redirect_args = array(
+        'page'       => 'crm-ficha-cliente',
+        'cliente_id' => $cliente_id,
+    );
+
+    /*
+     * Regresar a la misma propiedad que se estaba viendo.
+     */
+    $propiedad_id = isset($_POST['propiedad_id'])
+        ? absint($_POST['propiedad_id'])
+        : 0;
+
+    if ($propiedad_id) {
+        $redirect_args['propiedad_id'] = $propiedad_id;
+    }
+
     $redirect_url = add_query_arg(
-        array(
-            'page'       => 'crm-ficha-cliente',
-            'cliente_id' => $cliente_id,
-        ),
+        $redirect_args,
         admin_url('admin.php')
     );
 

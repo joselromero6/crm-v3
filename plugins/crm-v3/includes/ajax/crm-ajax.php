@@ -538,7 +538,7 @@ function crm_v3_ajax_backoffice_mercado_propiedades() {
                 $propiedad_id,
 
             'nombre' =>
-                get_the_title(
+                crm_v3_titulo_plano(
                     $propiedad_id
                 ),
 
@@ -728,7 +728,7 @@ function crm_v3_ajax_backoffice_cliente_resumen() {
 
         $propiedades[] = [
             'id'              => $propiedad_id,
-            'nombre'          => get_the_title($propiedad_id),
+            'nombre'          => crm_v3_titulo_plano($propiedad_id),
             'tipo'            => !empty($tipo_propiedad)
                 ? implode(', ', $tipo_propiedad)
                 : '—',
@@ -851,16 +851,16 @@ function crm_v3_ajax_backoffice_cliente_resumen() {
         $operaciones[] = [
             'id' => $operacion_id,
 
-            'nombre' => get_the_title(
+            'nombre' => crm_v3_titulo_plano(
                 $operacion_id
             ),
 
             'propiedad' => $propiedad_id
-                ? get_the_title($propiedad_id)
+                ? crm_v3_titulo_plano($propiedad_id)
                 : '—',
             
                 'comprador' => $comprador_id
-                ? get_the_title($comprador_id)
+                ? crm_v3_titulo_plano($comprador_id)
                 : '—',    
 
             'estatus' => crm_v3_display_value(
@@ -898,7 +898,7 @@ function crm_v3_ajax_backoffice_cliente_resumen() {
     wp_send_json_success([
         'cliente' => [
             'id'                  => $cliente_id,
-            'nombre'              => get_the_title($cliente_id),
+            'nombre'              => crm_v3_titulo_plano($cliente_id),
             'tipo'                => crm_v3_display_value($tipo_cliente),
             'estatus'             => crm_v3_display_value($estatus),
             'prioridad'           => crm_v3_display_value($prioridad),
