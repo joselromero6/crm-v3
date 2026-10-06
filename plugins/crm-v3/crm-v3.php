@@ -87,6 +87,9 @@ function crm_v3_assets_por_pantalla() {
             'css' => array(
                 'crm-v3-catalogos' => array('catalogos.css', array()),
             ),
+            'js' => array(
+                'crm-v3-catalogos' => array('catalogos.js', array()),
+            ),
         ),
 
         'crm-v3-cibr' => array(
