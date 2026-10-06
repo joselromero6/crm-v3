@@ -576,3 +576,26 @@ function crm_v3_estatus_ultima_operacion_por_propiedad() {
 
     return $resultado;
 }
+
+
+/**
+ * Agregar al final de un fragmento de HTML los cierres de formulario
+ * y de bloque que le falten. No cambia nada de lo ya escrito.
+ */
+function crm_v3_cerrar_etiquetas_abiertas($html) {
+
+    $html = (string) $html;
+
+    foreach (array('form', 'div') as $etiqueta) {
+
+        $faltan =
+            preg_match_all('/<' . $etiqueta . '\b/i', $html) -
+            preg_match_all('/<\/' . $etiqueta . '\s*>/i', $html);
+
+        if ($faltan > 0) {
+            $html .= str_repeat('</' . $etiqueta . '>', $faltan);
+        }
+    }
+
+    return $html;
+}
