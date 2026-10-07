@@ -750,13 +750,37 @@ function crm_v3_pipeline_editor_operacion($operacion_id) {
          CÁLCULO DE ISR
          ===================================================== -->
 
+    <?php
+    // Formulario de la tarjeta del comprador. Debe ir antes del ISR
+    // (ver crm-analisis-comprador.php).
+    if (function_exists('crm_v3_comprador_formulario')) {
+        crm_v3_comprador_formulario($operacion_id);
+    }
+    ?>
+
     <div class="crm-v3-operacion-isr">
 
         <?php
 
         if (function_exists('crm_v3_isr_operacion')) {
 
+            // El módulo de ISR (todavía a prueba) deja abiertos un
+            // formulario y un bloque. Se cierran aquí, sin tocar el
+            // módulo, para que lo que sigue no quede metido dentro.
+            ob_start();
+
             crm_v3_isr_operacion(
+                $operacion_id
+            );
+
+            echo crm_v3_cerrar_etiquetas_abiertas(ob_get_clean());
+
+        }
+
+        // Análisis financiero del comprador, debajo del ISR.
+        if (function_exists('crm_v3_analisis_comprador')) {
+
+            crm_v3_analisis_comprador(
                 $operacion_id
             );
 

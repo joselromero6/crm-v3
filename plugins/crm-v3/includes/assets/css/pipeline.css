@@ -313,3 +313,47 @@
     }
 
 }
+
+/* =========================================================
+   ANÁLISIS FINANCIERO CLIENTE COMPRADOR
+   (tarjeta debajo del cálculo de ISR; usa el estilo del ISR)
+   ========================================================= */
+
+.crm-v3-comprador {
+    margin-top: 10px;
+}
+
+.crm-v3-comprador-campo {
+    display: block;
+    cursor: text;
+}
+
+.crm-v3-comprador-campo input[type="number"] {
+    width: 100%;
+    max-width: none;
+    min-height: 26px;
+    margin: 2px 0 0;
+    padding: 2px 6px;
+    border: 1px solid #c3ccd3;
+    border-radius: 3px;
+    background: #fff;
+    color: #1d2327;
+    font-size: 12px;
+    font-weight: 600;
+    box-sizing: border-box;
+}
+
+.crm-v3-comprador-total {
+    grid-column: 1 / -1;
+}
+
+.crm-v3-comprador-acciones {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 10px;
+    border-top: 1px solid #d9dde1;
+    color: #6b7780;
+    font-size: 11px;
+}

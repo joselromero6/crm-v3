@@ -47,6 +47,9 @@ function crm_v3_assets_por_pantalla() {
                 'crm-v3-pipeline'            => array('pipeline.css', array('crm-v3-ficha-cliente')),
                 'crm-v3-analisis-financiero' => array('analisis-financiero.css', array('crm-v3-pipeline', 'crm-v3-isr')),
             ),
+            'js' => array(
+                'crm-v3-analisis-comprador' => array('analisis-comprador.js', array()),
+            ),
         ),
 
         'crm-clientes' => array(
@@ -254,6 +257,7 @@ require_once CRM_V3_PATH . 'includes/modules/crm-ficha-cliente.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-expediente.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-analisis-financiero.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-isr.php';
+require_once CRM_V3_PATH . 'includes/modules/crm-analisis-comprador.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-analisis-mercado.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-pipeline.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-propiedades.php';

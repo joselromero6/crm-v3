@@ -254,6 +254,52 @@
             "append": ""
         },
         {
+            "key": "field_6b01c0a1e5a01",
+            "label": "Costo del avalúo",
+            "name": "costo_avaluo",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Lo paga el comprador. Se captura en la ficha del cliente.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": 0,
+            "max": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "step": "",
+            "prepend": "$",
+            "append": ""
+        },
+        {
+            "key": "field_6b01c0a1e5a02",
+            "label": "Gastos de impuestos y derechos",
+            "name": "gastos_impuestos_derechos",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Gastos de escrituración del comprador. Se captura en la ficha del cliente.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": 0,
+            "max": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "step": "",
+            "prepend": "$",
+            "append": ""
+        },
+        {
             "key": "field_6a778946ec49c",
             "label": "Fecha cierre",
             "name": "fecha_cierre",
@@ -325,5 +371,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1787083834
+    "modified": 1791330010
 }
