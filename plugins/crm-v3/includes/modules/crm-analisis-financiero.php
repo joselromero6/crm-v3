@@ -7,6 +7,190 @@ if (!defined('ABSPATH')) {
 
 /**
  * ============================================================
+ * ALERTAS DEL ANÁLISIS FINANCIERO
+ * ============================================================
+ *
+ * Revisa los números de la operación y devuelve las situaciones
+ * con las que hay que tener cuidado. Cada alerta indica en qué
+ * tarjeta se muestra, su nivel ("rojo" = problema, "ambar" =
+ * precaución), un título y la explicación que aparece al pasar
+ * el mouse.
+ *
+ * Los textos fiscales son orientativos: la determinación final
+ * la hace el notario.
+ */
+function crm_v3_financiero_alertas($d) {
+
+    $alertas = array();
+
+    $dinero = function ($valor) {
+        return '$' . number_format((float) $valor, 2);
+    };
+
+    $avaluo    = (float) $d['valor_mercado'];
+    $cierre    = (float) $d['precio_cierre'];
+    $catastral = (float) $d['valor_catastral'];
+
+    /*
+     * 1. AVALÚO vs PRECIO (regla del 10%, art. 125 LISR)
+     *
+     * La ley compara cuánto excede el avalúo al precio pactado,
+     * medido sobre el precio: (avalúo - precio) / precio.
+     */
+    if ($avaluo > 0 && $cierre > 0 && $avaluo > $cierre) {
+
+        $diferencia = $avaluo - $cierre;
+        $exceso     = ($diferencia / $cierre) * 100;
+
+        if ($exceso > 10) {
+
+            $alertas['mercado_cierre'] = array(
+                'nivel'  => 'rojo',
+                'titulo' => 'El avalúo supera al precio en más de 10%',
+                'texto'  => array(
+                    'El avalúo (' . $dinero($avaluo) . ') es ' . number_format($exceso, 2) . '% mayor que el precio de cierre (' . $dinero($cierre) . '). La ley mide la diferencia contra el precio; por eso este porcentaje es distinto al de la tarjeta, que compara contra el avalúo.',
+                    'Cuando el avalúo excede en más de 10% el precio pactado, el SAT considera TODA la diferencia como ingreso del comprador (art. 125 de la Ley del ISR). El notario le retiene 20% sobre esa diferencia (art. 132).',
+                    'Diferencia: ' . $dinero($diferencia) . '. ISR estimado a cargo del comprador: ' . $dinero($diferencia * 0.20) . '.',
+                    'Para no rebasar el límite, el precio tendría que ser de al menos ' . $dinero($avaluo / 1.10) . '.',
+                    'Estimación orientativa: confírmala con el notario.',
+                ),
+            );
+
+        } elseif ($exceso >= 8) {
+
+            $alertas['mercado_cierre'] = array(
+                'nivel'  => 'ambar',
+                'titulo' => 'Cerca del límite de 10% entre avalúo y precio',
+                'texto'  => array(
+                    'El avalúo (' . $dinero($avaluo) . ') es ' . number_format($exceso, 2) . '% mayor que el precio de cierre (' . $dinero($cierre) . ').',
+                    'Si la diferencia pasa de 10%, el SAT la considera ingreso del comprador y se le retiene 20% de ISR sobre toda la diferencia (arts. 125 y 132 de la Ley del ISR).',
+                    'Precio mínimo para no rebasar el límite: ' . $dinero($avaluo / 1.10) . '.',
+                ),
+            );
+        }
+    }
+
+    /*
+     * 2. PRECIO DE CIERRE contra avalúo y contra valor catastral
+     */
+    if ($cierre > 0 && $avaluo > 0 && $cierre > $avaluo) {
+
+        $alertas['precio_cierre'] = array(
+            'nivel'  => 'ambar',
+            'titulo' => 'El precio es mayor que el avalúo',
+            'texto'  => array(
+                'El precio de cierre (' . $dinero($cierre) . ') supera al avalúo (' . $dinero($avaluo) . ') por ' . $dinero($cierre - $avaluo) . '.',
+                'Si el comprador usa crédito, el banco, Infonavit o Fovissste prestan sobre el valor más bajo. Esa diferencia la tendría que cubrir el comprador con recursos propios.',
+            ),
+        );
+
+    } elseif ($cierre > 0 && $catastral > 0 && $cierre < $catastral) {
+
+        $alertas['precio_cierre'] = array(
+            'nivel'  => 'ambar',
+            'titulo' => 'El precio es menor que el valor catastral',
+            'texto'  => array(
+                'El precio de cierre (' . $dinero($cierre) . ') está por debajo del valor catastral (' . $dinero($catastral) . ').',
+                'El impuesto de transmisión patrimonial y los derechos se calculan sobre el valor más alto (precio, avalúo o catastral), así que no bajan aunque baje el precio.',
+                'Un precio por debajo del catastral también puede provocar una revisión de la autoridad.',
+            ),
+        );
+    }
+
+    /*
+     * 3. ADEUDOS DE LA PROPIEDAD
+     */
+    $adeudos = array(
+        'adeudo_agua'    => 'agua',
+        'adeudo_predial' => 'predial',
+    );
+
+    foreach ($adeudos as $clave => $nombre) {
+
+        if ((float) $d[$clave] > 0) {
+
+            $alertas[$clave] = array(
+                'nivel'  => 'ambar',
+                'titulo' => 'Adeudo de ' . $nombre . ' pendiente',
+                'texto'  => array(
+                    'La propiedad debe ' . $dinero($d[$clave]) . ' de ' . $nombre . '.',
+                    'Para escriturar, el notario pide la constancia de no adeudo. Hay que liquidarlo antes de la firma o acordar que se descuente del precio.',
+                ),
+            );
+        }
+    }
+
+    /*
+     * 4. MONTO QUE RECIBE EL VENDEDOR
+     */
+    if ($d['monto_a_recibir'] !== null && (float) $d['monto_a_recibir'] < 0) {
+
+        $alertas['monto_a_recibir'] = array(
+            'nivel'  => 'rojo',
+            'titulo' => 'El precio no alcanza para cubrir hipoteca y gastos',
+            'texto'  => array(
+                'Después de pagar la hipoteca y los gastos conocidos, al vendedor le faltarían ' . $dinero(abs((float) $d['monto_a_recibir'])) . '.',
+                'Tendría que aportar esa cantidad para poder liberar la hipoteca y escriturar, o renegociar el precio.',
+            ),
+        );
+    }
+
+    return $alertas;
+}
+
+
+/**
+ * Clases y atributos de una tarjeta que tiene alerta.
+ * Se escribe dentro de class="…" de la tarjeta.
+ */
+function crm_v3_financiero_alerta_clase($alertas, $clave) {
+
+    return isset($alertas[$clave])
+        ? ' crm-v3-alerta crm-v3-alerta-' . $alertas[$clave]['nivel']
+        : '';
+}
+
+
+/**
+ * Atributos extra de la tarjeta con alerta (para poder llegar a
+ * ella con el teclado y para lectores de pantalla).
+ */
+function crm_v3_financiero_alerta_atributos($alertas, $clave) {
+
+    if (!isset($alertas[$clave])) {
+        return '';
+    }
+
+    return ' tabindex="0" title="' . esc_attr(
+        $alertas[$clave]['titulo'] . '. ' . implode(' ', $alertas[$clave]['texto'])
+    ) . '"';
+}
+
+
+/**
+ * Nota de la alerta: es lo que se muestra al pasar el mouse.
+ */
+function crm_v3_financiero_alerta_nota($alertas, $clave) {
+
+    if (!isset($alertas[$clave])) {
+        return;
+    }
+
+    $alerta = $alertas[$clave];
+
+    echo '<div class="crm-v3-alerta-nota" hidden>';
+    echo '<b>' . esc_html($alerta['titulo']) . '</b>';
+
+    foreach ($alerta['texto'] as $parrafo) {
+        echo '<p>' . esc_html($parrafo) . '</p>';
+    }
+
+    echo '</div>';
+}
+
+
+/**
+ * ============================================================
  * CRM V3 — ANÁLISIS FINANCIERO
  * ============================================================
  *
@@ -416,6 +600,15 @@ if ($monto_despues_costos !== null) {
      * Mantiene "—" cuando el dato original no existe.
      * ======================================================== */
 
+    $alertas = crm_v3_financiero_alertas(array(
+        'valor_mercado'   => $valor_mercado_num,
+        'precio_cierre'   => $precio_cierre_num,
+        'valor_catastral' => $valor_catastral_num,
+        'adeudo_agua'     => $adeudo_agua_num,
+        'adeudo_predial'  => $adeudo_predial_num,
+        'monto_a_recibir' => $monto_a_recibir,
+    ));
+
     $mostrar_dinero = function ($valor) {
 
         if (
@@ -508,7 +701,10 @@ if ($monto_despues_costos !== null) {
 
                 </div>
 
-                <div class="crm-v3-financiero-item">
+                <div class="crm-v3-financiero-item<?php echo esc_attr(crm_v3_financiero_alerta_clase($alertas, 'precio_cierre')); ?>"<?php echo crm_v3_financiero_alerta_atributos($alertas, 'precio_cierre'); ?>>
+
+                    <?php crm_v3_financiero_alerta_nota($alertas, 'precio_cierre'); ?>
+
 
                     <span>
                         Precio de cierre
@@ -599,7 +795,10 @@ if ($monto_despues_costos !== null) {
                 </div>
 
 
-                <div class="crm-v3-financiero-comparacion">
+                <div class="crm-v3-financiero-comparacion<?php echo esc_attr(crm_v3_financiero_alerta_clase($alertas, 'mercado_cierre')); ?>"<?php echo crm_v3_financiero_alerta_atributos($alertas, 'mercado_cierre'); ?>>
+
+                    <?php crm_v3_financiero_alerta_nota($alertas, 'mercado_cierre'); ?>
+
 
                     <span>
                         Mercado vs Cierre
@@ -648,7 +847,10 @@ if ($monto_despues_costos !== null) {
             <div class="crm-v3-financiero-grid">
 
 
-                <div class="crm-v3-financiero-item">
+                <div class="crm-v3-financiero-item<?php echo esc_attr(crm_v3_financiero_alerta_clase($alertas, 'adeudo_agua')); ?>"<?php echo crm_v3_financiero_alerta_atributos($alertas, 'adeudo_agua'); ?>>
+
+                    <?php crm_v3_financiero_alerta_nota($alertas, 'adeudo_agua'); ?>
+
 
                     <span>
                         Adeudo agua
@@ -665,7 +867,10 @@ if ($monto_despues_costos !== null) {
                 </div>
 
 
-                <div class="crm-v3-financiero-item">
+                <div class="crm-v3-financiero-item<?php echo esc_attr(crm_v3_financiero_alerta_clase($alertas, 'adeudo_predial')); ?>"<?php echo crm_v3_financiero_alerta_atributos($alertas, 'adeudo_predial'); ?>>
+
+                    <?php crm_v3_financiero_alerta_nota($alertas, 'adeudo_predial'); ?>
+
 
                     <span>
                         Adeudo predial
@@ -811,7 +1016,10 @@ if ($monto_despues_costos !== null) {
 
         <!-- MONTO A RECIBIR -->
 
-        <div class="crm-v3-financiero-item">
+        <div class="crm-v3-financiero-item<?php echo esc_attr(crm_v3_financiero_alerta_clase($alertas, 'monto_a_recibir')); ?>"<?php echo crm_v3_financiero_alerta_atributos($alertas, 'monto_a_recibir'); ?>>
+
+                    <?php crm_v3_financiero_alerta_nota($alertas, 'monto_a_recibir'); ?>
+
 
             <span>
                 Monto a recibir

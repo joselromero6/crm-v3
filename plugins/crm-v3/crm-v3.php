@@ -49,6 +49,7 @@ function crm_v3_assets_por_pantalla() {
             ),
             'js' => array(
                 'crm-v3-analisis-comprador' => array('analisis-comprador.js', array()),
+                'crm-v3-alertas-financieras' => array('alertas-financieras.js', array()),
             ),
         ),
 

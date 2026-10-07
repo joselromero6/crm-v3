@@ -366,3 +366,107 @@ strong {
     }
 
 }
+
+/* ============================================================
+ * ALERTAS
+ *
+ * Una tarjeta con alerta cambia de color y muestra una nota
+ * al pasar el mouse (o al tocarla / enfocarla con el teclado).
+ * rojo = problema · ámbar = precaución
+ * ============================================================ */
+
+.crm-v3-alerta {
+    position: relative;
+    cursor: help;
+}
+
+.crm-v3-alerta::after {
+    content: "!";
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 14px;
+    text-align: center;
+}
+
+.crm-v3-alerta:focus {
+    outline: 2px solid #1d4f7a;
+    outline-offset: 1px;
+}
+
+/* Rojo */
+.crm-v3-financiero-item.crm-v3-alerta-rojo,
+.crm-v3-financiero-comparaciones .crm-v3-financiero-comparacion.crm-v3-alerta-rojo {
+    background: #fdecea;
+    border-color: #e5a19a;
+}
+
+.crm-v3-financiero-item.crm-v3-alerta-rojo strong,
+.crm-v3-financiero-comparaciones .crm-v3-financiero-comparacion.crm-v3-alerta-rojo strong {
+    color: #c62828;
+}
+
+.crm-v3-alerta-rojo::after {
+    background: #c62828;
+}
+
+/* Ámbar */
+.crm-v3-financiero-item.crm-v3-alerta-ambar,
+.crm-v3-financiero-comparaciones .crm-v3-financiero-comparacion.crm-v3-alerta-ambar {
+    background: #fff6e0;
+    border-color: #e6c36a;
+}
+
+.crm-v3-financiero-item.crm-v3-alerta-ambar strong,
+.crm-v3-financiero-comparaciones .crm-v3-financiero-comparacion.crm-v3-alerta-ambar strong {
+    color: #9a6700;
+}
+
+.crm-v3-alerta-ambar::after {
+    background: #c98a00;
+}
+
+/* Nota flotante (la coloca alertas-financieras.js) */
+.crm-v3-alerta-flotante {
+    position: fixed;
+    z-index: 100000;
+    width: 340px;
+    max-width: calc(100vw - 24px);
+    padding: 12px 14px;
+    border-radius: 8px;
+    border-left: 4px solid #c62828;
+    background: #1f2933;
+    color: #f5f7fa;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: left;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .28);
+    pointer-events: none;
+}
+
+.crm-v3-alerta-flotante.is-ambar {
+    border-left-color: #e0a100;
+}
+
+.crm-v3-alerta-flotante b {
+    display: block;
+    margin-bottom: 6px;
+    color: #fff;
+    font-size: 13px;
+}
+
+.crm-v3-alerta-flotante p {
+    margin: 0 0 6px;
+    color: #e4e7eb;
+    font-size: 12px;
+}
+
+.crm-v3-alerta-flotante p:last-child {
+    margin-bottom: 0;
+}
