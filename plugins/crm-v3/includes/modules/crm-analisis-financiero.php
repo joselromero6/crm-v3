@@ -46,10 +46,10 @@ function crm_v3_financiero_alertas($d) {
 
             $alertas['mercado_cierre'] = array(
                 'nivel'  => 'rojo',
-                'titulo' => 'El avalúo supera al precio en más de 10%',
+                'titulo' => 'El valor de mercado supera al precio de cierre en más de 10%',
                 'texto'  => array(
-                    'El avalúo (' . $dinero($avaluo) . ') es ' . number_format($exceso, 2) . '% mayor que el precio de cierre (' . $dinero($cierre) . '). La ley mide la diferencia contra el precio; por eso este porcentaje es distinto al de la tarjeta, que compara contra el avalúo.',
-                    'Cuando el avalúo excede en más de 10% el precio pactado, el SAT considera TODA la diferencia como ingreso del comprador (art. 125 de la Ley del ISR). El notario le retiene 20% sobre esa diferencia (art. 132).',
+                    'El valor de mercado del avalúo (' . $dinero($avaluo) . ') es ' . number_format($exceso, 2) . '% mayor que el precio de cierre (' . $dinero($cierre) . '). El límite es 10%.',
+                    'Cuando el valor del avalúo excede en más de 10% el precio pactado, el SAT considera TODA la diferencia como ingreso del comprador (art. 125 de la Ley del ISR). El notario le retiene 20% sobre esa diferencia (art. 132).',
                     'Diferencia: ' . $dinero($diferencia) . '. ISR estimado a cargo del comprador: ' . $dinero($diferencia * 0.20) . '.',
                     'Para no rebasar el límite, el precio tendría que ser de al menos ' . $dinero($avaluo / 1.10) . '.',
                     'Estimación orientativa: confírmala con el notario.',
@@ -60,9 +60,9 @@ function crm_v3_financiero_alertas($d) {
 
             $alertas['mercado_cierre'] = array(
                 'nivel'  => 'ambar',
-                'titulo' => 'Cerca del límite de 10% entre avalúo y precio',
+                'titulo' => 'Cerca del límite de 10% entre valor de mercado y precio de cierre',
                 'texto'  => array(
-                    'El avalúo (' . $dinero($avaluo) . ') es ' . number_format($exceso, 2) . '% mayor que el precio de cierre (' . $dinero($cierre) . ').',
+                    'El valor de mercado del avalúo (' . $dinero($avaluo) . ') es ' . number_format($exceso, 2) . '% mayor que el precio de cierre (' . $dinero($cierre) . '). El límite es 10%.',
                     'Si la diferencia pasa de 10%, el SAT la considera ingreso del comprador y se le retiene 20% de ISR sobre toda la diferencia (arts. 125 y 132 de la Ley del ISR).',
                     'Precio mínimo para no rebasar el límite: ' . $dinero($avaluo / 1.10) . '.',
                 ),
@@ -77,9 +77,9 @@ function crm_v3_financiero_alertas($d) {
 
         $alertas['precio_cierre'] = array(
             'nivel'  => 'ambar',
-            'titulo' => 'El precio es mayor que el avalúo',
+            'titulo' => 'El precio de cierre es mayor que el valor de mercado',
             'texto'  => array(
-                'El precio de cierre (' . $dinero($cierre) . ') supera al avalúo (' . $dinero($avaluo) . ') por ' . $dinero($cierre - $avaluo) . '.',
+                'El precio de cierre (' . $dinero($cierre) . ') supera al valor de mercado del avalúo (' . $dinero($avaluo) . ') por ' . $dinero($cierre - $avaluo) . '.',
                 'Si el comprador usa crédito, el banco, Infonavit o Fovissste prestan sobre el valor más bajo. Esa diferencia la tendría que cubrir el comprador con recursos propios.',
             ),
         );
@@ -555,6 +555,22 @@ if ($valor_mercado_num > 0 && $precio_cierre_num > 0) {
     // Es el mismo cálculo que "precio de cierre vs valor de mercado".
     $desviacion_mercado = $comparacion_cierre_mercado;
 
+    /*
+     * MERCADO vs CIERRE (tarjeta de comparación)
+     *
+     * Cuánto excede el valor de mercado del avalúo al precio de
+     * cierre, medido contra el precio. Es la forma en que la ley
+     * mide el límite del 10% (art. 125 LISR), así la tarjeta y su
+     * alerta muestran el mismo número.
+     */
+    $mercado_sobre_cierre = null;
+
+    if ($valor_mercado_num > 0 && $precio_cierre_num > 0) {
+
+        $mercado_sobre_cierre =
+            (($valor_mercado_num - $precio_cierre_num) / $precio_cierre_num) * 100;
+    }
+
 
 /* ========================================================
  * MONTO A RECIBIR
@@ -808,14 +824,14 @@ if ($monto_despues_costos !== null) {
 
                         <?php
                         echo esc_html(
-                            $comparacion_cierre_mercado !== null
+                            $mercado_sobre_cierre !== null
                                 ? (
-                                    $comparacion_cierre_mercado >= 0
+                                    $mercado_sobre_cierre >= 0
                                         ? '+'
                                         : ''
                                 )
                                 . number_format(
-                                    $comparacion_cierre_mercado,
+                                    $mercado_sobre_cierre,
                                     2
                                 )
                                 . '%'
