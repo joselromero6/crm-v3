@@ -73,23 +73,51 @@ function crm_v3_financiero_alertas($d) {
     /*
      * 1-b. CATASTRAL vs MERCADO (solo referencia)
      *
-     * Por experiencia, el valor de mercado suele estar alrededor de
-     * 60% por encima del valor catastral. Varía por zona, antigüedad
-     * y por qué tan actualizado tiene el municipio su catastro.
+     * Referencia de mercado: el valor catastral suele equivaler entre
+     * 40% y 70% del valor comercial; lo típico, alrededor de 60%.
+     * En Zapopan el catastral se fija con 25% de descuento sobre el
+     * precio de mercado (≈ 75%). Fuentes: Spot2; acta del Consejo
+     * Técnico Catastral de Zapopan, 21/04/2026.
      */
-    $referencia = (float) apply_filters('crm_v3_referencia_catastral_mercado', 60);
+    $referencia = apply_filters(
+        'crm_v3_referencia_catastral_mercado',
+        array(
+            'minimo'  => 40,
+            'maximo'  => 70,
+            'tipico'  => 60,
+            'zapopan' => 75,
+        )
+    );
 
     if ($catastral > 0 && $avaluo > 0) {
 
         $porcentaje = (($avaluo - $catastral) / $catastral) * 100;
 
+        // Qué parte del valor de mercado representa el catastral.
+        $proporcion = ($catastral / $avaluo) * 100;
+
+        // Cuánto marcaría la tarjeta con cada referencia.
+        $tarjeta_con = function ($proporcion_referencia) {
+            return '+' . number_format((100 / $proporcion_referencia - 1) * 100, 0) . '%';
+        };
+
+        if ($proporcion < $referencia['minimo']) {
+            $lectura = 'Este caso está fuera del rango: el catastral es bajo para el valor de mercado. Puede ser un catastro desactualizado o un valor de mercado alto; conviene revisar el avalúo.';
+        } elseif ($proporcion > $referencia['maximo']) {
+            $lectura = 'Este caso está por encima del rango: el catastral está muy cerca del valor de mercado. Puede ser un catastro recién actualizado (como en Zapopan) o un valor de mercado bajo.';
+        } else {
+            $lectura = 'Este caso está dentro del rango normal.';
+        }
+
         $alertas['catastral_mercado'] = array(
             'nivel'  => 'info',
             'titulo' => 'Valor de mercado frente al catastral',
             'texto'  => array(
-                'El valor de mercado (' . $dinero($avaluo) . ') está ' . number_format($porcentaje, 2) . '% ' . ($porcentaje >= 0 ? 'por encima' : 'por debajo') . ' del valor catastral (' . $dinero($catastral) . ').',
-                'Referencia: por lo general el valor de mercado está alrededor de ' . number_format($referencia, 0) . '% por encima del catastral. Con esa referencia, el valor de mercado sería de unos ' . $dinero($catastral * (1 + $referencia / 100)) . '.',
-                'Es solo una referencia: depende de la zona, la antigüedad del inmueble y qué tan actualizado está el catastro del municipio.',
+                'El valor de mercado (' . $dinero($avaluo) . ') está ' . number_format($porcentaje, 2) . '% ' . ($porcentaje >= 0 ? 'por encima' : 'por debajo') . ' del valor catastral (' . $dinero($catastral) . '). Dicho de otra forma, el catastral equivale al ' . number_format($proporcion, 1) . '% del valor de mercado.',
+                'Referencia: el valor catastral suele equivaler entre ' . $referencia['minimo'] . '% y ' . $referencia['maximo'] . '% del valor de mercado; lo típico es alrededor de ' . $referencia['tipico'] . '% (la tarjeta marcaría ' . $tarjeta_con($referencia['tipico']) . '). En Zapopan se fija alrededor del ' . $referencia['zapopan'] . '% (la tarjeta marcaría ' . $tarjeta_con($referencia['zapopan']) . ').',
+                $lectura,
+                'Con la referencia típica, el valor de mercado sería de unos ' . $dinero($catastral / ($referencia['tipico'] / 100)) . '.',
+                'Es solo una referencia: cada municipio actualiza su catastro a su ritmo y el valor depende de la zona y la antigüedad del inmueble.',
             ),
         );
     }
