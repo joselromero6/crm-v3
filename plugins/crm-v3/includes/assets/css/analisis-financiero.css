@@ -470,3 +470,15 @@ strong {
 .crm-v3-alerta-flotante p:last-child {
     margin-bottom: 0;
 }
+
+/* Informativa: no cambia el color de la tarjeta, solo muestra la nota */
+.crm-v3-alerta-info::after {
+    content: "i";
+    background: #7f97ad;
+    font-family: Georgia, serif;
+    font-style: italic;
+}
+
+.crm-v3-alerta-flotante.is-info {
+    border-left-color: #5b8db8;
+}
