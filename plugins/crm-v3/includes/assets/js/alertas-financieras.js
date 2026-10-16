@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         flotante.innerHTML = nota.innerHTML;
         flotante.classList.toggle('is-ambar', tarjeta.classList.contains('crm-v3-alerta-ambar'));
+        flotante.classList.toggle('is-info', tarjeta.classList.contains('crm-v3-alerta-info'));
         flotante.hidden = false;
 
         // Debajo de la tarjeta; si no cabe, arriba.

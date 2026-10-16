@@ -71,7 +71,92 @@ function crm_v3_financiero_alertas($d) {
     }
 
     /*
-     * 2. PRECIO DE CIERRE contra avalúo y contra valor catastral
+     * 1-b. CATASTRAL vs MERCADO (solo referencia)
+     *
+     * Referencia de mercado: el valor catastral suele equivaler entre
+     * 40% y 70% del valor comercial; lo típico, alrededor de 60%.
+     * En Zapopan el catastral se fija con 25% de descuento sobre el
+     * precio de mercado (≈ 75%). Fuentes: Spot2; acta del Consejo
+     * Técnico Catastral de Zapopan, 21/04/2026.
+     */
+    $referencia = apply_filters(
+        'crm_v3_referencia_catastral_mercado',
+        array(
+            'minimo'  => 40,
+            'maximo'  => 70,
+            'tipico'  => 60,
+            'zapopan' => 75,
+        )
+    );
+
+    if ($catastral > 0 && $avaluo > 0) {
+
+        $porcentaje = (($avaluo - $catastral) / $catastral) * 100;
+
+        // Qué parte del valor de mercado representa el catastral.
+        $proporcion = ($catastral / $avaluo) * 100;
+
+        // Cuánto marcaría la tarjeta con cada referencia.
+        $tarjeta_con = function ($proporcion_referencia) {
+            return '+' . number_format((100 / $proporcion_referencia - 1) * 100, 0) . '%';
+        };
+
+        if ($proporcion < $referencia['minimo']) {
+            $lectura = 'Este caso está fuera del rango: el catastral es bajo para el valor de mercado. Puede ser un catastro desactualizado o un valor de mercado alto; conviene revisar el avalúo.';
+        } elseif ($proporcion > $referencia['maximo']) {
+            $lectura = 'Este caso está por encima del rango: el catastral está muy cerca del valor de mercado. Puede ser un catastro recién actualizado (como en Zapopan) o un valor de mercado bajo.';
+        } else {
+            $lectura = 'Este caso está dentro del rango normal.';
+        }
+
+        $alertas['catastral_mercado'] = array(
+            'nivel'  => 'info',
+            'titulo' => 'Valor de mercado frente al catastral',
+            'texto'  => array(
+                'El valor de mercado (' . $dinero($avaluo) . ') está ' . number_format($porcentaje, 2) . '% ' . ($porcentaje >= 0 ? 'por encima' : 'por debajo') . ' del valor catastral (' . $dinero($catastral) . '). Dicho de otra forma, el catastral equivale al ' . number_format($proporcion, 1) . '% del valor de mercado.',
+                'Referencia: el valor catastral suele equivaler entre ' . $referencia['minimo'] . '% y ' . $referencia['maximo'] . '% del valor de mercado; lo típico es alrededor de ' . $referencia['tipico'] . '% (la tarjeta marcaría ' . $tarjeta_con($referencia['tipico']) . '). En Zapopan se fija alrededor del ' . $referencia['zapopan'] . '% (la tarjeta marcaría ' . $tarjeta_con($referencia['zapopan']) . ').',
+                $lectura,
+                'Con la referencia típica, el valor de mercado sería de unos ' . $dinero($catastral / ($referencia['tipico'] / 100)) . '.',
+                'Es solo una referencia: cada municipio actualiza su catastro a su ritmo y el valor depende de la zona y la antigüedad del inmueble.',
+            ),
+        );
+    }
+
+    /*
+     * 1-c. CATASTRAL vs CIERRE
+     */
+    if ($catastral > 0 && $cierre > 0) {
+
+        $porcentaje = (($cierre - $catastral) / $catastral) * 100;
+
+        if ($cierre < $catastral) {
+
+            $alertas['catastral_cierre'] = array(
+                'nivel'  => 'ambar',
+                'titulo' => 'El precio de cierre está por debajo del catastral',
+                'texto'  => array(
+                    'El precio de cierre (' . $dinero($cierre) . ') está ' . number_format(abs($porcentaje), 2) . '% por debajo del valor catastral (' . $dinero($catastral) . ').',
+                    'El impuesto de transmisión patrimonial y los derechos se calculan sobre el valor más alto (precio, avalúo o catastral), así que no bajan aunque baje el precio.',
+                    'Un precio por debajo del catastral también puede provocar una revisión de la autoridad.',
+                ),
+            );
+
+        } else {
+
+            $alertas['catastral_cierre'] = array(
+                'nivel'  => 'info',
+                'titulo' => 'Precio de cierre frente al catastral',
+                'texto'  => array(
+                    'El precio de cierre (' . $dinero($cierre) . ') está ' . number_format($porcentaje, 2) . '% por encima del valor catastral (' . $dinero($catastral) . ').',
+                    'Para los impuestos de la escritura se toma el valor más alto entre precio, avalúo y catastral; en este caso el catastral no es el que determina el pago.',
+                ),
+            );
+        }
+    }
+
+    /*
+     * 2. PRECIO DE CIERRE contra el valor de mercado
+     *    (contra el catastral se revisa en la tarjeta Catastral vs Cierre)
      */
     if ($cierre > 0 && $avaluo > 0 && $cierre > $avaluo) {
 
@@ -84,17 +169,6 @@ function crm_v3_financiero_alertas($d) {
             ),
         );
 
-    } elseif ($cierre > 0 && $catastral > 0 && $cierre < $catastral) {
-
-        $alertas['precio_cierre'] = array(
-            'nivel'  => 'ambar',
-            'titulo' => 'El precio es menor que el valor catastral',
-            'texto'  => array(
-                'El precio de cierre (' . $dinero($cierre) . ') está por debajo del valor catastral (' . $dinero($catastral) . ').',
-                'El impuesto de transmisión patrimonial y los derechos se calculan sobre el valor más alto (precio, avalúo o catastral), así que no bajan aunque baje el precio.',
-                'Un precio por debajo del catastral también puede provocar una revisión de la autoridad.',
-            ),
-        );
     }
 
     /*
@@ -445,6 +519,17 @@ if ($valor_catastral_num > 0 && $precio_venta_num > 0) {
 /*
  * Valor catastral vs valor de mercado
  */
+/*
+ * Precio de cierre vs valor catastral
+ */
+$comparacion_catastral_cierre = null;
+
+if ($valor_catastral_num > 0 && $precio_cierre_num > 0) {
+
+    $comparacion_catastral_cierre =
+        (($precio_cierre_num - $valor_catastral_num) / $valor_catastral_num) * 100;
+}
+
 $comparacion_catastral_mercado = null;
 
 if ($valor_catastral_num > 0 && $valor_mercado_num > 0) {
@@ -751,7 +836,10 @@ if ($monto_despues_costos !== null) {
 
             <div class="crm-v3-financiero-comparaciones">
 
-                <div class="crm-v3-financiero-comparacion">
+                <div class="crm-v3-financiero-comparacion<?php echo esc_attr(crm_v3_financiero_alerta_clase($alertas, 'catastral_mercado')); ?>"<?php echo crm_v3_financiero_alerta_atributos($alertas, 'catastral_mercado'); ?>>
+
+                    <?php crm_v3_financiero_alerta_nota($alertas, 'catastral_mercado'); ?>
+
 
                     <span>
                         Catastral vs Mercado
@@ -781,24 +869,27 @@ if ($monto_despues_costos !== null) {
                 </div>
 
 
-                <div class="crm-v3-financiero-comparacion">
+                <div class="crm-v3-financiero-comparacion<?php echo esc_attr(crm_v3_financiero_alerta_clase($alertas, 'catastral_cierre')); ?>"<?php echo crm_v3_financiero_alerta_atributos($alertas, 'catastral_cierre'); ?>>
+
+                    <?php crm_v3_financiero_alerta_nota($alertas, 'catastral_cierre'); ?>
+
 
                     <span>
-                        Catastral vs Venta
+                        Catastral vs Cierre
                     </span>
 
                     <strong>
 
                         <?php
                         echo esc_html(
-                            $comparacion_catastral_venta !== null
+                            $comparacion_catastral_cierre !== null
                                 ? (
-                                    $comparacion_catastral_venta >= 0
+                                    $comparacion_catastral_cierre >= 0
                                         ? '+'
                                         : ''
                                 )
                                 . number_format(
-                                    $comparacion_catastral_venta,
+                                    $comparacion_catastral_cierre,
                                     2
                                 )
                                 . '%'
