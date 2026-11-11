@@ -229,6 +229,13 @@ function crm_v3_backoffice_page() {
 
 </section>
 
+<?php
+// Contadores de estatus y de etapas del pipeline.
+if (function_exists('crm_v3_backoffice_contadores')) {
+    crm_v3_backoffice_contadores();
+}
+?>
+
         </main>
 
 

@@ -267,5 +267,6 @@ require_once CRM_V3_PATH . 'includes/modules/crm-formulario.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-contacto-web.php';
 require_once CRM_V3_PATH . 'includes/modules/comunicados.php';
 require_once CRM_V3_PATH . 'includes/modules/crm-comunicados.php';
+require_once CRM_V3_PATH . 'includes/modules/crm-backoffice-contadores.php';
 
 
